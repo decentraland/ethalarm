@@ -2,9 +2,9 @@
   "name": "eventlog",
   "version": "1.0.0",
   "description": "Register your contract addresses and get notifications on certain events",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "babel-node src/server.js"
   },
   "keywords": [
     "event",
@@ -15,6 +15,13 @@
   "author": "Decentraland",
   "license": "ISC",
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.0.0",
+    "babel-preset-env": "^1.6.0",
+    "body-parser": "^1.18.1",
+    "eslint": "^4.7.2",
+    "express": "^4.15.4",
     "web3": "^1.0.0-beta.21"
-  }
+  },
+  "devDependencies": {}
 }

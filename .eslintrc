@@ -1,0 +1,28 @@
+{
+  "parser": "babel-eslint",
+  "extends": [ "eslint:recommended" ],
+  "env": {
+    "es6": true,
+    "node": true,
+  },
+  "globals": {
+  },
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "ecmaFeatures": {
+      "classes": true
+    },
+    "sourceType": "module"
+  },
+  "rules": {
+    "strict": 2,
+    "quotes": ["error", "single"],
+    "semi": ["error", "never"],
+    "no-console": 0,
+    "no-unused-vars": ["error", {
+      "vars": "all",
+      "args": "none",
+      "ignoreRestSiblings": false
+    }]
+  }
+}
