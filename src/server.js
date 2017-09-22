@@ -1,13 +1,17 @@
+import http from 'http'
 import express from 'express'
 import bodyParser from 'body-parser'
 
 import { handleRequest, extractFromReq } from './utils/requestHelpers'
+import { getEnv } from './utils/env'
 import db from './lib/db'
 import * as eth from './lib/eth'
 
-const app = express()
 
-const PORT = process.env.PORT || 3000
+const app = express()
+const server = http.Server(app)
+
+const PORT = getEnv('PORT', 3000)
 
 
 app.use(bodyParser.urlencoded({ extended: false }))
