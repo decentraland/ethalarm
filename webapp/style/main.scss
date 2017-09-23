@@ -5,6 +5,11 @@
 @import 'components';
 
 .select-address {
+  .queryLarge {
+    .explain {
+      text-align: center;
+    }
+  }
   .large-input {
     margin-top: 50px;
     margin-bottom: 40px;

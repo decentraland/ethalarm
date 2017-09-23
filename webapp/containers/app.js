@@ -13,7 +13,7 @@ import Entry from './entry'
 export default class App extends React.Component {
   render() {
     return (<div className='app-container'>
-      <Entry />
+      <LookingUp />
     </div>)
   }
 }
