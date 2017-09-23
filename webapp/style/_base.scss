@@ -15,3 +15,11 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+a {
+  color: $white;
+}
+
+a:visited {
+  color: $white;
+}
