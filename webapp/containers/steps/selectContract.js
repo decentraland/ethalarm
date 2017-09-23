@@ -1,7 +1,7 @@
 import React from 'react'
 
-import LargeInput from './largeInput'
-import NextButton from './nextButton'
+import LargeInput from '~/components/largeInput'
+import NextButton from '~/components/nextButton'
 
 export default class SelectContract extends React.Component {
   render() {

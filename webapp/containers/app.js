@@ -1,12 +1,13 @@
 import React from 'react'
 
-import SelectContract from './selectContract'
-import LookingUp from './lookingUp'
+import SelectContract from './steps/selectContract'
+import LookingUp from './steps/lookingUp'
+import InsertABI from './steps/insertABI'
 
 export default class App extends React.Component {
   render() {
     return (<div className='app-container'>
-      <LookingUp />
+      <InsertABI />
     </div>)
   }
 }

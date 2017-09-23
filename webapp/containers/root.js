@@ -1,7 +1,8 @@
 import React from 'react'
 
+import Logo from '~/components/logo'
+
 import Navbar from './navbar'
-import Logo from './logo'
 import App from './app'
 
 export default class Root extends React.Component {

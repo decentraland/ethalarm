@@ -17,3 +17,19 @@
     margin-bottom: 60px;
   }
 }
+
+.insertabi {
+  textarea {
+    border: none;
+    font-family: $monospace;
+    font-size: 14px;
+    padding: 10px;
+    &:focus {
+      outline: none;
+    }
+    margin-top: 30px;
+    margin-bottom: 30px;
+    min-width: 450px;
+    min-height: 200px;
+  }
+}

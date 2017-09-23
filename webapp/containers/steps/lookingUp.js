@@ -1,6 +1,6 @@
 import React from 'react'
 
-import LoadingDots from './loadingDots'
+import LoadingDots from '~/components/loadingDots'
 
 export default class LookingUp extends React.Component {
   render() {

@@ -33,6 +33,11 @@ export default {
       }
     ]
   },
+  resolve: {
+    alias: {
+      '~': path.resolve('__dirname', '../webapp')
+    }
+  },
   plugins: [
     new htmlPlugin({ template: 'public/index.html' }),
     new webpack.HotModuleReplacementPlugin()
