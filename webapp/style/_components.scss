@@ -83,3 +83,34 @@ button.next {
     content: ' ]';
   }
 }
+
+.loadingDots {
+  display: flex;
+  width: 50px;
+  justify-content: space-between;
+
+  $duration: 1.5s;
+  .dot {
+    background: white;
+    width: 10px;
+    height: 10px;
+    border-radius: 100px;
+    -webkit-animation: resize $duration/2 infinite alternate;
+    animation-delay: $duration * 2 / 3;
+  }
+  .dot:first-child {
+    animation-delay: $duration / 3;
+  }
+  .dot:last-child {
+    animation-delay: 0s;
+  }
+}
+
+@-webkit-keyframes resize {
+    from {
+        -webkit-transform:scale(1.5);
+    }
+    to {
+        -webkit-transform:scale(1);
+    }
+}
