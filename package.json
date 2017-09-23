@@ -15,13 +15,34 @@
   "author": "Decentraland",
   "license": "ISC",
   "dependencies": {
-    "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.0",
+    "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
     "body-parser": "^1.18.1",
+    "css-loader": "^0.28.7",
     "eslint": "^4.7.2",
     "express": "^4.15.4",
-    "web3": "^1.0.0-beta.21"
+    "html-webpack-plugin": "^2.30.1",
+    "node-sass": "^4.5.3",
+    "postcss": "^6.0.11",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-hot-loader": "^3.0.0-beta.7",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "sass": "^1.0.0-beta.2",
+    "sass-loader": "^6.0.6",
+    "socket.io": "^2.0.3",
+    "style-loader": "^0.18.2",
+    "web3": "^1.0.0-beta.21",
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.8.2",
+    "webpack-server": "^0.1.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "webpack-dev-middleware": "^1.12.0",
+    "webpack-hot-middleware": "^2.19.1"
+  }
 }

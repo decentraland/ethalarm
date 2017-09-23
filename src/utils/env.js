@@ -1,8 +1,8 @@
 
-export function getEnv(name, default) {
+export function getEnv(name, fallback) {
   if (!process.env[name]) {
-    console.log(`Warning: No ${name} environment variable set, defaulting to ${default}`)
-    return default
+    console.log(`Warning: No ${name} environment variable set, defaulting to ${fallback}`)
+    return fallback
   }
   return process.env[name]
 }
