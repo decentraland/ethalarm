@@ -33,3 +33,27 @@
     min-height: 200px;
   }
 }
+
+.selectevents {
+  .explain {
+    text-align: center;
+  }
+
+  ul {
+    text-align: left;
+    min-width: 50%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+
+    li {
+      margin-bottom: 15px;
+      list-style: none;
+
+      input {
+        margin-right: 10px;
+        position: relative;
+        top: -2px;
+      }
+    }
+  }
+}
