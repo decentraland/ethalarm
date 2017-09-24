@@ -64,7 +64,7 @@ class EventSelector extends React.Component {
   }
 
   getSelections() {
-    return this.props.options.map(item => this.state.selected[item.id])
+    return this.props.options.filter(item => this.state.selected[item.id])
   }
 
   render() {

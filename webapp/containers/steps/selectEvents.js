@@ -13,6 +13,12 @@ class SelectEvents extends SagaStep{
     super(...arguments)
     this.getEvents(props)
   }
+  createAction() {
+    return {
+      type: types.setEvents,
+      events: this.refs.events.getSelections()
+    }
+  }
   componentWillReceiveProps(newProps) {
     this.getEvents(newProps)
   }
@@ -39,8 +45,8 @@ class SelectEvents extends SagaStep{
     return (<div className='selectevents step'>
       <SelectedContract address={this.props.address} abi={this.props.abi} />
       <p>Select which events to subscribe to:</p>
-      <EventSelector options={this.events} />
-      <NextButton />
+      <EventSelector ref='events' options={this.events} />
+      <NextButton action={this.action} />
     </div>)
   }
 }

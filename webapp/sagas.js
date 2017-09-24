@@ -1,5 +1,5 @@
-import { call, takeEvery, put, take } from 'redux-saga/effects'
-import { push } from 'react-router-redux'
+import { call, takeEvery, select, put, take } from 'redux-saga/effects'
+import { push, replace } from 'react-router-redux'
 
 import locations from './locations'
 import actions from './types'
@@ -11,7 +11,12 @@ function* allSagas() {
 }
 
 function* handleABI(action) {
-  yield put(push(locations.selectEvents))
+  const path = yield select(state => state.router.location.pathname)
+  if (path === locations.lookingUp) {
+    yield put(replace(locations.selectEvents))
+  } else {
+    yield put(push(locations.selectEvents))
+  }
 }
 
 function* handleEvents(action) {
@@ -46,7 +51,7 @@ async function getABI(address) {
         return null
       }
       return response
-    })
+    }).catch(() => null)
 }
 
 function parseJson(e) {
