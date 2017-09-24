@@ -5,7 +5,7 @@ function filterAction(name, handler) {
     if (action.type === name) {
       return handler(store, action)
     }
-    return store
+    return store || {}
   }
 }
 

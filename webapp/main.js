@@ -22,7 +22,7 @@ const sagaMiddleware = createSagaMiddleware()
 
 const store = createStore(
   combineReducers({
-    ...reducers,
+    ...reducers(),
     router: routerReducer
   }),
   {},
