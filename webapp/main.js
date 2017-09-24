@@ -7,33 +7,39 @@ import createHistory from 'history/createBrowserHistory'
 import { Route } from 'react-router'
 import { ConnectedRouter, routerReducer, routerMiddleware as RouterMiddleware } from 'react-router-redux'
 import RedBox from 'redbox-react'
+import createSagaMiddleware from 'redux-saga'
+import im from 'immutable'
 
 import './style/main.scss'
 import routes from './routes'
 import reducers from './reducers'
+import sagas from './sagas'
 
 const history = createHistory()
 const routerMiddleware = RouterMiddleware(history)
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const sagaMiddleware = createSagaMiddleware()
 
 const store = createStore(
   combineReducers({
     ...reducers,
     router: routerReducer
   }),
+  {},
   composeEnhancers(
-    applyMiddleware(routerMiddleware)
+    applyMiddleware(routerMiddleware, sagaMiddleware)
   )
 )
 
+sagaMiddleware.run(sagas)
 const getRoot = () => document.getElementById('app')
 
-const render = Component => {
+const render = Routes => {
   ReactDOM.render(
     <AppContainer>
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <Component />
+          <Routes />
         </ConnectedRouter>
       </Provider>
     </AppContainer>,
