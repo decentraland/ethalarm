@@ -3,5 +3,6 @@ export default {
   setABI: 'ABI available',
   setEvents: 'Selected events',
   setNotificationPreference: 'Selected notification preference',
-  setId: 'Received ID'
+  setId: 'Received ID',
+  confirm: 'Confirmation'
 }

@@ -9,7 +9,6 @@ import WebpackHotMiddleware from 'webpack-hot-middleware'
 import { handleRequest, extractFromReq } from './utils/requestHelpers'
 import { getEnv } from './utils/env'
 import db from './lib/db'
-import * as eth from './lib/eth'
 import webpackConfig from '../config/webpack.config'
 import webpackMiddlewareConfig from '../config/webpackMiddleware'
 
@@ -45,9 +44,6 @@ app.post('/subscribeToEvents', handleRequest((req, res) => {
     notificationMethod: 'emails'
   })
 
-  eth.subscribe(subscriptionType, address, function(result) {
-    console.log(result)
-  })
 }))
 
 

@@ -17,7 +17,6 @@ export default class Success extends React.Component {
           id='ebf595a7-451e-483b-941a-ce87c510c437'
         />
       </div>
-      <NextButton />
     </div>)
   }
 }

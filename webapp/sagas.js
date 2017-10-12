@@ -8,6 +8,8 @@ function* allSagas() {
   yield takeEvery(actions.setAddress, handleAddressEntered)
   yield takeEvery(actions.setABI, handleABI)
   yield takeEvery(actions.setEvents, handleEvents)
+  yield takeEvery(actions.setNotificationPreference, handleNotification)
+  yield takeEvery(actions.confirm, handleConfirm)
 }
 
 function* handleABI(action) {
@@ -17,6 +19,14 @@ function* handleABI(action) {
   } else {
     yield put(push(locations.selectEvents))
   }
+}
+
+function* handleNotification(action) {
+  yield put(push(locations.verify))
+}
+
+function* handleConfirm(action) {
+  yield put(push(locations.success))
 }
 
 function* handleEvents(action) {
