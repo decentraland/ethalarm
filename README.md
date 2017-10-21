@@ -66,7 +66,7 @@ Example request body:
 ```
 {
   "address": "0xcca95e580bbbd04851ebfb85f77fd46c9b91f11c",
-  "events": ["LockedBalance"],
+  "eventNames": ["LockedBalance"],
   "hook": "https://decentraland.org/",
   "confirmations": 6,
   "abi": "[{\"constant\":false,\"inputs\":[{\"name\":\"target\",\"type\":\"address\"}],\"name\":\"setTargetContract\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalLocked\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_acceptingDeposits\",\"type\":\"bool\"}],\"name\":\"changeContractState\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"mana\",\"type\":\"uint256\"}],\"name\":\"lockMana\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"manaToken\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"landClaim\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"address\"}],\"name\":\"lockedBalance\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"acceptingDeposits\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_token\",\"type\":\"address\"}],\"payable\":false,\"type\":\"constructor\"},{\"payable\":true,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"mana\",\"type\":\"uint256\"}],\"name\":\"LockedBalance\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"target\",\"type\":\"address\"}],\"name\":\"LandClaimContractSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"LandClaimExecuted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"_acceptingDeposits\",\"type\":\"bool\"}"
@@ -124,7 +124,7 @@ Alarm
 id: string (uuid v4)
 address: string
 abi: string
-events: string (comma separated)
+eventNames: string (comma separated)
 email: string
 url: string
 confirmation_code: string
@@ -165,3 +165,52 @@ createdAt: timestamp
               and no alarmreceipt for the tx of that event exists:
           - dispatch run notifications
     - set last sync block to current tip height
+
+
+### Proposed implementation
+```
+class AlarmService {
+  mapAddressesToAlarm() {}
+  getContracts(addresses) {}
+  getReorgSafety() {}
+  mapAddressesToLastSync(defaultLastSync, addresses) {}
+  getReceipt(alarmId, txHash) {}
+  dispatchNotifications(alarm, event) {}
+  storeLastSyncBlock(address, height) {}
+}
+class EthService {
+  getCurrentTip() {}
+  watchNewBlocks(blockHandler) {}
+}
+async function watch() {
+  const addressToAlarms = await alarmService.mapAddressesToAlarm()
+  const contracts = await alarmService.getContracts(Object.keys(addressToAlarms))
+  const reorgSafety = await alarmService.getReorgSafety()
+  const currentTip = await ethService.getCurrentTip()
+  
+  let lastBlockSync = await alarmService.mapAddressesToLastSync(currentTip, Object.keys(addressToAlarms))
+  
+  return ethService.watchNewBlocks((block) => {
+    const height = block.height
+    await Promise.all(contracts.map(contract => {
+      const alarms = addressToAlarms[contract.address]
+      const fromBlock = lastBlockSync[contract.address] - max(alarms.blockConfirmations) - reogSafety
+      const toBlock = block.height - min(alarms.blockConfirmations)
+      const events = await contract.events({ fromBlock, toBlock })
+      for (let event in events) {
+        const confirmations = height - event.blockHeight
+        for (let alarm in alarms) {
+          if (confirmations >= alarm.blockConfirmations
+              && event.event in alarm.eventNames
+              && !(await alarmService.getReceipt(alarm.id, event.transactionHash))
+          ) {
+            await alarmService.dispatchNotification(alarm, event)
+          }
+        }
+      }
+      await alarmService.storeLastBlockSync(contract.address, block.height)
+      lastBlockSync[contract.address] = block.height
+    })
+  })
+}
+```
