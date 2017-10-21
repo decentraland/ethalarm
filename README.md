@@ -123,10 +123,12 @@ Alarm
 -----
 id: string (uuid v4)
 address: string
+abi: string
 events: string (comma separated)
 email: string
+url: string
 confirmation_code: string
-confirmations: number
+blockConfirmations: number
 enabled: boolean
 createdAt: timestamp
 updatedAt: timestamp
@@ -136,27 +138,30 @@ AlarmSyncState
 --------------
 id: number
 alarmId: string (FK to Alarm)
-lastBlockHeight: number
-lastBlockHash: string
+lastSyncBlock: number
 
 AlarmReceipt
 -------------
 id: number
 alarmId: string (FK to Alarm)
-hookId: number (FK to AlarmHook)
 txHash: string
-blockHash: string
-response: blob
+smtpResponse: blob
+httpResponse: blob
 createdAt: timestamp
-
-AlarmHook
-----------
-id: number
-alarmId: string (FK to Alarm)
-type: string ('http_post', 'http_get', 'email', ...)
-config: string (URL if type = 'http', email address (or null for Alarm.email) if type = 'email')
-data: string (template of the data to send to the hook. json with key=>value for http hooks, email template text/html. Both using some templating engine, ?http://mustache.github.io/?)
-enabled: boolean
-createdAt: timestamp
-deleted: boolean
 ```
+
+## Checking for events
+
+* Select unique addresses and ABIs
+* Select last block sync' (if nothing stored, use current web3 block)
+* pick reorgsafety: number of blocks where a reorg might happen
+* For each new block:
+  - for each unique address:
+    - Call the `contract.events()` interface from web3 with `{fromBlock: lastSyncBlock-max(alarms.blockConfirmations)-reorgSafety, toBlock: currentTip-min(alarms.blockConfirmations)}`
+    - for each event:
+      - for each alarm: 
+        * if tx height confirmed is greater or equal than alarm confirmations,
+              event name matches alarm name,
+              and no alarmreceipt for the tx of that event exists:
+          - dispatch run notifications
+    - set last sync block to current tip height
