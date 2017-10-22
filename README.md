@@ -196,7 +196,7 @@ async function watch() {
       const alarms = addressToAlarms[contract.address]
       const fromBlock = lastBlockSync[contract.address] - max(alarms.blockConfirmations) - reogSafety
       const toBlock = block.height - min(alarms.blockConfirmations)
-      const events = await contract.events({ fromBlock, toBlock })
+      const events = await contract.getPastEvents('allEvents', { fromBlock, toBlock })
       for (let event in events) {
         const confirmations = height - event.blockHeight
         for (let alarm in alarms) {
@@ -208,8 +208,7 @@ async function watch() {
           }
         }
       }
-      await alarmService.storeLastBlockSync(contract.address, block.height)
-      lastBlockSync[contract.address] = block.height
+      await alarmService.storeLastBlockSync(contract.address, block)
     })
   })
 }
