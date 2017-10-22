@@ -63,6 +63,7 @@ The request content should follow this [schema](http://json-schema.org/):
 ```
 
 Example request body:
+
 ```
 {
   "address": "0xcca95e580bbbd04851ebfb85f77fd46c9b91f11c",
@@ -75,7 +76,8 @@ Example request body:
 
 The response body for this method follows a simple schema:
 
-```{
+```
+{
   "id": "https://github.com/decentraland/eventlog#POST-Response",
   "$schema": "http://json-schema.org/draft-06/schema#",
   "description": "Schema for a POST response of /alarm",
