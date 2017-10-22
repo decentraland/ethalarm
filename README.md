@@ -184,29 +184,29 @@ class EthService {
 }
 async function watch() {
   const addressToAlarms = await alarmService.mapAddressesToAlarm()
-  const contracts = await alarmService.getContracts(Object.keys(addressToAlarms))
+  const allAddresses = Object.keys(addressToAlarms)
+  const contracts = await alarmService.getContracts(allAddresses)
   const reorgSafety = await alarmService.getReorgSafety()
   const currentTip = await ethService.getCurrentTip()
-  
-  let lastBlockSync = await alarmService.mapAddressesToLastSync(currentTip, Object.keys(addressToAlarms))
+  const lastBlockSync = await alarmService.mapAddressesToLastSync(currentTip, allAddresses)
   
   return ethService.watchNewBlocks((block) => {
     const height = block.height
-    await Promise.all(contracts.map(contract => {
+    await Promise.all(contracts.map(async (contract) => {
       const alarms = addressToAlarms[contract.address]
       const fromBlock = lastBlockSync[contract.address] - max(alarms.blockConfirmations) - reogSafety
       const toBlock = block.height - min(alarms.blockConfirmations)
       const events = await contract.getPastEvents('allEvents', { fromBlock, toBlock })
       for (let event in events) {
         const confirmations = height - event.blockHeight
-        for (let alarm in alarms) {
+        await Promise.all(alarms.map(async (alarm) => {
           if (confirmations >= alarm.blockConfirmations
               && event.event in alarm.eventNames
               && !(await alarmService.getReceipt(alarm.id, event.transactionHash))
           ) {
             await alarmService.dispatchNotification(alarm, event)
           }
-        }
+        }))
       }
       await alarmService.storeLastBlockSync(contract.address, block)
     })
