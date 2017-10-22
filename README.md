@@ -1,4 +1,4 @@
-# eventlog
+# ethalarm
 
 A tool to get notified about new events triggered by smart contracts.
 
@@ -14,7 +14,7 @@ Now, go to http://localhost:3000 and the frontend should be displayed to you.
 
 ## API
 
-The API is currently not implemented. There's a mock method in https://github.com/decentraland/eventlog/blob/master/src/server.js#L39 but it's currently not being used.
+The API is currently not implemented. There's a mock method in https://github.com/decentraland/ethalarm/blob/master/src/server.js#L39 but it's currently not being used.
 
 There should be only three endpoints to the API:
 
@@ -27,11 +27,11 @@ The request content should follow this [schema](http://json-schema.org/):
 
 ```
 {
-  "id": "https://github.com/decentraland/eventlog#POST-Request",
+  "id": "https://github.com/decentraland/ethalarm#POST-Request",
   "$schema": "http://json-schema.org/draft-06/schema#",
   "description": "Schema for a POST request to /alarm",
   "type": "object",
-  "required": [ "address", "abi", "events", "confirmations" ],
+  "required": [ "address", "abi", "ethalarm", "confirmations" ],
   "properties": {
     "address": {
       "description": "The contract's address",
@@ -78,7 +78,7 @@ The response body for this method follows a simple schema:
 
 ```
 {
-  "id": "https://github.com/decentraland/eventlog#POST-Response",
+  "id": "https://github.com/decentraland/ethalarm#POST-Response",
   "$schema": "http://json-schema.org/draft-06/schema#",
   "description": "Schema for a POST response of /alarm",
   "type": "object",

@@ -1,5 +1,5 @@
 {
-  "name": "eventlog",
+  "name": "ethalarm",
   "version": "1.0.0",
   "description": "Register your contract addresses and get notifications on certain events",
   "private": true,

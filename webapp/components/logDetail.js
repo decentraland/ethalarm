@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 class LogDetail extends React.Component {
   render() {
-    const url = `https://eventlog.tech/entry/${this.props.id}`
+    const url = `https://ethalarm.com/entry/${this.props.id}`
     return (<div className='logdetail'>
       <p>Contract: <strong>{this.props.contractName}</strong></p>
       <p>Address: <strong>{this.props.address}</strong></p>
