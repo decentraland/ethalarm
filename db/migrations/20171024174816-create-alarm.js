@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable('alarm', {
+		return queryInterface.createTable('Alarm', {
 			id: {
 				type: Sequelize.UUID,
 				allowNull: false,
@@ -56,6 +56,6 @@ module.exports = {
 		});
 	},
 	down: (queryInterface, Sequelize) => {
-		return queryInterface.dropTable('alarm');
+		return queryInterface.dropTable('Alarm');
 	}
 };

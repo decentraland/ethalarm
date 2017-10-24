@@ -1,18 +1,18 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('alarm_sync_state', {
+	return sequelize.define('AlarmSyncState', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		alarm_id: {
+		Alarm_id: {
 			type: DataTypes.UUID,
 			allowNull: false,
 			references: {
-				model: 'alarm',
+				model: 'Alarm',
 				key: 'id'
 			}
 		},
@@ -22,6 +22,6 @@ module.exports = function(sequelize, DataTypes) {
 			defaultValue: '0',
 		},
 	}, {
-		tableName: 'alarm_sync_state'
+		tableName: 'AlarmSyncState'
 	});
 };

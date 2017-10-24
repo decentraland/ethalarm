@@ -1,17 +1,17 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('alarm_receipt', {
+	return sequelize.define('AlarmReceipt', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		alarm_id: {
+		Alarm_id: {
 			type: DataTypes.UUID,
 			references: {
-				model: 'alarm',
+				model: 'Alarm',
 				key: 'id'
 			},
 			allowNull: false,
@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.BLOB('medium'),
 		},
 	}, {
-		tableName: 'alarm_receipt',
+		tableName: 'AlarmReceipt',
 		paranoid: false,
 		timestamps: true,
 		createdAt: 'created_at',

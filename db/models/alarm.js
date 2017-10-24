@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('alarm', {
+	return sequelize.define('Alarm', {
 		id: {
 			type: DataTypes.UUID,
 			allowNull: true,
@@ -42,9 +42,9 @@ module.exports = function(sequelize, DataTypes) {
 			defaultValue: false,
 		},
 	}, {
-		tableName: 'alarm',
-		paranoid: true, // Causes timestamps to create the `deletedAt` field
-		timestamps: true, // Provides `createdAt`, `updatedAt` and `deletedAt`
+		tableName: 'Alarm',
+		paranoid: true,
+		timestamps: true,
 		createdAt: 'created_at',
 		updatedAt: 'updated_at',
 		deletedAt: 'deleted_at',

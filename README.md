@@ -126,30 +126,31 @@ Alarm
 id: string (uuid v4)
 address: string
 abi: string
-eventNames: string (comma separated)
+event_names: string (comma separated)
 email: string
 url: string
 confirmation_code: string
-blockConfirmations: number
+block_confirmations: number
 enabled: boolean
-createdAt: timestamp
-updatedAt: timestamp
-deleted: boolean
+created_at: timestamp
+updated_at: timestamp
+deleted_at: timestamp
 
 AlarmSyncState
 --------------
 id: number
-alarmId: string (FK to Alarm)
-lastSyncBlock: number
+Alarm_id: string (FK to Alarm)
+last_sync_block: number
 
 AlarmReceipt
 -------------
 id: number
-alarmId: string (FK to Alarm)
-txHash: string
-smtpResponse: blob
-httpResponse: blob
-createdAt: timestamp
+Alarm_id: string (FK to Alarm)
+tx_hash: string
+smtp_response: blob
+http_response: blob
+created_at: timestamp
+created_at: timestamp
 ```
 
 ## Checking for events
