@@ -132,9 +132,9 @@ url: string
 confirmation_code: string
 block_confirmations: number
 enabled: boolean
-created_at: timestamp
-updated_at: timestamp
-deleted_at: timestamp
+created_at: datetime
+updated_at: datetime
+deleted_at: datetime
 
 AlarmSyncState
 --------------
@@ -149,8 +149,8 @@ Alarm_id: string (FK to Alarm)
 tx_hash: string
 smtp_response: blob
 http_response: blob
-created_at: timestamp
-created_at: timestamp
+created_at: datetime
+updated_at: datetime
 ```
 
 ## Checking for events
