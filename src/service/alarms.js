@@ -18,16 +18,20 @@ export class AlarmService {
     this._alarm_receipt_model.associate({ Alarm: this._alarm_model })
 	}
 
-	getAlarms(addresses = []) {
-    const where = {};
-    if(addresses.length) {
-      where.address = {
-        [ Op.in ]: addresses,
+	getAlarms(where = { addresses: [], id: undefined }) {
+    const internal_where = {};
+    if(where.addresses && where.addresses.length) {
+      internal_where.address = {
+        [ Op.in ]: where.addresses,
       }
     }
 
+    if(where.id) {
+      internal_where.id = where.id
+    }
+
     return this._alarm_model.findAll({
-        where: where,
+        where: internal_where,
       }).map(function(alarm) {
 				alarm.dataValues.abi = JSON.parse(alarm.dataValues.abi)
 				return alarm.dataValues
@@ -47,7 +51,7 @@ export class AlarmService {
 	}
 
 	mapAddressesToAlarm(addresses = []) {
-		return this.getAlarms(addresses).reduce(function(map, obj) {
+		return this.getAlarms({addresses: addresses}).reduce(function(map, obj) {
         if(!map[obj.address]) map[obj.address] = []
         map[obj.address].push(obj)
         return map
@@ -81,47 +85,20 @@ export class AlarmService {
       }, {})
   }
 
-  getReceipt(alarm_id, tx_hash) {
+  getReceipt(alarm_id, tx_hash, event_name) {
     return this._alarm_receipt_model.findAll({
         where: {
           Alarm_id: alarm_id,
           tx_hash: tx_hash,
+          event_name: event_name,
         }
       })
   }
 
+  storeReceipt(alarm_id, event_name, tx_hash) {
+
+  }
+
   // dispatchNotifications(alarm, event) {
   // }
-
-  storeLastSyncBlock(address, height) {
-    return this.getAlarms([address])
-      .then(async (results) => {
-          const sync_states = []
-
-          for(let x = 0; x < results.length; ++x) {
-            const alarm = results[x];
-
-            await this._alarm_sync_state_model
-              .findOrCreate({
-                where: {
-                  Alarm_id: alarm.id,
-                },
-                defaults: {
-                  Alarm_id: alarm.id,
-                  last_sync_block: height,
-                }
-              })
-              .spread((record, created) => {
-                  // console.log(record, created)
-                  sync_states.push({
-                      Alarm_id: alarm.id,
-                      AlarmSyncState: record,
-                      created: created,
-                    })
-                })
-          }
-
-          return sync_states
-        })
-  }
 }
