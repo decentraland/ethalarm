@@ -4,7 +4,8 @@
   "description": "Register your contract addresses and get notifications on certain events",
   "private": true,
   "scripts": {
-    "start": "babel-node src/server.js"
+    "start": "babel-node src/server.js",
+    "scanner": "babel-node src/service.js"
   },
   "keywords": [
     "event",

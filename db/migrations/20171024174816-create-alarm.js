@@ -4,7 +4,7 @@ module.exports = {
 		return queryInterface.createTable('Alarm', {
 			id: {
 				type: Sequelize.UUID,
-				allowNull: false,
+				//allowNull: false,
 				primaryKey: true,
 				defaultValue: Sequelize.UUIDV4,
 			},
@@ -43,15 +43,12 @@ module.exports = {
 			},
 			created_at: {
 				type: Sequelize.DATE,
-				allowNull: false,
 			},
 			updated_at: {
 				type: Sequelize.DATE,
-				allowNull: false,
 			},
 			deleted_at: {
 				type: Sequelize.DATE,
-				allowNull: false,
 			},
 		});
 	},

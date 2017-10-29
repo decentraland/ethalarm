@@ -8,12 +8,16 @@ module.exports = {
 				primaryKey: true,
 				autoIncrement: true,
 			},
-			alarm_id: {
-				type: Sequelize.UUID,
+			Alarm_id: {
+				type: Sequelize.UUIDV4,
 				references: {
 					model: 'Alarm',
 					key: 'id'
 				},
+				allowNull: false,
+			},
+			event_name: {
+				type: Sequelize.STRING(64),
 				allowNull: false,
 			},
 			tx_hash: {

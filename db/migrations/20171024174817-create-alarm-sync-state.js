@@ -8,8 +8,8 @@ module.exports = {
 				primaryKey: true,
 				autoIncrement: true,
 			},
-			alarm_id: {
-				type: Sequelize.UUID,
+			Alarm_id: {
+				type: Sequelize.UUIDV4,
 				allowNull: false,
 				references: {
 					model: 'Alarm',

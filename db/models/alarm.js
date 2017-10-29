@@ -1,10 +1,9 @@
 /* jshint indent: 1 */
-
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('Alarm', {
+	const Alarm = sequelize.define('Alarm', {
 		id: {
 			type: DataTypes.UUID,
-			allowNull: true,
+			//allowNull: true,
 			primaryKey: true,
 			defaultValue: DataTypes.UUIDV4,
 		},
@@ -49,4 +48,11 @@ module.exports = function(sequelize, DataTypes) {
 		updatedAt: 'updated_at',
 		deletedAt: 'deleted_at',
 	});
+
+  Alarm.associate = function(models) {
+    Alarm.hasOne(models.AlarmSyncState, { foreignKey: 'Alarm_id' })
+    Alarm.hasMany(models.AlarmReceipt, { foreignKey: 'Alarm_id' })
+  }
+
+  return Alarm;
 };
