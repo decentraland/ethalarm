@@ -1,5 +1,6 @@
-const Sequelize = require('sequelize');
+const Sequelize = require('sequelize')
 const Op = Sequelize.Op
+const fetch = require('node-fetch')
 const AlarmModel = require('./../../db/models/alarm.js')
 const AlarmSyncStateModel = require('./../../db/models/alarm_sync_state.js')
 const AlarmReceiptModel = require('./../../db/models/alarm_receipt.js')
@@ -18,8 +19,8 @@ export class AlarmService {
     this._alarm_receipt_model.associate({ Alarm: this._alarm_model })
 	}
 
-	getAlarms(where = { addresses: [], id: undefined }) {
-    const internal_where = {};
+	getAlarms(where = { id: undefined, addresses: [] }) {
+    const internal_where = {}
     if(where.addresses && where.addresses.length) {
       internal_where.address = {
         [ Op.in ]: where.addresses,
@@ -34,6 +35,7 @@ export class AlarmService {
         where: internal_where,
       }).map(function(alarm) {
 				alarm.dataValues.abi = JSON.parse(alarm.dataValues.abi)
+        alarm.dataValues.event_names = alarm.dataValues.event_names.split(',')
 				return alarm.dataValues
 			})
 	}
@@ -95,10 +97,33 @@ export class AlarmService {
       })
   }
 
-  storeReceipt(alarm_id, event_name, tx_hash) {
+  async storeReceipt(alarm_id, tx_hash, event_name, extra) {
+    const alarm_receipt = {
+      Alarm_id: alarm_id,
+      tx_hash: tx_hash,
+      event_name: event_name,
+      http_response: extra.http_response,
+      smtp_response: extra.smtp_response,
+    }
 
+    return this._alarm_receipt_model.create(alarm_receipt)
   }
 
-  // dispatchNotifications(alarm, event) {
-  // }
+  async dispatchNotifications(alarm, event) {
+    // if(alarm.email && alarm.email.length) {
+
+    // }
+
+    if(alarm.url && alarm.url.length) {
+      await fetch(alarm.url, {
+          method: 'POST',
+          body: 'details='+JSON.stringify({ alarm: alarm, event: event, }),
+          headers: { 'Content-type': 'application/x-www-form-urlencoded' }
+        }).then(async (res) => {
+          return await res.text()
+        }).then(async (text) => {
+          await this.storeReceipt(alarm.id, event.tx_hash, event.event_name, { http_response: text })
+        })
+    }
+  }
 }

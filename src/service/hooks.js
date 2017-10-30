@@ -1,6 +1,6 @@
 
-class HookService {
-  constructor() {
+export class HookService {
+  constructor(sequelize, DataTypes) {
   }
 
   wasHookTriggered(alarm, alarmHook, alarmEvent) {
