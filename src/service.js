@@ -13,25 +13,27 @@ import { ScannerService } from './service/scanner.js'
 
 sequelize_opts.development.logging = false
 const sequelize = new Sequelize('ethalarm', null, null, sequelize_opts.development)
-sequelize.authenticate()
-	.then(() => {
-		console.log('Connection has been established successfully.')
-	})
-	.catch(err => {
-		console.error('Unable to connect to the database:', err)
-	})
 
 // const eth = new Eth() // TODO
 const alarms = new AlarmService(sequelize, Sequelize)
 const events = new EventService(sequelize, Sequelize, alarms)
 const scanner = new ScannerService(WEB3_PROVIDER, events, alarms)
 
-scanner.startScanner(1000)
-console.log('Scanner started')
+sequelize.authenticate()
+	.then(() => {
+			console.log('Connection has been established successfully.')
+		})
+	.then(() => {
+			scanner.startScanner(1000)
+			console.log('Scanner started')
+		})
+	.catch(err => {
+			console.error('Unable to connect to the database:', err)
+		})
 
-function printResults(result, label) {
-  console.log('\x1b[1m======%s======\x1b[0m\n\x1b[2m%s\x1b[0m', label, JSON.stringify(result));
-}
+// function printResults(result, label) {
+// 	console.log('\x1b[1m======%s======\x1b[0m\n\x1b[2m%s\x1b[0m', label, JSON.stringify(result))
+// }
 
 // alarms.getAlarms()
 //   .then(function(result) {
@@ -98,6 +100,6 @@ function printResults(result, label) {
 //   })
 
 // events.watchNewEvents()
-  // .then((result) => {
-  //     printResults(result, 'EventService.watchNewEvents');
-  //   })
+	// .then((result) => {
+	//     printResults(result, 'EventService.watchNewEvents');
+	//   })
