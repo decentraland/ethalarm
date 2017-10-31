@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "start": "babel-node src/server.js",
+    "test": "mocha",
     "scanner": "babel-node src/service.js"
   },
   "keywords": [
@@ -57,5 +58,7 @@
     "webpack-hot-middleware": "^2.19.1",
     "webpack-server": "^0.1.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": "^4.0.1"
+  }
 }
