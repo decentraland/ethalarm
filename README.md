@@ -1,6 +1,6 @@
 # ethalarm
 
-A tool to get notified about new events triggered by smart contracts.
+Get notified of events triggered by Ethereum contracts.
 
 ## Running
 
