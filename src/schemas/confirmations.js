@@ -1,6 +1,3 @@
-const ConfirmationSchema = {
+const ConfirmationSchema = {};
 
-}
-
-export { ConfirmationSchema }
-
+export { ConfirmationSchema };

@@ -1,24 +1,28 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { AppContainer } from 'react-hot-loader'
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
-import { Provider } from 'react-redux'
-import createHistory from 'history/createBrowserHistory'
-import { Route } from 'react-router'
-import { ConnectedRouter, routerReducer, routerMiddleware as RouterMiddleware } from 'react-router-redux'
-import RedBox from 'redbox-react'
-import createSagaMiddleware from 'redux-saga'
-import im from 'immutable'
+import React from "react";
+import ReactDOM from "react-dom";
+import { AppContainer } from "react-hot-loader";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+import { Provider } from "react-redux";
+import createHistory from "history/createBrowserHistory";
+import { Route } from "react-router";
+import {
+  ConnectedRouter,
+  routerReducer,
+  routerMiddleware as RouterMiddleware
+} from "react-router-redux";
+import RedBox from "redbox-react";
+import createSagaMiddleware from "redux-saga";
+import im from "immutable";
 
-import './style/main.scss'
-import routes from './routes'
-import reducers from './reducers'
-import sagas from './sagas'
+import "./style/main.scss";
+import routes from "./routes";
+import reducers from "./reducers";
+import sagas from "./sagas";
 
-const history = createHistory()
-const routerMiddleware = RouterMiddleware(history)
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-const sagaMiddleware = createSagaMiddleware()
+const history = createHistory();
+const routerMiddleware = RouterMiddleware(history);
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
   combineReducers({
@@ -26,13 +30,11 @@ const store = createStore(
     router: routerReducer
   }),
   {},
-  composeEnhancers(
-    applyMiddleware(routerMiddleware, sagaMiddleware)
-  )
-)
+  composeEnhancers(applyMiddleware(routerMiddleware, sagaMiddleware))
+);
 
-sagaMiddleware.run(sagas)
-const getRoot = () => document.getElementById('app')
+sagaMiddleware.run(sagas);
+const getRoot = () => document.getElementById("app");
 
 const render = Routes => {
   ReactDOM.render(
@@ -44,17 +46,17 @@ const render = Routes => {
       </Provider>
     </AppContainer>,
     getRoot()
-  )
-}
+  );
+};
 
-render(routes)
+render(routes);
 
 if (module.hot) {
-  module.hot.accept('./routes', () => {
+  module.hot.accept("./routes", () => {
     try {
-      render(routes)
+      render(routes);
     } catch (e) {
-      ReactDOM.render(<RedBox error={e} />, getRoot())
+      ReactDOM.render(<RedBox error={e} />, getRoot());
     }
-  })
+  });
 }

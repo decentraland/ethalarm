@@ -1,9 +1,9 @@
 export default {
   noInfo: true,
   progress: true,
-  publicPath: '/',
+  publicPath: "/",
   hot: true,
   stats: {
     color: true
   }
-}
+};
