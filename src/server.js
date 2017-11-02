@@ -8,7 +8,7 @@ import WebpackHotMiddleware from 'webpack-hot-middleware'
 
 import { handleRequest, extractFromReq } from './utils/requestHelpers'
 import { getEnv } from './utils/env'
-import db from './lib/db'
+import { dbConnect } from './lib/db'
 import * as eth from './lib/eth'
 
 import webpackConfig from '../config/webpack.config'
@@ -19,6 +19,8 @@ const app = express()
 const server = http.Server(app)
 const io = SocketIO(http)
 const webpack = Webpack(webpackConfig)
+
+
 
 const PORT = getEnv('PORT', 3000)
 
@@ -35,7 +37,29 @@ app.use(express.static('./public'))
 
 // setup db
 app.use(dbConnect)
+<<<<<<< .merge_file_piURo6
 
+=======
+/*
+app.post('/subscribeToEvents', handleRequest((req, res) => {
+
+    io.emit('subscription', JSON.stringify(req))
+
+    const address = extractFromReq(req, 'address')
+    const subscriptionType = 'events'
+
+    db.save({
+        address,
+        subscriptionType,
+        notificationMethod: 'emails'
+    })
+
+    eth.subscribe(subscriptionType, address, function(result) {
+        console.log(result)
+    })
+}))
+*/
+>>>>>>> .merge_file_qmoaRX
 // define routes
 app.use('/api', alarms)
 

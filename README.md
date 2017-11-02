@@ -6,11 +6,22 @@ Get notified of events triggered by Ethereum contracts.
 
 Run the server using:
 ```
-npm install
-npm start
+npm run docker:build
+npm run docker
 ```
 
 Now, go to http://localhost:3000 and the frontend should be displayed to you.
+
+## Architecture
+
+## TODO
+
+[ ] Templates - write them up
+[ ] Make Services injected with DI
+[ ] Create a configuration service to bootstrap configuration and models
+[ ] Docker-compose: add server, postgres
+[ ] Implement all missing API endpoints
+[ ] Verify Service implementation
 
 ## API
 
@@ -123,7 +134,7 @@ Alarm
 id: string (uuid v4)
 address: string
 abi: string
-eventNames: string (comma separated)
+event_names: string (comma separated)
 email: string
 url: string
 confirmation_code: string
