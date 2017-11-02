@@ -1,0 +1,19 @@
+{
+  "development": {
+    "database": "ethalarm",
+    "dialect": "sqlite",
+    "storage": "ethalarm.db"
+  },
+  "test": {
+    "database": "ethalarm",
+    "dialect": "sqlite",
+    "storage": "ethalarm.db"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "ethalarm",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

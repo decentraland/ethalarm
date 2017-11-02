@@ -1,5 +1,6 @@
-class Eth {
-  constructor(config) {
+export class Eth {
+  //constructor(config) {
+  constructor() {
   }
 
   async initialize() {
