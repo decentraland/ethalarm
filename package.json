@@ -4,7 +4,8 @@
   "description": "Register your contract addresses and get notifications on certain events",
   "private": true,
   "scripts": {
-    "start": "babel-node src/server.js"
+    "start": "babel-node src/server.js",
+    "test": "babel-tape-runner test/index.js | tap-spec"
   },
   "keywords": [
     "event",
@@ -28,9 +29,12 @@
     "css-loader": "^0.28.7",
     "eslint": "^4.7.2",
     "express": "^4.15.4",
+    "express-json-validator-middleware": "^1.1.0",
+    "helmet": "^3.9.0",
     "history": "^4.7.2",
     "html-webpack-plugin": "^2.30.1",
     "immutable": "^3.8.1",
+    "mongodb": "^2.2.33",
     "node-sass": "^4.5.3",
     "postcss": "^6.0.11",
     "react": "^15.6.1",
@@ -51,5 +55,10 @@
     "webpack-hot-middleware": "^2.19.1",
     "webpack-server": "^0.1.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-tape-runner": "^2.0.1",
+    "supertest": "^3.0.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.8.0"
+  }
 }

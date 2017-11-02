@@ -9,9 +9,11 @@ import WebpackHotMiddleware from 'webpack-hot-middleware'
 import { handleRequest, extractFromReq } from './utils/requestHelpers'
 import { getEnv } from './utils/env'
 import db from './lib/db'
+import * as eth from './lib/eth'
+
 import webpackConfig from '../config/webpack.config'
 import webpackMiddlewareConfig from '../config/webpackMiddleware'
-
+import alarms from './routes/alarms'
 
 const app = express()
 const server = http.Server(app)
@@ -31,22 +33,19 @@ app.use(WebpackHotMiddleware(webpack))
 
 app.use(express.static('./public'))
 
-app.post('/subscribeToEvents', handleRequest((req, res) => {
+// setup db
+app.use(dbConnect)
 
-  io.emit('subscription', JSON.stringify(req))
+// define routes
+app.use('/api', alarms)
 
-  const address = extractFromReq(req, 'address')
-  const subscriptionType = 'events'
-
-  db.save({
-    address,
-    subscriptionType,
-    notificationMethod: 'emails'
-  })
-
-}))
-
+app.use((err, req, res, next) => {
+    console.log(err)
+    res.status(400).json(err);
+})
 
 server.listen(PORT, function () {
-  console.log('Server running on port', PORT)
+    console.log(`Eventlog Server running on port ${PORT}`)
 })
+
+export default server

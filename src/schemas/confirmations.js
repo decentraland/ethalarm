@@ -1,0 +1,6 @@
+const ConfirmationSchema = {
+
+}
+
+export { ConfirmationSchema }
+
