@@ -1,27 +1,57 @@
-import actions from './types'
+import types from '~/types'
 
-function filterAction(name, handler) {
-  return (store, action) => {
-    if (action.type === name) {
-      return handler(store, action)
+const INITIAL_STATE = {
+  address: null,
+  abi: null,
+  events: null,
+  id: null,
+  notification: null
+}
+
+export default {
+  address: (state = INITIAL_STATE.address, action) => {
+    switch (action.type) {
+      case types.setAddress:
+        return action.address
+      default:
+        return state
     }
-    return store || {}
+  },
+
+  abi: (state = INITIAL_STATE.abi, action) => {
+    switch(action.type) {
+      case types.setABI:
+        return action.abi
+      default:
+        return state
+    }
+  },
+
+  events: (state = INITIAL_STATE.events, action) => {
+    switch(action.type) {
+      case types.setEvents:
+        return action.events
+      default:
+        return state
+    }
+  },
+
+  id: (state = INITIAL_STATE.id, action) => {
+    switch(action.type) {
+      case types.setId:
+        return action.id
+      default:
+        return state
+    }
+  },
+
+  notification: (state = INITIAL_STATE.notification, action) => {
+    switch(action.type) {
+      case types.setNotificationPreference:
+        return action.notification
+      default:
+        return state
+    }
   }
 }
 
-function pick(field) {
-  return (store, action) => action[field]
-}
-
-export default function() {
-  return {
-    address: filterAction(actions.setAddress, pick('address')),
-    abi: filterAction(actions.setABI, pick('abi')),
-    events: filterAction(actions.setEvents, pick('events')),
-    notification: filterAction(
-      actions.setNotificationPreference,
-      pick('notification')
-    ),
-    id: filterAction(actions.setId, pick('id'))
-  }
-}

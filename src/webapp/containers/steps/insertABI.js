@@ -17,6 +17,7 @@ class InsertABI extends SagaStep {
       abi: JSON.parse(this.abiInput.value)
     }
   }
+
   render() {
     const defaultData =
       '[{"anonymous":false,"inputs":[{"indexed":false,"name":"target","type":"address"}],"name":"LandClaimContractSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"user","type":"address"}],"name":"LandClaimExecuted","type":"event"}]'
@@ -25,11 +26,11 @@ class InsertABI extends SagaStep {
       <div className="insertabi step">
         <div className="explain">
           <p>
-            Insert the ABI for contract{' '}
+            Insert the ABI for contract&nbsp;
             <strong>0x0F5D2fB29fb7d3CFeE444a200298f468908cC942</strong>:
           </p>
         </div>
-        <textarea ref={ abiInput => this.abiInput = abiInput } value={defaultData} />
+        <textarea ref={ abiInput => this.abiInput = abiInput } placeholder={defaultData} />
         <NextButton action={this.action} />
       </div>
     )

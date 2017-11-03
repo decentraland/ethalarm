@@ -17,6 +17,11 @@ body {
   flex-direction: column;
 }
 
+.content {
+  padding-top: 100px;
+  padding-bottom: 20px;
+}
+
 h1, h2, h3 {
   font-family: "Source Sans Pro", Helvetica, sans-serif;
 }
@@ -31,4 +36,8 @@ a {
 
 a:visited {
   color: $black;
+}
+
+.text-center {
+  text-align: center;
 }

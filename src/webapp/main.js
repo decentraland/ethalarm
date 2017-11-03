@@ -9,8 +9,8 @@ import {
   routerReducer,
   routerMiddleware as RouterMiddleware
 } from 'react-router-redux'
-import RedBox from 'redbox-react'
 import createSagaMiddleware from 'redux-saga'
+import reduxLogger from 'redux-logger'
 
 import './style/main.scss'
 import routes from './routes'
@@ -24,11 +24,11 @@ const sagaMiddleware = createSagaMiddleware()
 
 const store = createStore(
   combineReducers({
-    ...reducers(),
+    ...reducers,
     router: routerReducer
   }),
   {},
-  composeEnhancers(applyMiddleware(routerMiddleware, sagaMiddleware))
+  composeEnhancers(applyMiddleware(routerMiddleware, reduxLogger, sagaMiddleware))
 )
 
 sagaMiddleware.run(sagas)
@@ -53,8 +53,8 @@ if (module.hot) {
   module.hot.accept('./routes', () => {
     try {
       render(routes)
-    } catch (e) {
-      ReactDOM.render(<RedBox error={e} />, getRoot())
+    } catch (error) {
+      console.error(error)
     }
   })
 }

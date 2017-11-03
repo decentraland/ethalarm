@@ -1,13 +1,11 @@
 import React from 'react'
 
-function SelectedContract({ address, abi }) {
+function SelectedContract({ address }) {
   return (
     <div className="explain selectedContract">
       <p>
-        Contract: <strong>SomeSmartContract</strong>
-      </p>
-      <p>
-        Address: <strong>0x0F5D2fB29fb7d3CFeE444a200298f468908cC942</strong>
+        Address
+        <strong className="offset-value">{ address }</strong>
       </p>
     </div>
   )

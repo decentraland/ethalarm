@@ -1,4 +1,5 @@
-import { call, takeEvery, select, put } from 'redux-saga/effects'
+import { delay } from 'redux-saga'
+import { race, call, takeEvery, select, put } from 'redux-saga/effects'
 import { push, replace } from 'react-router-redux'
 
 import locations from './locations'
@@ -26,6 +27,17 @@ function* handleNotification(action) {
 }
 
 function* handleConfirm(action) {
+  const state = yield select()
+
+  yield call(postAlarm, {
+    address: state.address,
+    abi: JSON.stringify(state.abi),
+    events: state.events,
+    hook: state.notification.webhook || '',
+    email: state.notification.email || '',
+    confirmations: 0
+  })
+
   yield put(push(locations.success))
 }
 
@@ -33,27 +45,29 @@ function* handleEvents(action) {
   yield put(push(locations.howNotify))
 }
 
-// function* handleSubmit(action) {
-//   yield put(push(locations.howNotify))
-// }
-
 function* handleAddressEntered(action) {
   yield put(push(locations.lookingUp))
-  const result = yield call(getABI, action.address)
-  if (!result) {
-    console.log('No abi', result)
-    yield put(push(locations.insertABI))
-  } else {
-    console.log('have abi', result)
+
+  const { abi } = yield race({
+    abi: call(getABI, action.address),
+    timeout: call(delay, 2000)
+  })
+
+  if (abi) {
     yield put({
       type: actions.setABI,
-      abi: result
+      abi: abi
     })
+  } else {
+    console.log(`Couldn't find a valid abi for ${action.address}`)
+    yield put(push(locations.insertABI))
   }
 }
 
 async function getABI(address) {
+  // TODO: conditional by selected net
   const url = `http://api.etherscan.io/api?module=contract&action=getabi&address=${address}&format=raw`
+
   return await fetch(url)
     .then(parseJson)
     .then(response => {
@@ -63,6 +77,17 @@ async function getABI(address) {
       return response
     })
     .catch(() => null)
+}
+
+async function postAlarm(alarm) {
+  return await fetch('/alarms', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify(alarm)
+    })
+    .then(parseJson)
 }
 
 function parseJson(e) {

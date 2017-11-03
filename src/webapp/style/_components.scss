@@ -30,8 +30,12 @@
     text-align: center;
     color: $black;
   }
-  margin-top: 100px;
-  margin-bottom: 50px;
+}
+
+.offset-value {
+  margin-top: 6px;
+  margin-left: 40px;
+  display: block;
 }
 
 .step {
@@ -128,12 +132,16 @@ button.next {
 }
 
 .logdetail {
-  margin-top: 30px;
+  margin-bottom: 30px;
+
+  p {
+    margin-bottom: 0;
+  }
+
   ul {
-    margin-left: 20px;
     li {
       margin-bottom: 10px;
     }
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 }

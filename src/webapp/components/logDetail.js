@@ -3,31 +3,39 @@ import PropTypes from 'prop-types'
 
 class LogDetail extends React.Component {
   render() {
-    const url = `https://ethalarm.com/entry/${this.props.id}`
+    const { address, events, email, webhook, id } = this.props
+    const url = `https://ethalarm.com/entry/${id}`
+
     return (
       <div className="logdetail">
         <p>
-          Contract: <strong>{this.props.contractName}</strong>
+          Address
+          <strong className="offset-value">{address}</strong>
         </p>
-        <p>
-          Address: <strong>{this.props.address}</strong>
-        </p>
-        <p>Events:</p>
-        <ul>{this.props.events.map(event => <li key={event}>{event}</li>)}</ul>
-        {this.props.email && (
+
+        <p>Events</p>
+        <ul className="offset-value">
+          {events.map((event, index) => <EventItem key={ index } event={ event } />)}
+        </ul>
+
+        {email && (
           <p>
-            Email notifications: <strong>{this.props.email}</strong>
+            Email notifications
+            <strong className="offset-value">{email}</strong>
           </p>
         )}
-        {this.props.webhook && (
+
+        {webhook && (
           <p>
-            Webhook: <strong>{this.props.webhook}</strong>
+            Webhook
+            <strong className="offset-value">{webhook}</strong>
           </p>
         )}
-        {this.props.id && (
+
+        {id && (
           <p>
             Permalink:&nbsp;
-            <strong>
+            <strong className="offset-value">
               <a href={url} target="_blank">
                 {url}
               </a>
@@ -40,8 +48,13 @@ class LogDetail extends React.Component {
   }
 }
 
+function EventItem({ event }) {
+  return <li>
+    <strong>{event}</strong>
+  </li>
+}
+
 LogDetail.propTypes = {
-  contractName: PropTypes.string.isRequired,
   address: PropTypes.string.isRequired,
   events: PropTypes.arrayOf(PropTypes.string).isRequired,
   email: PropTypes.string,

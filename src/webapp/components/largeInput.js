@@ -1,26 +1,29 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default class LargeInput extends React.Component {
-  componentWillMount() {
-    this.input = null
-  }
+  static propTypes = {
+    type: PropTypes.string,
+    required: PropTypes.bool,
+    onChange: PropTypes.func
+  };
 
-  value() {
-    return this.input.value
-  }
+  static defaultProps = {
+    type: "text",
+    required: false,
+    onChange: () => {}
+  };
 
-  handleEnter = ev => {
-    if (ev.key === 'Enter') {
-      if (this.props.onSubmit) {
-        this.props.onSubmit(this.value())
-      }
-    }
+  onChange = event => {
+    this.props.onChange(event.currentTarget.value)
   };
 
   render() {
+    const { type, required } = this.props
+
     return (
       <div className="large-input">
-        <input ref={ input => this.input = input } onKeyUp={this.handleEnter} />
+        <input type={type} required={required} onChange={this.onChange} />
       </div>
     )
   }

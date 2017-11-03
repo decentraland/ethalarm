@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import types from '~/types'
+import { pick } from '~/utils'
 
 import SagaStep from './sagaStep'
 import LogDetail from '~/components/logDetail'
@@ -13,22 +14,29 @@ class Verify extends SagaStep {
       type: types.confirm
     }
   }
+
   render() {
+    const { address, events, notification } = this.props
+    const { email, webhook } = notification
+
     return (
       <div className="verify step">
-        <div className="explain">
-          Please verify the configuration for the notification:
+        <div className="highlight">
+          Please verify the configuration for the notification
         </div>
+
         <LogDetail
-          contractName="SomeContract"
-          address="0x0F5D2fB29fb7d3CFeE444a200298f468908cC942"
-          events={['Deposit', 'Withdraw']}
-          email="john@doe.com"
+          contractName={address}
+          address={address}
+          events={events}
+          email={email}
+          webhook={webhook}
         />
+
         <NextButton action={this.action} />
       </div>
     )
   }
 }
 
-export default connect(() => ({}))(Verify)
+export default connect(pick(['address', 'events', 'notification']))(Verify)

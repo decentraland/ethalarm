@@ -40,6 +40,6 @@ export default class AlarmRouter {
 
 const buildResponseSchema = (promise, response = {}) => {
   promise
-    .then(result => res.json({ ok: true, result }))
-    .catch(error => res.status(error === 'not found' ? 404 : 500).json({ ok: false, error }))
+    .then(result => response.json({ ok: true, result }))
+    .catch(error => response.status(error === 'not found' ? 404 : 500).json({ ok: false, error }))
 }

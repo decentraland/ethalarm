@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import types from '~/types'
+import { pick } from '~/utils'
 
 import NextButton from '~/components/nextButton'
 import EventSelector from '~/components/eventSelector'
@@ -11,7 +12,7 @@ import SagaStep from './sagaStep'
 class SelectEvents extends SagaStep {
   constructor(props) {
     super(props)
-    this.eventsInput = null
+    this.eventSelector = null
 
     this.getEvents(props)
   }
@@ -19,17 +20,12 @@ class SelectEvents extends SagaStep {
   createAction() {
     return {
       type: types.setEvents,
-      events: this.eventsInput.getSelections()
+      events: this.eventSelector.getSelections()
     }
   }
 
   componentWillReceiveProps(newProps) {
     this.getEvents(newProps)
-  }
-
-  getIdForMethod(method) {
-    // TODO: Return actually hash
-    return this.getNameForMethod(method)
   }
 
   getNameForMethod(method) {
@@ -42,32 +38,21 @@ class SelectEvents extends SagaStep {
   }
 
   getEvents(props) {
-    console.log(props)
-    this.events = props.abi.filter(abi => abi.type === 'event').map(method => ({
-      id: this.getIdForMethod(method),
-      name: this.getNameForMethod(method)
-    }))
+    this.events = props.abi.filter(abi => abi.type === 'event').map(method =>
+      this.getNameForMethod(method)
+    )
   }
 
   render() {
     return (
       <div className="selectevents step">
-        <SelectedContract address={this.props.address} abi={this.props.abi} />
-        <p>Select which events to subscribe to:</p>
-        <EventSelector ref={ eventsInput => this.eventsInput = eventsInput } options={this.events} />
+        <SelectedContract address={this.props.address} />
+        <p>Select which events to subscribe to</p>
+        <EventSelector ref={ eventSelector => this.eventSelector = eventSelector } options={this.events} />
         <NextButton action={this.action} />
       </div>
     )
   }
-}
-
-const pick = fields => state => {
-  console.log(state)
-  const result = {}
-  for (let field of fields) {
-    result[field] = state[field]
-  }
-  return result
 }
 
 export default connect(pick(['address', 'abi']))(SelectEvents)

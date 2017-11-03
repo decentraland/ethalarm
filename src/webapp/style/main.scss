@@ -48,7 +48,6 @@
 
   ul {
     text-align: left;
-    min-width: 50%;
     margin-top: 30px;
     margin-bottom: 30px;
 
@@ -79,10 +78,7 @@
   }
 }
 
-.success {
-  .details {
-    font-size: 18px;
-  }
+.verify, .success {
   .highlight {
     font-size: 20px;
     margin-top: 0px;

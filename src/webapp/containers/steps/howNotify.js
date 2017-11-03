@@ -1,25 +1,34 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import actions from '../../types'
+import actions from '~/types'
+import { preventDefault } from '~/utils'
 
 import SagaStep from './sagaStep'
 import NextButton from '~/components/nextButton'
-import SelectedContract from '~/components/selectedContract'
 import QueryWithLargeInput from '~/components/queryWithLargeInput'
 
 class HowNotify extends SagaStep {
   componentWillMount() {
-    this.emailInput = null
-    this.webhookInput = null
+    this.email = null
+    this.webhook = null
   }
 
+  setEmail = (email) => {
+    this.email = email
+  };
+
+  setWebhook = (webhook) => {
+    this.webhook = webhook
+  };
+
   createAction() {
+    // TODO: check at least one exists
     return {
       type: actions.setNotificationPreference,
       notification: {
-        email: this.emailInput.value,
-        hook: this.webhookInput.value
+        email: this.email,
+        hook: this.webhook
       }
     }
   }
@@ -27,18 +36,24 @@ class HowNotify extends SagaStep {
   render() {
     return (
       <div className="hownotify step">
-        <SelectedContract address={''} abi={''} />
         <p className="how">How would you like to be notified of new events?</p>
-        <QueryWithLargeInput ref={ emailInput => this.emailInput = emailInput } onSubmit={this.action}>
-          Via email:
-        </QueryWithLargeInput>
-        <QueryWithLargeInput ref={ webhookInput => this.webhookInput = webhookInput } onSubmit={this.action}>
-          Via a POST request to:
-        </QueryWithLargeInput>
-        <NextButton action={this.action} />
+
+        <form action="/" method="GET" onSubmit={preventDefault(this.action)}>
+          <QueryWithLargeInput type="email" onChange={this.setEmail}>
+            Via email:
+          </QueryWithLargeInput>
+
+          <QueryWithLargeInput onChange={this.setWebhook}>
+            Via a POST request to:
+          </QueryWithLargeInput>
+
+          <div className="text-center">
+            <NextButton />
+          </div>
+        </form>
       </div>
     )
   }
 }
 
-export default connect(() => ({}))(HowNotify)
+export default  connect(() => ({}))(HowNotify)

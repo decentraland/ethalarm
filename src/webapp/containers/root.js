@@ -9,8 +9,10 @@ export default class Root extends React.Component {
     return (
       <div className="root">
         <Navbar />
-        <Logo />
-        {this.props.children}
+        <div className="content">
+          <Logo />
+          {this.props.children}
+        </div>
       </div>
     )
   }
