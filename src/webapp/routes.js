@@ -1,18 +1,18 @@
-import React from "react";
-import { Route } from "react-router";
+import React from 'react'
+import { Route } from 'react-router'
 
-import locations from "./locations";
+import locations from './locations'
 
-import Root from "./containers/root";
-import SelectContract from "./containers/steps/selectContract";
-import LookingUp from "./containers/steps/lookingUp";
-import InsertABI from "./containers/steps/insertABI";
-import SelectEvents from "./containers/steps/selectEvents";
-import HowNotify from "./containers/steps/howNotify";
-import Verify from "./containers/steps/verify";
-import Success from "./containers/steps/success";
+import Root from './containers/root'
+import SelectContract from './containers/steps/selectContract'
+import LookingUp from './containers/steps/lookingUp'
+import InsertABI from './containers/steps/insertABI'
+import SelectEvents from './containers/steps/selectEvents'
+import HowNotify from './containers/steps/howNotify'
+import Verify from './containers/steps/verify'
+import Success from './containers/steps/success'
 
-export default function() {
+export default function routes() {
   return (
     <Root>
       <Route exact path={locations.root} component={SelectContract} />
@@ -23,5 +23,5 @@ export default function() {
       <Route path="/verify" component={Verify} />
       <Route path="/success" component={Success} />
     </Root>
-  );
+  )
 }

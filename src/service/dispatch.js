@@ -29,8 +29,8 @@ export default class DispatchService {
       event_name: eventName,
       http_response: extras.httpResponse,
       smtp_response: extras.smtpResponse
-    };
+    }
 
-    return this.receiptModel.create(receipt);
+    return this.receiptModel.create(receipt)
   }
 }

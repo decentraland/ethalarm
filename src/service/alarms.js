@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+import { Op } from 'sequelize'
 
 export class AlarmService {
   constructor(dispathService, alarmModel, syncStateModel, receiptModel, reorgSafety) {
@@ -13,15 +13,15 @@ export class AlarmService {
    * @param [where] add restrictions on what alarms to fetch
    */
   getAlarms(where = { id: undefined, addresses: [] }) {
-    const internal_where = {};
+    const internal_where = {}
     if (where.addresses && where.addresses.length) {
       internal_where.address = {
         [Op.in]: where.addresses
-      };
+      }
     }
 
     if (where.id) {
-      internal_where.id = where.id;
+      internal_where.id = where.id
     }
 
     return this.alarmModel
@@ -29,10 +29,10 @@ export class AlarmService {
         where: internal_where
       })
       .map(function(alarm) {
-        alarm.dataValues.abi = JSON.parse(alarm.dataValues.abi);
-        alarm.dataValues.event_names = alarm.dataValues.event_names.split(",");
-        return alarm.dataValues;
-      });
+        alarm.dataValues.abi = JSON.parse(alarm.dataValues.abi)
+        alarm.dataValues.event_names = alarm.dataValues.event_names.split(',')
+        return alarm.dataValues
+      })
   }
 
   /**
@@ -47,7 +47,7 @@ export class AlarmService {
       email: alarmDescription.email,
       url: alarmDescription.url,
       block_confirmations: alarmDescription.block_confirmations
-    });
+    })
   }
 
   /**
@@ -56,19 +56,19 @@ export class AlarmService {
   mapAddressesToAlarm(addresses = []) {
     return this.getAlarms({ addresses: addresses }).reduce(
       function(map, obj) {
-        if (!map[obj.address]) map[obj.address] = [];
-        map[obj.address].push(obj);
-        return map;
+        if (!map[obj.address]) map[obj.address] = []
+        map[obj.address].push(obj)
+        return map
       },
       {}
-    );
+    )
   }
 
   /**
    * Configure the maximum amount of reorgs we might expect to happen
    */
   getReorgSafety() {
-    return this.reorgSafety;
+    return this.reorgSafety
   }
 
   /**
@@ -91,19 +91,19 @@ export class AlarmService {
         }
       })
       .reduce(function(addrtolastsync, alarm) {
-        let last_sync_block = default_last_sync;
+        let last_sync_block = default_last_sync
         if (alarm.AlarmSyncState !== null)
-          last_sync_block = alarm.AlarmSyncState.dataValues.last_sync_block;
+          last_sync_block = alarm.AlarmSyncState.dataValues.last_sync_block
 
         // Only return the greatest last_block_sync for specified address
         if (
           addrtolastsync[alarm.dataValues.address] === undefined ||
           last_sync_block > addrtolastsync[alarm.dataValues.address]
         )
-          addrtolastsync[alarm.dataValues.address] = last_sync_block;
+          addrtolastsync[alarm.dataValues.address] = last_sync_block
 
-        return addrtolastsync;
-      }, {});
+        return addrtolastsync
+      }, {})
   }
 
   /**
@@ -116,6 +116,6 @@ export class AlarmService {
         tx_hash: tx_hash,
         event_name: event_name
       }
-    });
+    })
   }
 }

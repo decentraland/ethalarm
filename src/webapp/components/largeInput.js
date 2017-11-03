@@ -1,21 +1,27 @@
-import React from "react";
+import React from 'react'
 
 export default class LargeInput extends React.Component {
-  value() {
-    return this.refs.input.value;
+  componentWillMount() {
+    this.input = null
   }
+
+  value() {
+    return this.input.value
+  }
+
   handleEnter = ev => {
-    if (ev.key === "Enter") {
+    if (ev.key === 'Enter') {
       if (this.props.onSubmit) {
-        this.props.onSubmit(this.value());
+        this.props.onSubmit(this.value())
       }
     }
   };
+
   render() {
     return (
       <div className="large-input">
-        <input ref="input" onKeyUp={this.handleEnter} />
+        <input refs={ input => this.input = input } onKeyUp={this.handleEnter} />
       </div>
-    );
+    )
   }
 }

@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react'
 
-import SelectContract from "./steps/selectContract";
-import LookingUp from "./steps/lookingUp";
-import InsertABI from "./steps/insertABI";
-import SelectEvents from "./steps/selectEvents";
-import HowNotify from "./steps/howNotify";
-import Verify from "./steps/verify";
-import Success from "./steps/success";
+// import SelectContract from './steps/selectContract'
+import LookingUp from './steps/lookingUp'
+// import InsertABI from './steps/insertABI'
+// import SelectEvents from './steps/selectEvents'
+// import HowNotify from './steps/howNotify'
+// import Verify from './steps/verify'
+// import Success from './steps/success'
 
-import Entry from "./entry";
+// import Entry from './entry'
 
 export default class App extends React.Component {
   render() {
@@ -16,6 +16,6 @@ export default class App extends React.Component {
       <div className="app-container">
         <LookingUp />
       </div>
-    );
+    )
   }
 }

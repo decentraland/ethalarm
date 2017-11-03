@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 module.exports = function(sequelize, DataTypes) {
   const AlarmSyncState = sequelize.define(
-    "AlarmSyncState",
+    'AlarmSyncState',
     {
       id: {
         type: DataTypes.INTEGER,
@@ -13,25 +13,25 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: "Alarm",
-          key: "id"
+          model: 'Alarm',
+          key: 'id'
         }
       },
       last_sync_block: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: "0"
+        defaultValue: '0'
       }
     },
     {
-      tableName: "AlarmSyncState",
+      tableName: 'AlarmSyncState',
       timestamps: false
     }
-  );
+  )
 
   AlarmSyncState.associate = function(models) {
-    AlarmSyncState.belongsTo(models.Alarm, { foreignKey: "Alarm_id" });
-  };
+    AlarmSyncState.belongsTo(models.Alarm, { foreignKey: 'Alarm_id' })
+  }
 
-  return AlarmSyncState;
-};
+  return AlarmSyncState
+}

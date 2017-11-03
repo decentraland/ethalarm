@@ -7,12 +7,12 @@ export class Eth {
   }
 
   async getEvents(data) {
-    const newFilter = await this.client.newFilter(data);
+    const newFilter = await this.client.newFilter(data)
     return await new Promise((resolve, reject) => {
       newFilter.get((err, result) => {
-        if (err) return reject(err);
-        return resolve(result);
-      });
-    });
+        if (err) return reject(err)
+        return resolve(result)
+      })
+    })
   }
 }

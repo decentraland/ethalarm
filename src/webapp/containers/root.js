@@ -1,9 +1,8 @@
-import React from "react";
+import React from 'react'
 
-import Logo from "~/components/logo";
+import Logo from '~/components/logo'
 
-import Navbar from "./navbar";
-import App from "./app";
+import Navbar from './navbar'
 
 export default class Root extends React.Component {
   render() {
@@ -13,6 +12,6 @@ export default class Root extends React.Component {
         <Logo />
         {this.props.children}
       </div>
-    );
+    )
   }
 }

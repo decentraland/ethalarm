@@ -1,7 +1,7 @@
-"use strict";
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Alarm", {
+    return queryInterface.createTable('Alarm', {
       id: {
         type: Sequelize.UUID,
         //allowNull: false,
@@ -29,7 +29,7 @@ module.exports = {
       block_confirmations: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: "1"
+        defaultValue: '1'
       },
       confirmation_code: {
         type: Sequelize.UUID,
@@ -50,9 +50,9 @@ module.exports = {
       deleted_at: {
         type: Sequelize.DATE
       }
-    });
+    })
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("Alarm");
+    return queryInterface.dropTable('Alarm')
   }
-};
+}

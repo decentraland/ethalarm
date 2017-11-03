@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export default class Root extends React.Component {
   render() {
@@ -6,6 +6,6 @@ export default class Root extends React.Component {
       <div className="logo">
         <h1>ethalarm</h1>
       </div>
-    );
+    )
   }
 }

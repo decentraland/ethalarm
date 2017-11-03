@@ -1,7 +1,7 @@
-"use strict";
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("AlarmReceipt", {
+    return queryInterface.createTable('AlarmReceipt', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -11,8 +11,8 @@ module.exports = {
       Alarm_id: {
         type: Sequelize.UUIDV4,
         references: {
-          model: "Alarm",
-          key: "id"
+          model: 'Alarm',
+          key: 'id'
         },
         allowNull: false
       },
@@ -25,10 +25,10 @@ module.exports = {
         allowNull: false
       },
       smtp_response: {
-        type: Sequelize.BLOB("medium")
+        type: Sequelize.BLOB('medium')
       },
       http_response: {
-        type: Sequelize.BLOB("medium")
+        type: Sequelize.BLOB('medium')
       },
       created_at: {
         type: Sequelize.DATE,
@@ -38,9 +38,9 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       }
-    });
+    })
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("AlarmReceipt");
+    return queryInterface.dropTable('AlarmReceipt')
   }
-};
+}

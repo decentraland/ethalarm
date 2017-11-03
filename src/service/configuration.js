@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import http from 'http'
 import express from 'express'
 import bodyParser from 'body-parser'
 import Webpack from 'webpack'
@@ -8,12 +9,19 @@ import WebpackMiddleware from 'webpack-dev-middleware'
 import WebpackHotMiddleware from 'webpack-hot-middleware'
 
 import Sequelize from 'sequelize'
-import { Log } from 'decentraland-commons'
+import { Log, env } from 'decentraland-commons'
 
 import webpackDevelopment from '../config/webpack.development.config'
 import webpackProduction from '../config/webpack.production.config'
 import middlewareProduction from '../config/webpackMiddleware.production'
 import middlewareDevelopment from '../config/webpackMiddleware.development'
+
+// Missing imports:
+//   AlarmRouter
+//   ConfirmationRouter
+//   AlarmService
+//   EmailService
+//   TemplateService
 
 export const PRODUCTION = 'production'
 export const STAGING = 'staging'
@@ -22,17 +30,6 @@ export const DEVELOPMENT = 'development'
 export const ENVS = [ PRODUCTION, STAGING, TESTING, DEVELOPMENT ]
 
 export const configLog = new Log('ConfigurationService')
-
-const _modelDir = path.join(__dirname, '..', 'db', 'models')
-const _basename = path.basename(_modelDir)
-const _onlyJsFiles = file => (file.indexOf('.') !== 0) && (file !== _basename) && (file.slice(-3) === '.js')
-
-function _sequelizeImport(sequelize, classes) {
-  return (file) => {
-    const model = sequelize.import(path.join(__driname, file))
-    classes[model.name] = model
-  }
-}
 
 export default class ConfigurationService {
   constructor(environment) {
@@ -45,21 +42,22 @@ export default class ConfigurationService {
   startServer() {
     const app = express()
     const webpack = Webpack(this.webpackConfiguration)
-    const log = new Logger('Server')
+    const log = new Log('Server')
 
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())
 
-    this.setupWebpack(app)
+    this.setupWebpack(app, webpack)
 
     this.setupRoutes(app)
 
     app.use((err, req, res, next) => {
-      log.error(err);
-      res.status(400).json(err);
+      log.error(err)
+      res.status(400).json(err)
     })
 
-    const port = getEnv('PORT', 3000)
+    const port = env.getEnv('PORT', 3000)
+    const server = http.Server(app)
     server.listen(port, () => {
       console.log(`EthAlarm server running on port ${port}`)
     })
@@ -67,7 +65,7 @@ export default class ConfigurationService {
     return server
   }
 
-  setupWebpack(app) {
+  setupWebpack(app, webpack) {
     app.use(WebpackMiddleware(webpack, this.middlewareConfiguration))
     app.use(WebpackHotMiddleware(webpack))
   }
@@ -109,7 +107,7 @@ export default class ConfigurationService {
 
   get emailService() {
     if (!this._emailService) {
-      this._emailService = new EmailService(getEnv('EMAIL_CONFIG'))
+      this._emailService = new EmailService(env.getEnv('EMAIL_CONFIG'))
     }
     return this._emailService
   }
@@ -150,13 +148,11 @@ export default class ConfigurationService {
   }
 
   _setupDatabase() {
-    const config = getEnv('DATABASE_CONNECTION')
+    const config = env.getEnv('DATABASE_CONNECTION')
     this._sequelize = new Sequelize(config)
     this._classes = {}
 
-    fs.readdirSync(_modelDir)
-      .filter(_onlyJsFiles)
-      .forEach(_sequelizeImport(this._sequelize, this._classes))
+    _sequelizeImport(this._sequelize, this._classes)
 
     this._associateModels()
     this._classes.sequelize = this._sequelize
@@ -171,3 +167,17 @@ export default class ConfigurationService {
     })
   }
 }
+
+function _sequelizeImport(sequelize, classes) {
+  const _modelDir = path.join(__dirname, '..', 'db', 'models')
+  const _basename = path.basename(_modelDir)
+  const _onlyJsFiles = file => (file.indexOf('.') !== 0) && (file !== _basename) && (file.slice(-3) === '.js')
+
+  fs.readdirSync(_modelDir)
+    .filter(_onlyJsFiles)
+    .forEach(  (file) => {
+      const model = sequelize.import(path.join(__dirname, file))
+      classes[model.name] = model
+    })
+}
+

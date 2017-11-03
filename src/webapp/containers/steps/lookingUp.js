@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react'
 
-import LoadingDots from "~/components/loadingDots";
+import LoadingDots from '~/components/loadingDots'
 
 export default class LookingUp extends React.Component {
   render() {
@@ -12,6 +12,6 @@ export default class LookingUp extends React.Component {
         </div>
         <LoadingDots />
       </div>
-    );
+    )
   }
 }

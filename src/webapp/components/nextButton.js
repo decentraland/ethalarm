@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export default class NextButton extends React.Component {
   render() {
@@ -6,6 +6,6 @@ export default class NextButton extends React.Component {
       <button className="next" onClick={() => (this.props.action || {})()}>
         <span>next</span>
       </button>
-    );
+    )
   }
 }

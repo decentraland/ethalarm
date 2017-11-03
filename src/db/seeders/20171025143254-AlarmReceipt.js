@@ -1,4 +1,4 @@
-"use strict";
+
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -13,29 +13,29 @@ module.exports = {
 			}], {});
 		*/
     return queryInterface.bulkInsert(
-      "AlarmReceipt",
+      'AlarmReceipt',
       [
         {
           id: 1,
-          Alarm_id: "3411d22e-d454-4bf3-aab1-2e711c9879bc",
-          event_name: "Trade",
+          Alarm_id: '3411d22e-d454-4bf3-aab1-2e711c9879bc',
+          event_name: 'Trade',
           tx_hash:
-            "0x5c8c0ce953202c42a13ae1183e86ade8ca08440774fb6b2fc23909f16b5dfe0e",
+            '0x5c8c0ce953202c42a13ae1183e86ade8ca08440774fb6b2fc23909f16b5dfe0e',
           created_at: new Date(),
           updated_at: new Date()
         },
         {
           id: 2,
-          Alarm_id: "3411d22e-d454-4bf3-aab1-2e711c9879bd",
-          event_name: "Deposit",
+          Alarm_id: '3411d22e-d454-4bf3-aab1-2e711c9879bd',
+          event_name: 'Deposit',
           tx_hash:
-            "0x5c8c0ce953202c42a13ae1183e86ade8ca08440774fb6b2fc23909f16b5dfe0e",
+            '0x5c8c0ce953202c42a13ae1183e86ade8ca08440774fb6b2fc23909f16b5dfe0e',
           created_at: new Date(),
           updated_at: new Date()
         }
       ],
       {}
-    );
+    )
   },
   down: (queryInterface, Sequelize) => {
     /*
@@ -45,6 +45,6 @@ module.exports = {
 			Example:
 			return queryInterface.bulkDelete('Person', null, {});
 		*/
-    queryInterface.bulkDelete("AlarmReceipt", null, {});
+    queryInterface.bulkDelete('AlarmReceipt', null, {})
   }
-};
+}

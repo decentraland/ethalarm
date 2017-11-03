@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 module.exports = function(sequelize, DataTypes) {
   const Alarm = sequelize.define(
-    "Alarm",
+    'Alarm',
     {
       id: {
         type: DataTypes.UUID,
@@ -30,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
       block_confirmations: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: "1"
+        defaultValue: '1'
       },
       confirmation_code: {
         type: DataTypes.UUID,
@@ -44,19 +44,19 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     {
-      tableName: "Alarm",
+      tableName: 'Alarm',
       paranoid: true,
       timestamps: true,
-      createdAt: "created_at",
-      updatedAt: "updated_at",
-      deletedAt: "deleted_at"
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+      deletedAt: 'deleted_at'
     }
-  );
+  )
 
   Alarm.associate = function(models) {
-    Alarm.hasOne(models.AlarmSyncState, { foreignKey: "Alarm_id" });
-    Alarm.hasMany(models.AlarmReceipt, { foreignKey: "Alarm_id" });
-  };
+    Alarm.hasOne(models.AlarmSyncState, { foreignKey: 'Alarm_id' })
+    Alarm.hasMany(models.AlarmReceipt, { foreignKey: 'Alarm_id' })
+  }
 
-  return Alarm;
-};
+  return Alarm
+}

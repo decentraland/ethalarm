@@ -1,41 +1,41 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 
 class EventSelector extends React.Component {
   constructor() {
-    super(...arguments);
+    super(...arguments)
     this.state = {
       selected: {}
-    };
+    }
     for (let item of this.props.options) {
-      this.state.selected[item.id] = true;
+      this.state.selected[item.id] = true
     }
 
     this.handleAllClick = () => {
-      const newState = !this.allSelected();
+      const newState = !this.allSelected()
       this.setState({
         selected: this.props.options
           .map(item => item.id)
           .reduce((prev, item) => {
-            prev[item] = newState;
-            return prev;
+            prev[item] = newState
+            return prev
           }, {})
-      });
-    };
+      })
+    }
 
     this.handleClick = ev => {
-      const updatedSelected = Object.assign({}, this.state.selected);
-      const id = ev.target.attributes["data-id"].value;
-      updatedSelected[id] = !this.state.selected[id];
+      const updatedSelected = Object.assign({}, this.state.selected)
+      const id = ev.target.attributes['data-id'].value
+      updatedSelected[id] = !this.state.selected[id]
       this.setState({
         selected: updatedSelected
-      });
-    };
+      })
+    }
   }
 
   renderItem(item) {
     return (
-      <li key={item.id} ref={item.id}>
+      <li key={item.id}>
         <input
           type="checkbox"
           checked={this.state.selected[item.id]}
@@ -44,13 +44,13 @@ class EventSelector extends React.Component {
         />
         {item.name}
       </li>
-    );
+    )
   }
 
   allSelected() {
     return this.props.options
       .map(item => item.id)
-      .reduce((prev, item) => prev && this.state.selected[item], true);
+      .reduce((prev, item) => prev && this.state.selected[item], true)
   }
 
   renderAll() {
@@ -63,21 +63,21 @@ class EventSelector extends React.Component {
         />
         All
       </li>
-    );
+    )
   }
 
   renderOptions() {
-    const options = this.props.options.map(item => this.renderItem(item));
-    options.push(this.renderAll());
-    return options;
+    const options = this.props.options.map(item => this.renderItem(item))
+    options.push(this.renderAll())
+    return options
   }
 
   getSelections() {
-    return this.props.options.filter(item => this.state.selected[item.id]);
+    return this.props.options.filter(item => this.state.selected[item.id])
   }
 
   render() {
-    return <ul>{this.renderOptions()}</ul>;
+    return <ul>{this.renderOptions()}</ul>
   }
 }
 
@@ -88,6 +88,6 @@ EventSelector.propTypes = {
       id: PropTypes.string
     })
   )
-};
+}
 
-export default EventSelector;
+export default EventSelector

@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 
 class LogDetail extends React.Component {
   render() {
-    const url = `https://ethalarm.com/entry/${this.props.id}`;
+    const url = `https://ethalarm.com/entry/${this.props.id}`
     return (
       <div className="logdetail">
         <p>
@@ -26,16 +26,17 @@ class LogDetail extends React.Component {
         )}
         {this.props.id && (
           <p>
-            Permalink:{" "}
+            Permalink:&nbsp;
             <strong>
               <a href={url} target="_blank">
                 {url}
-              </a>{" "}
+              </a>
+              &nbsp;
             </strong>
           </p>
         )}
       </div>
-    );
+    )
   }
 }
 
@@ -45,6 +46,6 @@ LogDetail.propTypes = {
   events: PropTypes.arrayOf(PropTypes.string).isRequired,
   email: PropTypes.string,
   webhook: PropTypes.string
-};
+}
 
-export default LogDetail;
+export default LogDetail

@@ -1,4 +1,4 @@
-"use strict";
+
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -13,31 +13,31 @@ module.exports = {
 			}], {});
 		*/
     return queryInterface.bulkInsert(
-      "AlarmSyncState",
+      'AlarmSyncState',
       [
         {
           id: 1,
-          Alarm_id: "3411d22e-d454-4bf3-aab1-2e711c9879bb",
+          Alarm_id: '3411d22e-d454-4bf3-aab1-2e711c9879bb',
           last_sync_block: 4446530
         },
         {
           id: 2,
-          Alarm_id: "3411d22e-d454-4bf3-aab1-2e711c9879bc",
+          Alarm_id: '3411d22e-d454-4bf3-aab1-2e711c9879bc',
           last_sync_block: 1233312
         },
         {
           id: 3,
-          Alarm_id: "3411d22e-d454-4bf3-aab1-2e711c9879bd",
+          Alarm_id: '3411d22e-d454-4bf3-aab1-2e711c9879bd',
           last_sync_block: 0
         },
         {
           id: 4,
-          Alarm_id: "3411d22e-d454-4bf3-aab1-2e711c9879be",
+          Alarm_id: '3411d22e-d454-4bf3-aab1-2e711c9879be',
           last_sync_block: 33
         }
       ],
       {}
-    );
+    )
   },
   down: (queryInterface, Sequelize) => {
     /*
@@ -47,6 +47,6 @@ module.exports = {
 			Example:
 			return queryInterface.bulkDelete('Person', null, {});
 		*/
-    queryInterface.bulkDelete("AlarmSyncState", null, {});
+    queryInterface.bulkDelete('AlarmSyncState', null, {})
   }
-};
+}

@@ -1,22 +1,28 @@
-import React from "react";
+import React from 'react'
 
-import LargeInput from "~/components/largeInput";
+import LargeInput from '~/components/largeInput'
 
 export default class QueryWithLargeInput extends React.Component {
-  value() {
-    return this.refs.input.value();
+  componentWillMount() {
+    this.input = null
   }
+
+  value() {
+    return this.input.value
+  }
+
   onSubmit = ev => {
     if (this.props.onSubmit) {
-      this.props.onSubmit(this.value());
+      this.props.onSubmit(this.value())
     }
   };
+
   render() {
     return (
-      <div className={this.props.className + " queryLarge"}>
+      <div className={this.props.className + ' queryLarge'}>
         <div className="explain">{this.props.children}</div>
-        <LargeInput ref="input" onSubmit={this.onSubmit} />
+        <LargeInput refs={ input => this.input = input } onSubmit={this.onSubmit} />
       </div>
-    );
+    )
   }
 }

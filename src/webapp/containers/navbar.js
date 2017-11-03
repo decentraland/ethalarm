@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export default class Navbar extends React.Component {
   render() {
@@ -10,6 +10,6 @@ export default class Navbar extends React.Component {
           <li>about</li>
         </ul>
       </div>
-    );
+    )
   }
 }

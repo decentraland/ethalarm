@@ -2,7 +2,7 @@
 
 module.exports = function(sequelize, DataTypes) {
   const AlarmReceipt = sequelize.define(
-    "AlarmReceipt",
+    'AlarmReceipt',
     {
       id: {
         type: DataTypes.INTEGER,
@@ -13,8 +13,8 @@ module.exports = function(sequelize, DataTypes) {
       Alarm_id: {
         type: DataTypes.UUID,
         references: {
-          model: "Alarm",
-          key: "id"
+          model: 'Alarm',
+          key: 'id'
         },
         allowNull: false
       },
@@ -27,24 +27,24 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       smtp_response: {
-        type: DataTypes.BLOB("medium")
+        type: DataTypes.BLOB('medium')
       },
       http_response: {
-        type: DataTypes.BLOB("medium")
+        type: DataTypes.BLOB('medium')
       }
     },
     {
-      tableName: "AlarmReceipt",
+      tableName: 'AlarmReceipt',
       paranoid: false,
       timestamps: true,
-      createdAt: "created_at",
-      updatedAt: "updated_at"
+      createdAt: 'created_at',
+      updatedAt: 'updated_at'
     }
-  );
+  )
 
   AlarmReceipt.associate = function(models) {
-    AlarmReceipt.belongsTo(models.Alarm, { foreignKey: "Alarm_id" });
-  };
+    AlarmReceipt.belongsTo(models.Alarm, { foreignKey: 'Alarm_id' })
+  }
 
-  return AlarmReceipt;
-};
+  return AlarmReceipt
+}

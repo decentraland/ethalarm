@@ -1,36 +1,35 @@
-import { Router } from "express";
-import { Validator, ValidationError } from "express-json-validator-middleware";
+import { Router } from 'express'
+import { Validator } from 'express-json-validator-middleware'
 
-import AlarmSchema from "../schemas/alarms";
+import AlarmSchema from '../schemas/alarms'
+import Alarm from '../models/alarm'
 
-const router = Router();
-const validator = new Validator({ allErrors: true });
-const validate = validator.validate.bind(validator);
-
-const ALARMS_DB_KEY = "alarms";
+const router = Router()
+const validator = new Validator({ allErrors: true })
+const validate = validator.validate.bind(validator)
 
 const getResponseSchema = (response = {}) => {
   return {
     ok: response.ok || true,
-    error: response.error || "",
+    error: response.error || '',
     result: response.result || {}
-  };
-};
+  }
+}
 
-router.post("/alarms", validate({ body: AlarmSchema }), (req, res) => {
-  db
-    .save(ALARMS_DB_KEY, req.body)
-    .then(dbResult => {
-      console.log(
-        `Document Inserted OK: ${!!JSON.stringify(dbResult.result.ok)}`
-      );
-      res.status(201).json(
+router.post('/alarms', validate({ body: AlarmSchema }), (req, res) => {
+  Alarm
+    .build(req.body)
+    .save()
+    .then(alarm => {
+      console.log('Document Inserted OK')
+
+      res.status(200).json(
         getResponseSchema({
           result: {
-            id: dbResult.insertedIds[0]
+            id: alarm.id
           }
         })
-      );
+      )
     })
     .catch(err => {
       res.status(500).json(
@@ -38,16 +37,16 @@ router.post("/alarms", validate({ body: AlarmSchema }), (req, res) => {
           ok: false,
           error: err
         })
-      );
-    });
-});
+      )
+    })
+})
 
-router.get("/alarms/:id", (req, res) => {
-  db
-    .get(ALARMS_DB_KEY, { _id: req.params.id })
-    .then(result => {
-      if (!result) return Promise.reject(result);
-      res.status(200).json(getResponseSchema({ result }));
+router.get('/alarms/:id', (req, res) => {
+  Alarm
+    .findById(req.params.id)
+    .then(alarm => {
+      if (!alarm) return Promise.reject(alarm)
+      res.status(200).json(getResponseSchema({ alarm }))
     })
     .catch(err => {
       res.status(404).json(
@@ -55,16 +54,18 @@ router.get("/alarms/:id", (req, res) => {
           ok: false,
           error: err
         })
-      );
-    });
-});
+      )
+    })
+})
 
-router.delete("/alarms/:id", (req, res) => {
-  db
-    .remove(ALARMS_DB_KEY, { _id: req.params.id })
+router.delete('/alarms/:id', (req, res) => {
+    Alarm
+    .destroy({
+        where: { id: req.params.id }
+    })
     .then(result => {
-      console.log(`Remove from database result: ${JSON.stringify(result)}`);
-      res.json(204);
+      console.log('Alarm removed from database')
+      res.json(200)
     })
     .catch(err => {
       res.json(500).json(
@@ -72,8 +73,8 @@ router.delete("/alarms/:id", (req, res) => {
           ok: false,
           error: err
         })
-      );
-    });
-});
+      )
+    })
+})
 
-export default router;
+export default router
