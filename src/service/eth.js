@@ -12,7 +12,7 @@ export class EthereumService {
     try {
       await this.getCurrentTip()
     } catch(error) {
-      this.log.error(`Could not connect to the Ethereum node`, error)
+      this.log.error('Could not connect to the Ethereum node', error)
       throw error
     }
   }

@@ -13,7 +13,7 @@ export default class DispatchService {
       smtpResponse = await this.emaiService.sendMail(alarm.email, this.templateName, { alarm, event })
     }
 
-    if (alarm.url && alarm.url.length) {
+    if (alarm.webhook && alarm.webhook.length) {
       httpResponse = await this.httpService.sendRequest(alarm, event)
     }
 

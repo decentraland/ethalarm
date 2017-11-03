@@ -23,12 +23,13 @@ class HowNotify extends SagaStep {
   };
 
   createAction() {
-    // TODO: check at least one exists
-    return {
-      type: actions.setNotificationPreference,
-      notification: {
-        email: this.email,
-        hook: this.webhook
+    if (this.email.trim() || this.webhook.trim()) {
+      return {
+        type: actions.setNotificationPreference,
+        notification: {
+          email: this.email,
+          hook: this.webhook
+        }
       }
     }
   }

@@ -33,9 +33,9 @@ function* handleConfirm(action) {
     address: state.address,
     abi: JSON.stringify(state.abi),
     eventNames: state.eventNames,
-    hook: state.notification.webhook || '',
+    webhook: state.notification.webhook || '',
     email: state.notification.email || '',
-    confirmations: 0
+    blockConfirmations: 0
   })
 
   yield put(push(locations.success))

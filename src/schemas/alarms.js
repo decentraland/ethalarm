@@ -18,7 +18,7 @@ const AlarmSchema = {
       type: 'array',
       items: { type: 'string' }
     },
-    hook: {
+    webhook: {
       description: 'The URL to query when a new event is generated',
       type: 'string'
     },
@@ -26,7 +26,7 @@ const AlarmSchema = {
       description: 'Email to send a notification',
       type: 'string'
     },
-    confirmations: {
+    blockConfirmations: {
       description: 'Amount of confirmations to wait before notifying',
       type: 'number'
     }

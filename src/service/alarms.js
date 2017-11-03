@@ -87,7 +87,7 @@ export default class AlarmService {
       abi: alarmDescription.abi,
       eventNames: alarmDescription.eventNames,
       email: alarmDescription.email,
-      url: alarmDescription.url,
+      webhook: alarmDescription.webhook,
       blockConfirmations: alarmDescription.blockConfirmations
     })
   }

@@ -24,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
       email: {
         type: DataTypes.STRING(254)
       },
-      url: {
+      webhook: {
         type: DataTypes.STRING(2000)
       },
       blockConfirmations: {
