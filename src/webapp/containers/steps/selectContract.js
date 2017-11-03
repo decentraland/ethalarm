@@ -22,7 +22,7 @@ class SelectContract extends SagaStep {
   render() {
     return (
       <div className="select-address step">
-        <QueryWithLargeInput refs={ addressInput => this.addressInput = addressInput } onSubmit={this.action}>
+        <QueryWithLargeInput ref={ addressInput => this.addressInput = addressInput } onSubmit={this.action}>
           To start, please enter the contract&#39;s address:
         </QueryWithLargeInput>
         <NextButton action={this.action} />
