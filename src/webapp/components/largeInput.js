@@ -20,7 +20,7 @@ export default class LargeInput extends React.Component {
   render() {
     return (
       <div className="large-input">
-        <input refs={ input => this.input = input } onKeyUp={this.handleEnter} />
+        <input ref={ input => this.input = input } onKeyUp={this.handleEnter} />
       </div>
     )
   }

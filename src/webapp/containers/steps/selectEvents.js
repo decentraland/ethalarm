@@ -54,7 +54,7 @@ class SelectEvents extends SagaStep {
       <div className="selectevents step">
         <SelectedContract address={this.props.address} abi={this.props.abi} />
         <p>Select which events to subscribe to:</p>
-        <EventSelector refs={ eventsInput => this.eventsInput = eventsInput } options={this.events} />
+        <EventSelector ref={ eventsInput => this.eventsInput = eventsInput } options={this.events} />
         <NextButton action={this.action} />
       </div>
     )

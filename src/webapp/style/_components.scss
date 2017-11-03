@@ -13,7 +13,7 @@
       margin-right: 10px;
     }
     li.selected {
-      color: $almost-white;
+      color: $black;
     }
     li:before {
       content: '[ ';
@@ -28,7 +28,7 @@
   h1 {
     font-weight: 200;
     text-align: center;
-    color: $white;
+    color: $black;
   }
   margin-top: 100px;
   margin-bottom: 50px;
@@ -51,8 +51,8 @@
     font-family: $monospace;
     padding: 10px 5px 10px 5px;
     font-size: $fontsize;
-    border: none;
-    border-radius: 1px;
+    border: 1px solid $black;
+    border-radius: 3px;
     text-align: center;
 
     &:focus {
@@ -62,14 +62,19 @@
 }
 
 button.next {
-  background: $black;
-  color: $white;
+  background: $white;
+  color: $green;
   border: none;
   font-size: $fontsize;
   font-family: $font;
   letter-spacing: $letter-spacing;
   font-weight: 400;
   padding: 20px;
+  cursor: pointer;
+
+  &:hover {
+    color: darken($green, 15%);
+  }
   &:focus {
     outline: 0 !important;
   }
@@ -91,7 +96,7 @@ button.next {
 
   $duration: 1.5s;
   .dot {
-    background: white;
+    background: $black;
     width: 10px;
     height: 10px;
     border-radius: 100px;

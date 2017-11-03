@@ -10,7 +10,7 @@ export default {
       'react-hot-loader/patch',
       'webpack-hot-middleware/client',
       'webpack/hot/only-dev-server',
-      './webapp/main',
+      './src/webapp/main.js',
     ]
   },
   output: {
@@ -20,6 +20,22 @@ export default {
   },
   module: {
     rules: [
+      {
+        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?mimetype=application/font-woff'
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?mimetype=application/octet-stream'
+      },
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file-loader'
+      },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?mimetype=image/svg+xml'
+      },
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
       {
         test: /\.s?css/,

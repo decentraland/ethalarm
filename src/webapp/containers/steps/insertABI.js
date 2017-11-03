@@ -29,7 +29,7 @@ class InsertABI extends SagaStep {
             <strong>0x0F5D2fB29fb7d3CFeE444a200298f468908cC942</strong>:
           </p>
         </div>
-        <textarea refs={ abiInput => this.abiInput = abiInput } value={defaultData} />
+        <textarea ref={ abiInput => this.abiInput = abiInput } value={defaultData} />
         <NextButton action={this.action} />
       </div>
     )

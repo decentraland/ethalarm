@@ -29,10 +29,10 @@ class HowNotify extends SagaStep {
       <div className="hownotify step">
         <SelectedContract address={''} abi={''} />
         <p className="how">How would you like to be notified of new events?</p>
-        <QueryWithLargeInput refs={ emailInput => this.emailInput = emailInput } onSubmit={this.action}>
+        <QueryWithLargeInput ref={ emailInput => this.emailInput = emailInput } onSubmit={this.action}>
           Via email:
         </QueryWithLargeInput>
-        <QueryWithLargeInput refs={ webhookInput => this.webhookInput = webhookInput } onSubmit={this.action}>
+        <QueryWithLargeInput ref={ webhookInput => this.webhookInput = webhookInput } onSubmit={this.action}>
           Via a POST request to:
         </QueryWithLargeInput>
         <NextButton action={this.action} />

@@ -21,7 +21,7 @@ export default class QueryWithLargeInput extends React.Component {
     return (
       <div className={this.props.className + ' queryLarge'}>
         <div className="explain">{this.props.children}</div>
-        <LargeInput refs={ input => this.input = input } onSubmit={this.onSubmit} />
+        <LargeInput ref={ input => this.input = input } onSubmit={this.onSubmit} />
       </div>
     )
   }

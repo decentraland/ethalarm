@@ -4,11 +4,12 @@ html, body, #app, .root {
 }
 
 body {
-  font: 100% Helvetica, sans-serif;
-  background-color: $black;
-  color: $white;
-  font-weight: 100;
+  font: 100% "Source Sans Pro Light", Helvetica, sans-serif;
   height: 100%;
+  background-color: $white;
+  color: $black;
+  font-weight: 100;
+  font-size: 16px;
 }
 
 .root {
@@ -16,10 +17,18 @@ body {
   flex-direction: column;
 }
 
+h1, h2, h3 {
+  font-family: "Source Sans Pro", Helvetica, sans-serif;
+}
+
+h1 {
+  font-size: 40px;
+}
+
 a {
-  color: $white;
+  color: $black;
 }
 
 a:visited {
-  color: $white;
+  color: $black;
 }

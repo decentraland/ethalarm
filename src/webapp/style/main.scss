@@ -3,6 +3,7 @@
 @import 'base';
 @import 'constants';
 @import 'components';
+@import 'fonts';
 
 .select-address {
   .queryLarge {
@@ -25,17 +26,18 @@
 
 .insertabi {
   textarea {
-    border: none;
+    border: 1px solid $black;
+    border-radius: 3px;
     font-family: $monospace;
     font-size: 14px;
     padding: 10px;
-    &:focus {
-      outline: none;
-    }
     margin-top: 30px;
     margin-bottom: 30px;
     min-width: 450px;
     min-height: 200px;
+    &:focus {
+      outline: none;
+    }
   }
 }
 
@@ -58,6 +60,8 @@
         margin-right: 10px;
         position: relative;
         top: -2px;
+        border-color: $black;
+        border-radius: 3px;
       }
     }
   }

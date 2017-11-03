@@ -15,13 +15,13 @@ import Success from './containers/steps/success'
 export default function routes() {
   return (
     <Root>
-      <Route exact path={locations.root} component={SelectContract} />
-      <Route path={locations.lookingUp} component={LookingUp} />
-      <Route path="/insertABI" component={InsertABI} />
-      <Route path="/selectEvents" component={SelectEvents} />
-      <Route path="/howNotify" component={HowNotify} />
-      <Route path="/verify" component={Verify} />
-      <Route path="/success" component={Success} />
+      <Route exact path={locations.root}   component={SelectContract} />
+      <Route path={locations.lookingUp}    component={LookingUp} />
+      <Route path={locations.insertABI}    component={InsertABI} />
+      <Route path={locations.selectEvents} component={SelectEvents} />
+      <Route path={locations.howNotify}    component={HowNotify} />
+      <Route path={locations.verify}       component={Verify} />
+      <Route path={locations.success}      component={Success} />
     </Root>
   )
 }
