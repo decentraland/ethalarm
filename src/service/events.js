@@ -2,7 +2,7 @@ import Sequelize from 'sequelize'
 import AlarmSyncStateModel from '../db/models/alarm_sync_state.js'
 
 
-export class EventService {
+export default class EventService {
   constructor(sequelize, DataTypes, alarms) {
     this._alarm_sync_state_model = new AlarmSyncStateModel(
       sequelize,

@@ -38,6 +38,10 @@ Object.keys(db).forEach(modelName => {
   }
 })
 
+console.log('*********************************************')
+console.log(db)
+console.log('*********************************************')
+
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 

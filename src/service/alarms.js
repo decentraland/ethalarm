@@ -1,6 +1,6 @@
 import { Op } from 'sequelize'
 
-export class AlarmService {
+export default class AlarmService {
   constructor(dispathService, alarmModel, syncStateModel, receiptModel, configurationService) {
     this.dispathService = dispathService
     this.alarmModel = alarmModel

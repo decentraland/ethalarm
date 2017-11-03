@@ -1,6 +1,3 @@
-import fs from 'fs'
-import path from 'path'
-
 import http from 'http'
 import express from 'express'
 import bodyParser from 'body-parser'
@@ -8,20 +5,18 @@ import Webpack from 'webpack'
 import WebpackMiddleware from 'webpack-dev-middleware'
 import WebpackHotMiddleware from 'webpack-hot-middleware'
 
-import Sequelize from 'sequelize'
 import { Log, env } from 'decentraland-commons'
 
-import webpackDevelopment from '../config/webpack.development.config'
-import webpackProduction from '../config/webpack.production.config'
-import middlewareProduction from '../config/webpackMiddleware.production'
-import middlewareDevelopment from '../config/webpackMiddleware.development'
+import AlarmRouter from '../routes/alarms'
+import ConfirmationRouter from '../routes/confirmations'
+
+import AlarmService from '../service/alarms'
 
 // Missing imports:
-import AlarmRouter from '../routes/alarm'
-import ConfirmationRouter from '../routes/confirmation'
-//   AlarmService
-//   EmailService
-//   TemplateService
+//  EmailService
+//  TemplateService
+
+import db from '../db/models'
 
 export const PRODUCTION = 'production'
 export const STAGING = 'staging'
@@ -32,11 +27,13 @@ export const ENVS = [ PRODUCTION, STAGING, TESTING, DEVELOPMENT ]
 export const configLog = new Log('ConfigurationService')
 
 export default class ConfigurationService {
-  constructor(environment) {
-    if (!ENVS.includes(environment)) {
-      configLog.error(`Error initializing: ${environment} is not in ${JSON.stringify(ENVS)}`)
+  constructor(envName) {
+    if (!ENVS.includes(envName)) {
+      configLog.error(`Error initializing: ${envName} is not in ${JSON.stringify(ENVS)}`)
     }
-    this.env = environment
+    this.envName = envName
+
+    env.load()
   }
 
   startServer() {
@@ -56,7 +53,7 @@ export default class ConfigurationService {
       res.status(400).json(err)
     })
 
-    const port = env.getEnv('PORT', 3000)
+    const port = env.get('PORT', 3000)
     const server = http.Server(app)
     server.listen(port, () => {
       console.log(`EthAlarm server running on port ${port}`)
@@ -85,17 +82,14 @@ export default class ConfigurationService {
   }
 
   get webpackConfiguration() {
-    if (this.env === PRODUCTION) {
-      return webpackProduction
-    }
-    return webpackDevelopment
+    const environment = this.envName === PRODUCTION ? PRODUCTION : DEVELOPMENT
+    const configPath = `../config/webpack.${environment}.config.js`
+
+    return require(configPath).default
   }
 
   get middlewareConfiguration() {
-    if (this.env === PRODUCTION) {
-      return middlewareProduction
-    }
-    return middlewareDevelopment
+    return require('../config/webpackMiddleware.js').default
   }
 
   get alarmService() {
@@ -106,78 +100,31 @@ export default class ConfigurationService {
   }
 
   get emailService() {
-    if (!this._emailService) {
-      this._emailService = new EmailService(env.getEnv('EMAIL_CONFIG'))
-    }
-    return this._emailService
+    throw new Error('Missing EmailService import')
+    // if (!this._emailService) {
+    //   this._emailService = new EmailService(env.get('EMAIL_CONFIG'))
+    // }
+    // return this._emailService
   }
 
   get templateService() {
-    if (!this._templateService) {
-      this._templateService = new TemplateService()
-    }
-    return this._templateService
+    throw new Error('Missing TemplateService import')
   }
 
   get database() {
-    if (!this._database) {
-      this.setupDatabase()
-    }
-    return this._database
+    return db
   }
 
   get alarmModel() {
-    if (!this._alarmModel) {
-      this.setupDatabase()
-    }
-    return this._alarmModel
+    return db.Alarm
   }
 
   get alarmSyncStateModel() {
-    if (!this._alarmSyncStateModel) {
-      this.setupDatabase()
-    }
-    return this._alarmSyncStateModel
+    return db.AlarmSyncState
   }
 
   get alarmReceiptModel() {
-    if (!this._alarmReceiptModel) {
-      this.setupDatabase()
-    }
-    return this._alarmReceiptModel
+    return db.AlarmRecepeit
   }
-
-  _setupDatabase() {
-    const config = env.getEnv('DATABASE_CONNECTION')
-    this._sequelize = new Sequelize(config)
-    this._classes = {}
-
-    _sequelizeImport(this._sequelize, this._classes)
-
-    this._associateModels()
-    this._classes.sequelize = this._sequelize
-    this._classes.Sequelize = this._sequelize
-  }
-
-  _associateModels() {
-    Object.keys(this._classes).forEach(model => {
-      if (this._classes[model].associate) {
-        this._classes[model].associate(this._classes)
-      }
-    })
-  }
-}
-
-function _sequelizeImport(sequelize, classes) {
-  const _modelDir = path.join(__dirname, '..', 'db', 'models')
-  const _basename = path.basename(_modelDir)
-  const _onlyJsFiles = file => (file.indexOf('.') !== 0) && (file !== _basename) && (file.slice(-3) === '.js')
-
-  fs.readdirSync(_modelDir)
-    .filter(_onlyJsFiles)
-    .forEach(  (file) => {
-      const model = sequelize.import(path.join(__dirname, file))
-      classes[model.name] = model
-    })
 }
 

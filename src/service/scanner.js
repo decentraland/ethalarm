@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 
-export class ScannerService {
+export default class ScannerService {
   constructor(eth_provider, events, alarms) {
     this.web3 = new Web3(Web3.givenProvider || eth_provider)
     if (this.web3.isConnected()) {
