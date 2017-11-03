@@ -1,17 +1,26 @@
 version: '2'
 
 services:
-  mongodb:
-    image: 'bitnami/mongodb:latest'
-    labels:
-      kompose.service.type: nodeport
+  server:
+    build:
+      context: ./
     ports:
-      - "27017:27017"
+      - "3000:3000"
+    networks:
+      - internal
+      - outside
+  postgresql:
+    image: 'docker/postgresql:latest'
     volumes:
-      - 'mongodb_data:/bitnami'
-    environment:
-      - MONGODB_DATABASE=eventlog
+      - postgresql_data:/var/lib/postgresql
+    networks:
+      - internal
 
 volumes:
-  mongodb_data:
-    driver: local
+  postgresql_data: {}
+
+networks:
+  internal:
+    internal: true
+  outside:
+    driver: bridge
