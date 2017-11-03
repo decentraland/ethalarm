@@ -17,6 +17,10 @@ export class EthereumService {
     }
   }
 
+  watchNewBlocks(callback) {
+    return this.web3.eth.subscribe(newBlockHeaders, callback)
+  }
+
   getCurrentTip() {
     return this.web3.eth.getBlockNumber()
   }
