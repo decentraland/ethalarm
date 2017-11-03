@@ -4,7 +4,7 @@ import Webpack from 'webpack'
 import WebpackMiddleware from 'webpack-dev-middleware'
 import WebpackHotMiddleware from 'webpack-hot-middleware'
 
-import { Log, env } from 'decentraland-commons'
+import { Log, env, SMTP } from 'decentraland-commons'
 
 import AlarmRouter from '../routes/alarms'
 import ConfirmationRouter from '../routes/confirmations'
@@ -14,10 +14,8 @@ import AlarmService from '../service/alarms'
 
 import db from '../db/models'
 
-// Missing imports:
-//   EmailService
-//   TemplateService
-//   DispatchService
+import HTTPService from './http'
+import DispatchService from './dispatch'
 
 export const PRODUCTION = 'production'
 export const STAGING = 'staging'
@@ -111,19 +109,35 @@ export default class ConfigurationService {
   }
 
   get emailService() {
-    throw new Error('Missing EmailService import')
-    // if (!this._emailService) {
-    //   this._emailService = new EmailService(env.get('EMAIL_CONFIG'))
-    // }
-    // return this._emailService
-  }
-
-  get templateService() {
-    throw new Error('Missing TemplateService import')
+    if (!this._email) {
+      this._email = new SMTP({
+        hostname: env.get('EMAIL_HOSTNAME'),
+        port: env.get('EMAIL_PORT'),
+        username: env.get('EMAIL_USERNAME'),
+        password: env.get('EMAIL_PASSWORD'),
+      })
+      this._email.setTemplate('notification', (opts) => ({
+        from: `The Decentraland Team <${opts.sender}>`,
+        to: `The Decentraland Team <${opts.sender}>`,
+        subject: `The Decentraland Team <${opts.sender}>`,
+        text: `The Decentraland Team <${opts.sender}>`,
+      }))
+    }
+    return this._email
   }
 
   get dispathService() {
-    throw new Error('Missing DispatchService import')
+    if (!this._dispatch) {
+      this._dispatch = new DispatchService(this.httpService, this.emailService, 'notification', this.receiptModel)
+    }
+    return this._dispatch
+  }
+
+  get httpService() {
+    if (!this._http) {
+      this._http = new HTTPService()
+    }
+    return this._http
   }
 
   get database() {
@@ -134,12 +148,12 @@ export default class ConfigurationService {
     return db.Alarm
   }
 
-  get alarmSyncStateModel() {
+  get syncStateModel() {
     return db.AlarmSyncState
   }
 
-  get alarmReceiptModel() {
-    return db.AlarmRecepeit
+  get receiptModel() {
+    return db.AlarmReceipt
   }
 }
 

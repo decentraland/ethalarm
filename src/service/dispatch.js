@@ -14,7 +14,7 @@ export default class DispatchService {
     }
 
     if (alarm.url && alarm.url.length) {
-      httpResponse = await this.httpService.sendRequest(alarm, event).then(res => res.text())
+      httpResponse = await this.httpService.sendRequest(alarm, event)
     }
 
     return await this.storeReceipt(alarm.id, event.txHash, event.eventName, {
