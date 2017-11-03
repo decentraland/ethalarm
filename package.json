@@ -4,7 +4,7 @@
   "description": "Register your contract addresses and get notifications on certain events",
   "private": true,
   "scripts": {
-    "start": "babel-node src/server.js",
+    "start": "babel-node src/index.js",
     "test": "babel-tape-runner test/index.js | tap-spec"
   },
   "keywords": [
@@ -16,10 +16,10 @@
   "author": "Decentraland",
   "license": "ISC",
   "dependencies": {
-    "decentraland-commons": "git+ssh://git@github.com/decentraland/commons.git#release",
     "bignumber": "^1.1.0",
     "body-parser": "^1.18.1",
     "css-loader": "^0.28.7",
+    "decentraland-commons": "git+https://github.com/decentraland/commons.git#release",
     "express": "^4.15.4",
     "express-json-validator-middleware": "^1.1.0",
     "history": "^4.7.2",

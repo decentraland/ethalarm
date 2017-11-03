@@ -17,8 +17,8 @@ import middlewareProduction from '../config/webpackMiddleware.production'
 import middlewareDevelopment from '../config/webpackMiddleware.development'
 
 // Missing imports:
-//   AlarmRouter
-//   ConfirmationRouter
+import AlarmRouter from '../routes/alarm'
+import ConfirmationRouter from '../routes/confirmation'
 //   AlarmService
 //   EmailService
 //   TemplateService
@@ -71,16 +71,16 @@ export default class ConfigurationService {
   }
 
   setupRoutes(app) {
-    app.use(this.getAlarmRouter())
-    app.use(this.getConfirmationRouter())
+    app.use(this.alarmRouter.getRouter())
+    app.use(this.confirmationRouter.getRouter())
     app.use(express.static('./public'))
   }
 
-  getAlarmRouter() {
+  get alarmRouter() {
     return new AlarmRouter(this.alarmService)
   }
 
-  getConfirmationRouter() {
+  get confirmationRouter() {
     return new ConfirmationRouter(this.confirmationService)
   }
 
