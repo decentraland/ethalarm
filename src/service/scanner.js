@@ -3,6 +3,7 @@ import { Log } from 'decentraland-commons'
 
 const min = (array, prop) => array.reduce((prev, elem) => Math.min(prev, elem.prop), Infinity)
 const max = (array, prop) => array.reduce((prev, elem) => Math.max(prev, elem.prop), -Infinity)
+const nameMatches = (events, eventNames) => events.reduce((prev, event) => prev || eventNames.includes(event.event), false)
 
 export default class ScannerService {
   constructor(alarmService, ethService) {
@@ -30,14 +31,15 @@ export default class ScannerService {
         const toBlock = block.height - min(alarms, 'blockConfirmations')
         const events = await contract.getPastEvents('allEvents', { fromBlock, toBlock })
         this.log.debug(`Data received for contract in ${contract.address}`, alarms, fromBlock, toBlock, events)
-        for (let event in events) {
-          const confirmations = height - event.blockHeight
+        const byTransaction = alarmService.mapByTransactionId(events)
+        for (let events in byTransaction) {
+          const confirmations = height - events[0].blockHeight
           await Promise.all(alarms.map(async (alarm) => {
             if (confirmations >= alarm.blockConfirmations
-              && event.event in alarm.eventNames
-              && !(await alarmService.getReceipt(alarm.id, event.transactionHash))
+              && nameMatches(events, alarm.eventNames)
+              && !(await alarmService.getReceipt(alarm.id, events[0].transactionHash))
             ) {
-              await alarmService.dispatchNotification(alarm, event)
+              await alarmService.dispatchNotification(alarm, events)
             }
           }))
         }

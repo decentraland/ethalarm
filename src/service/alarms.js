@@ -113,6 +113,15 @@ export default class AlarmService {
     return this.configuration.getReorgSafety()
   }
 
+  mapByTransactionId(events) {
+    const result = {}
+    for (let event of events) {
+      result[event.txHash] = result[event.txHash] || []
+      result[event.txHash].push(event)
+    }
+    return Object.values(result)
+  }
+
   getContractData(addressToAlarms) {
     return Object.keys(addressToAlarms).map(address => {
       return {
