@@ -31,8 +31,11 @@ class SelectContract extends SagaStep {
           <QueryWithLargeInput onChange={this.setAddress}>
             To start, please enter the contract&#39;s address:
           </QueryWithLargeInput>
+
+          <div className="text-center">
+            <NextButton />
+          </div>
         </form>
-        <NextButton action={this.action} />
       </div>
     )
   }

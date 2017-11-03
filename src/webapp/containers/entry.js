@@ -8,7 +8,7 @@ import LogDetail from '~/components/logDetail'
 
 class Entry extends React.Component {
   render() {
-    const { address, events, notification } = this.props
+    const { address, eventNames, notification } = this.props
     const { email, webhook } = notification
 
     const id = uuid.v4()
@@ -18,7 +18,7 @@ class Entry extends React.Component {
         <div className="explain">
           <LogDetail
             address={address}
-            events={events}
+            eventNames={eventNames}
             email={email}
             webhook={webhook}
             id={id}
@@ -29,4 +29,4 @@ class Entry extends React.Component {
   }
 }
 
-export default connect(pick(['address', 'events', 'notification']))(Entry)
+export default connect(pick(['address', 'eventNames', 'notification']))(Entry)

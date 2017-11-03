@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import actions from '../../types'
+import actions from '~/types'
+import { pick } from '~/utils'
 
 import SagaStep from './sagaStep'
 import NextButton from '~/components/nextButton'
@@ -27,7 +28,7 @@ class InsertABI extends SagaStep {
         <div className="explain">
           <p>
             Insert the ABI for contract&nbsp;
-            <strong>0x0F5D2fB29fb7d3CFeE444a200298f468908cC942</strong>:
+            <strong>{this.props.address}</strong>
           </p>
         </div>
         <textarea ref={ abiInput => this.abiInput = abiInput } placeholder={defaultData} />
@@ -37,4 +38,4 @@ class InsertABI extends SagaStep {
   }
 }
 
-export default connect(() => ({}))(InsertABI)
+export default connect(pick(['address']))(InsertABI)

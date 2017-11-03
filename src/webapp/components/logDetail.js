@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 class LogDetail extends React.Component {
   render() {
-    const { address, events, email, webhook, id } = this.props
+    const { address, eventNames, email, webhook, id } = this.props
     const url = `https://ethalarm.com/entry/${id}`
 
     return (
@@ -15,7 +15,7 @@ class LogDetail extends React.Component {
 
         <p>Events</p>
         <ul className="offset-value">
-          {events.map((event, index) => <EventItem key={ index } event={ event } />)}
+          {eventNames.map((eventName, index) => <EventItem key={ index } eventName={ eventName } />)}
         </ul>
 
         {email && (
@@ -48,15 +48,15 @@ class LogDetail extends React.Component {
   }
 }
 
-function EventItem({ event }) {
+function EventItem({ eventName }) {
   return <li>
-    <strong>{event}</strong>
+    <strong>{eventName}</strong>
   </li>
 }
 
 LogDetail.propTypes = {
   address: PropTypes.string.isRequired,
-  events: PropTypes.arrayOf(PropTypes.string).isRequired,
+  eventNames: PropTypes.arrayOf(PropTypes.string).isRequired,
   email: PropTypes.string,
   webhook: PropTypes.string
 }

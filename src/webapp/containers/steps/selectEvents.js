@@ -14,18 +14,18 @@ class SelectEvents extends SagaStep {
     super(props)
     this.eventSelector = null
 
-    this.getEvents(props)
+    this.setEventNames(props)
   }
 
   createAction() {
     return {
-      type: types.setEvents,
-      events: this.eventSelector.getSelections()
+      type: types.setEventNames,
+      eventNames: this.eventSelector.getSelections()
     }
   }
 
   componentWillReceiveProps(newProps) {
-    this.getEvents(newProps)
+    this.setEventNames(newProps)
   }
 
   getNameForMethod(method) {
@@ -37,8 +37,8 @@ class SelectEvents extends SagaStep {
     return `${method.name}(${methodArgs})`
   }
 
-  getEvents(props) {
-    this.events = props.abi.filter(abi => abi.type === 'event').map(method =>
+  setEventNames(props) {
+    this.eventNames = props.abi.filter(abi => abi.type === 'event').map(method =>
       this.getNameForMethod(method)
     )
   }
@@ -48,7 +48,7 @@ class SelectEvents extends SagaStep {
       <div className="selectevents step">
         <SelectedContract address={this.props.address} />
         <p>Select which events to subscribe to</p>
-        <EventSelector ref={ eventSelector => this.eventSelector = eventSelector } options={this.events} />
+        <EventSelector ref={ eventSelector => this.eventSelector = eventSelector } options={this.eventNames} />
         <NextButton action={this.action} />
       </div>
     )

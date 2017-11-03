@@ -16,7 +16,7 @@ class Verify extends SagaStep {
   }
 
   render() {
-    const { address, events, notification } = this.props
+    const { address, eventNames, notification } = this.props
     const { email, webhook } = notification
 
     return (
@@ -28,7 +28,7 @@ class Verify extends SagaStep {
         <LogDetail
           contractName={address}
           address={address}
-          events={events}
+          eventNames={eventNames}
           email={email}
           webhook={webhook}
         />
@@ -39,4 +39,4 @@ class Verify extends SagaStep {
   }
 }
 
-export default connect(pick(['address', 'events', 'notification']))(Verify)
+export default connect(pick(['address', 'eventNames', 'notification']))(Verify)

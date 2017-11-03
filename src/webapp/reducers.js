@@ -3,9 +3,12 @@ import types from '~/types'
 const INITIAL_STATE = {
   address: null,
   abi: null,
-  events: null,
+  eventNames: [],
   id: null,
-  notification: null
+  notification: {
+    email: null,
+    webhook: null
+  }
 }
 
 export default {
@@ -27,10 +30,10 @@ export default {
     }
   },
 
-  events: (state = INITIAL_STATE.events, action) => {
+  eventNames: (state = INITIAL_STATE.eventNames, action) => {
     switch(action.type) {
-      case types.setEvents:
-        return action.events
+      case types.setEventNames:
+        return action.eventNames
       default:
         return state
     }

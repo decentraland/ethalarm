@@ -3,14 +3,14 @@ import { race, call, takeEvery, select, put } from 'redux-saga/effects'
 import { push, replace } from 'react-router-redux'
 
 import locations from './locations'
-import actions from './types'
+import types from './types'
 
 function* allSagas() {
-  yield takeEvery(actions.setAddress               , handleAddressEntered)
-  yield takeEvery(actions.setABI                   , handleABI)
-  yield takeEvery(actions.setEvents                , handleEvents)
-  yield takeEvery(actions.setNotificationPreference, handleNotification)
-  yield takeEvery(actions.confirm                  , handleConfirm)
+  yield takeEvery(types.setAddress               , handleAddressEntered)
+  yield takeEvery(types.setABI                   , handleABI)
+  yield takeEvery(types.setEventNames            , handleEvents)
+  yield takeEvery(types.setNotificationPreference, handleNotification)
+  yield takeEvery(types.confirm                  , handleConfirm)
 }
 
 function* handleABI(action) {
@@ -32,7 +32,7 @@ function* handleConfirm(action) {
   yield call(postAlarm, {
     address: state.address,
     abi: JSON.stringify(state.abi),
-    events: state.events,
+    eventNames: state.eventNames,
     hook: state.notification.webhook || '',
     email: state.notification.email || '',
     confirmations: 0
@@ -55,7 +55,7 @@ function* handleAddressEntered(action) {
 
   if (abi) {
     yield put({
-      type: actions.setABI,
+      type: types.setABI,
       abi: abi
     })
   } else {
