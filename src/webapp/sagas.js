@@ -5,11 +5,11 @@ import locations from './locations'
 import actions from './types'
 
 function* allSagas() {
-  yield takeEvery(actions.setAddress, handleAddressEntered)
-  yield takeEvery(actions.setABI, handleABI)
-  yield takeEvery(actions.setEvents, handleEvents)
+  yield takeEvery(actions.setAddress               , handleAddressEntered)
+  yield takeEvery(actions.setABI                   , handleABI)
+  yield takeEvery(actions.setEvents                , handleEvents)
   yield takeEvery(actions.setNotificationPreference, handleNotification)
-  yield takeEvery(actions.confirm, handleConfirm)
+  yield takeEvery(actions.confirm                  , handleConfirm)
 }
 
 function* handleABI(action) {

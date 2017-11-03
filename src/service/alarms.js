@@ -1,11 +1,12 @@
 import { Op } from 'sequelize'
 
 export class AlarmService {
-  constructor(dispathService, alarmModel, syncStateModel, receiptModel, reorgSafety) {
+  constructor(dispathService, alarmModel, syncStateModel, receiptModel, configurationService) {
+    this.dispathService = dispathService
     this.alarmModel = alarmModel
     this.syncStateModel = syncStateModel
     this.receiptModel = receiptModel
-    this.reorgSafety = reorgSafety
+    this.configuration = configurationService
   }
 
   /**
