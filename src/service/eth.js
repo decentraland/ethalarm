@@ -1,18 +1,27 @@
-export class Eth {
-  //constructor(config) {
-  constructor() {}
+import Web3 from 'web3'
 
-  async initialize() {
-    // Setup ethereum client
+import { Log } from 'decentraland-commons'
+
+export class EthereumService {
+  constructor(web3Provider) {
+    this.web3 = new Web3(web3Provider)
+    this.log = new Log('Ethereum')
   }
 
-  async getEvents(data) {
-    const newFilter = await this.client.newFilter(data)
-    return await new Promise((resolve, reject) => {
-      newFilter.get((err, result) => {
-        if (err) return reject(err)
-        return resolve(result)
-      })
-    })
+  async initialize() {
+    try {
+      await this.getCurrentTip()
+    } catch(error) {
+      this.log.error(`Could not connect to the Ethereum node`, error)
+      throw error
+    }
+  }
+
+  getCurrentTip() {
+    return this.web3.eth.getBlockNumber()
+  }
+
+  getContracts(contractData) {
+    return contractData.map(data => new this.web3.eth.Contract(data.address, data.abi))
   }
 }

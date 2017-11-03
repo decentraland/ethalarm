@@ -72,6 +72,10 @@ export default class AlarmService {
     return this.configuration.getReorgSafety()
   }
 
+  getContracts() {
+    return this.alarmModel.
+  }
+
   /**
    * Retrieve a mapping of each address, linking to the latest sync
    * stored in the database for that address
@@ -110,12 +114,11 @@ export default class AlarmService {
   /**
    * Retrieve a receipt from the database
    */
-  getReceipt(alarm_id, tx_hash, event_name) {
+  getReceipt(alarm_id, tx_hash) {
     return this.receiptModel.findAll({
       where: {
         Alarm_id: alarm_id,
-        tx_hash: tx_hash,
-        event_name: event_name
+        tx_hash: tx_hash
       }
     })
   }

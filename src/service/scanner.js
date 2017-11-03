@@ -1,84 +1,45 @@
 import Web3 from 'web3'
 
+const min = (array, prop) => reduce((prev, elem) => Math.min(prev, elem.prop), Infinity)
+const max = (array, prop) => reduce((prev, elem) => Math.max(prev, elem.prop), -Infinity)
+
 export default class ScannerService {
-  constructor(eth_provider, events, alarms) {
-    this.web3 = new Web3(Web3.givenProvider || eth_provider)
-    if (this.web3.isConnected()) {
-      // show some dialog to ask the user to start a node
-      console.log('Connected to RPC!')
-    } else {
-      // start web3 filters, calls, etc
-      console.error('Could not connect to RPC...')
-      return
-    }
-
-    // Parameters are other services
-    this.events = events
-    this.alarms = alarms
-
-    this.running = false
+  constructor(alarmService, ethService) {
+    this.ethService = ethService
+    this.alarmService = alarmService
   }
 
-  processHistoricalEvents() {
-    // Return hooks
-  }
+  async run() {
+    const alarmService = this.alarmService
+    const ethService = this.ethService
 
-  async processNewHooks(triggered_hooks) {}
+    const addressToAlarms = await alarmService.mapAddressesToAlarm()
+    const allAddresses = Object.keys(addressToAlarms)
+    const contracts = ethService.getContracts(await alarmService.getContractData(addressToAlarms))
+    const reorgSafety = await alarmService.getReorgSafety()
+    const currentTip = await ethService.getCurrentTip()
+    const lastBlockSync = await alarmService.mapAddressesToLastSync(currentTip, allAddresses)
 
-  async startScanner(timeout = 5000) {
-    this.running = true
-    this.run(timeout)
-  }
-
-  async run(timeout) {
-    if (this.running) {
-      await this.events.watchNewEvents(this.web3)
-
-      // Do work
-      // const triggered_hooks = this.processHistoricalEvents()
-      // this.processHooks(triggered_hooks)
-
-      let total_event_names = 0
-      Object.keys(this.events.watching).forEach(address => {
-        total_event_names += Object.keys(this.events.watching[address]).length
-      })
-      let total_events = 0
-      Object.keys(this.events.events).forEach(address => {
-        total_events += Object.keys(this.events.events[address]).length
-      })
-      // Schedule next run
-      console.log(
-        '%s: Currently watching %s event_names in %s contracts',
-        new Date().toISOString(),
-        total_event_names,
-        Object.keys(this.events.watching.length)
-      )
-      console.log(
-        '%s: Currently %s events triggered waiting for confirmations',
-        new Date().toISOString(),
-        total_events
-      )
-
-      await this.events
-        .getAlarmsToTrigger(this.web3.eth.blockNumber)
-        .then(async triggers => {
-          for (let x = 0; x < triggers.length; ++x)
-            await this.alarms.dispatchNotifications(
-              triggers[x].alarm,
-              triggers[x].event
-            )
-        })
-
-      setTimeout(() => {
-        this.run(timeout)
-      }, timeout)
-    } else {
-      // Kill all the watchers
-    }
-  }
-
-  stopScanner() {
-    // Stop all watchers
-    this.running = false
+    return ethService.watchNewBlocks((block) => {
+      const height = block.height
+      await Promise.all(contracts.map(async (contract) => {
+        const alarms = addressToAlarms[contract.address]
+        const fromBlock = lastBlockSync[contract.address] - max(alarms, 'blockConfirmations') - reogSafety
+        const toBlock = block.height - min(alarms, 'blockConfirmations')
+        const events = await contract.getPastEvents('allEvents', { fromBlock, toBlock })
+        for (let event in events) {
+          const confirmations = height - event.blockHeight
+          await Promise.all(alarms.map(async (alarm) => {
+            if (confirmations >= alarm.blockConfirmations
+              && event.event in alarm.eventNames
+              && !(await alarmService.getReceipt(alarm.id, event.transactionHash))
+            ) {
+              await alarmService.dispatchNotification(alarm, event)
+            }
+          }))
+        }
+        await alarmService.storeLastBlockSync(contract.address, block)
+      }))
+    })
   }
 }
