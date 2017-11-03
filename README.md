@@ -18,9 +18,10 @@ Now, go to http://localhost:3000 and the frontend should be displayed to you.
 
 [ ] Templates - write them up
 [ ] Make Services injected with DI
-[ ] Create a configuration service to bootstrap configuration and models
+[x] Create a configuration service to bootstrap configuration and models
 [ ] Docker-compose: add server, postgres
-[ ] Implement all missing API endpoints
+[ ] Redo the frontend
+[x] Implement all missing API endpoints
 [ ] Verify Service implementation
 
 ## API
