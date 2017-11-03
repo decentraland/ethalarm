@@ -10,7 +10,7 @@ export default {
       'react-hot-loader/patch',
       'webpack-hot-middleware/client',
       'webpack/hot/only-dev-server',
-      './webapp/main',
+      './src/webapp/main.js',
     ]
   },
   output: {
@@ -35,7 +35,7 @@ export default {
   },
   resolve: {
     alias: {
-      '~': path.resolve('__dirname', '../webapp')
+      '~': path.resolve(__dirname, '../webapp')
     }
   },
   plugins: [

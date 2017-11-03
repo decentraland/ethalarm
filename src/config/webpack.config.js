@@ -39,7 +39,7 @@ export default {
   },
   resolve: {
     alias: {
-      '~': path.resolve('__dirname', '../webapp')
+      '~': path.resolve(__dirname, '../webapp')
     }
   },
   plugins: [
