@@ -2,10 +2,10 @@ import webpack from 'webpack'
 import htmlPlugin from 'html-webpack-plugin'
 import path from 'path'
 
-import base from './webpack.base.config'
+import base from './webpack.base'
 
 export default Object.assign({}, base, {
-  devtool: 'cheap-eval-source-map',
+  devtool: 'source-map',
   entry: {
     'app': [
       'babel-polyfill',
@@ -19,4 +19,4 @@ export default Object.assign({}, base, {
     new htmlPlugin({ template: 'public/index.html' }),
     new webpack.HotModuleReplacementPlugin()
   ]
-}
+})
