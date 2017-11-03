@@ -69,7 +69,7 @@ export default class AlarmService {
    * Configure the maximum amount of reorgs we might expect to happen
    */
   getReorgSafety() {
-    return this.reorgSafety
+    return this.configuration.getReorgSafety()
   }
 
   /**

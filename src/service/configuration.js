@@ -18,6 +18,7 @@ import db from '../db/models'
 // Missing imports:
 //   EmailService
 //   TemplateService
+//   DispatchService
 
 export const PRODUCTION = 'production'
 export const STAGING = 'staging'
@@ -39,28 +40,22 @@ export default class ConfigurationService {
 
   startServer() {
     const app = express()
-    const webpack = Webpack(this.webpackConfiguration)
-    const log = new Log('Server')
+    this.webpack = Webpack(this.webpackConfiguration)
+    this.serverLog = new Log('Server')
 
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())
 
-    this.setupWebpack(app, webpack)
+    this.setupWebpack(app, this.webpack)
 
     this.setupRoutes(app)
 
-    app.use((err, req, res, next) => {
-      log.error(err)
-      res.status(400).json(err)
-    })
-
     const port = env.get('PORT', 3000)
-    const server = http.Server(app)
-    server.listen(port, () => {
-      console.log(`Ethalarm server running on port ${port}`)
+    app.listen(port, () => {
+      this.serverLog.info(`EthAlarm server running on port ${port}`)
     })
 
-    return server
+    return app
   }
 
   setupWebpack(app, webpack) {
@@ -69,10 +64,15 @@ export default class ConfigurationService {
   }
 
   setupRoutes(app) {
-    app.use(this.alarmRouter.getRouter())
-    app.use(this.confirmationRouter.getRouter())
-    app.use(this.fallbackRouter.getRouter())
+    this.alarmRouter.setup(app)
+    this.confirmationRouter.setup(app)
     app.use(express.static('./public'))
+
+    this.fallbackRouter.setupDefault(app)
+  }
+
+  getReorgSafety() {
+    return env.get('REORG_SAFETY', 6)
   }
 
   get alarmRouter() {
@@ -84,7 +84,7 @@ export default class ConfigurationService {
   }
 
   get fallbackRouter() {
-    return new FallbackRouter()
+    return new FallbackRouter(this.serverLog, this.webpack)
   }
 
   get webpackConfiguration() {
@@ -100,7 +100,13 @@ export default class ConfigurationService {
 
   get alarmService() {
     if (!this._alarmService) {
-      this._alarmService = new AlarmService(this.alarmModel)
+      this._alarmService = new AlarmService(
+        this.dispatchService,
+        this.alarmModel,
+        this.syncStateModel,
+        this.receiptModel,
+        this
+      )
     }
     return this._alarmService
   }
@@ -115,6 +121,10 @@ export default class ConfigurationService {
 
   get templateService() {
     throw new Error('Missing TemplateService import')
+  }
+
+  get dispathService() {
+    throw new Error('Missing DispatchService import')
   }
 
   get database() {

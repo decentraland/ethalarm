@@ -3,23 +3,21 @@ import { Router } from 'express'
 import locations from '../webapp/locations'
 
 export default class FallbackRouter {
-  constructor(webpack) {
+  constructor(log, webpack) {
     this.webpack = webpack
+    this.log = log
     this.routes = Object.values(locations)
   }
-  getRouter() {
-    const router = Router()
-    router.use((err, req, res, next) => {
-      if (this.routes.includes(req.path)) {
-        res.redirect('/')
-      } else {
-        next()
+  setupDefault(app) {
+    console.log('asdfa')
+    app.use(function(err, req, res, next) {
+      try {
+        console.log('asdf')
+        this.log.error(err)
+        res.status(400).json(err)
+      } catch (e) {
+        console.log('asdf')
       }
     })
-    router.use((err, req, res, next) => {
-      log.error(err)
-      res.status(400).json(err)
-    })
-    return router
   }
 }
