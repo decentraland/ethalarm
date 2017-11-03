@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.STRING(65534),
         allowNull: false
       },
-      event_names: {
+      eventNames: {
         type: Sequelize.STRING(512),
         allowNull: false
       },
@@ -26,12 +26,12 @@ module.exports = {
       url: {
         type: Sequelize.STRING(2000)
       },
-      block_confirmations: {
+      blockConfirmations: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: '1'
       },
-      confirmation_code: {
+      confirmationCode: {
         type: Sequelize.UUID,
         allowNull: false,
         defaultValue: Sequelize.UUIDV4
@@ -41,13 +41,13 @@ module.exports = {
         allowNull: false,
         defaultValue: false
       },
-      created_at: {
+      createdAt: {
         type: Sequelize.DATE
       },
-      updated_at: {
+      updatedAt: {
         type: Sequelize.DATE
       },
-      deleted_at: {
+      deletedAt: {
         type: Sequelize.DATE
       }
     })

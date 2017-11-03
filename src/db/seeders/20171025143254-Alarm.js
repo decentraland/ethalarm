@@ -1,7 +1,7 @@
 
 
-const etherdelta_address = '0x8d12a197cb00d4747a1fe03395095ce2a5cc6819'
-const etherdelta_abi = [
+const etherdeltaAddress = '0x8d12a197cb00d4747a1fe03395095ce2a5cc6819'
+const etherdeltaAbi = [
   {
     constant: false,
     inputs: [
@@ -366,109 +366,92 @@ const etherdelta_abi = [
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    /*
-			Add altering commands here.
-			Return a promise to correctly handle asynchronicity.
-
-			Example:
-			return queryInterface.bulkInsert('Person', [{
-				name: 'John Doe',
-				isBetaMember: false
-			}], {});
-		*/
     return queryInterface.bulkInsert(
       'Alarm',
       [
         {
           id: '3411d22e-d454-4bf3-aab1-2e711c9879bb',
-          address: etherdelta_address,
-          abi: JSON.stringify(etherdelta_abi),
-          event_names: 'Deposit,Trade',
+          address: etherdeltaAddress,
+          abi: JSON.stringify(etherdeltaAbi),
+          eventNames: 'Deposit,Trade',
           email: 'myself@danielkelly.me',
           url: 'https://danielkelly.me/contract_events.php',
-          block_confirmations: 1,
-          confirmation_code: '3411d22e-d454-4bf3-aab1-2e711c9879bb',
+          blockConfirmations: 1,
+          confirmationCode: '3411d22e-d454-4bf3-aab1-2e711c9879bb',
           enabled: 1,
-          created_at: new Date(),
-          updated_at: new Date()
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           id: '3411d22e-d454-4bf3-aab1-2e711c9879bc',
-          address: etherdelta_address,
-          abi: JSON.stringify(etherdelta_abi),
-          event_names: 'Trade',
+          address: etherdeltaAddress,
+          abi: JSON.stringify(etherdeltaAbi),
+          eventNames: 'Trade',
           email: 'myself@danielkelly.me',
           url: 'https://danielkelly.me/contract_events.php',
-          block_confirmations: 3,
-          confirmation_code: '3411d22e-d454-4bf3-aab1-2e711c9879bf',
+          blockConfirmations: 3,
+          confirmationCode: '3411d22e-d454-4bf3-aab1-2e711c9879bf',
           enabled: 1,
-          created_at: new Date(),
-          updated_at: new Date()
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           id: '3411d22e-d454-4bf3-aab1-2e711c9879bd',
-          address: etherdelta_address,
-          abi: JSON.stringify(etherdelta_abi),
-          event_names: 'Deposit,Trade',
+          address: etherdeltaAddress,
+          abi: JSON.stringify(etherdeltaAbi),
+          eventNames: 'Deposit,Trade',
           email: 'myself@danielkelly.me',
           url: 'https://danielkelly.me/contract_events.php',
-          block_confirmations: 3,
-          confirmation_code: '3411d22e-d454-4bf3-aab1-2e711c9879bf',
+          blockConfirmations: 3,
+          confirmationCode: '3411d22e-d454-4bf3-aab1-2e711c9879bf',
           enabled: 1,
-          created_at: new Date(),
-          updated_at: new Date()
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           id: '3411d22e-d454-4bf3-aab1-2e711c9879be',
-          address: etherdelta_address,
-          abi: JSON.stringify(etherdelta_abi),
-          event_names: 'Deposit',
+          address: etherdeltaAddress,
+          abi: JSON.stringify(etherdeltaAbi),
+          eventNames: 'Deposit',
           email: 'myself@danielkelly.me',
           url: 'https://danielkelly.me/contract_events.php',
-          block_confirmations: 6,
-          confirmation_code: '3411d22e-d454-4bf3-aab1-2e711c9879bf',
+          blockConfirmations: 6,
+          confirmationCode: '3411d22e-d454-4bf3-aab1-2e711c9879bf',
           enabled: 1,
-          created_at: new Date(),
-          updated_at: new Date()
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           id: '3411d22e-d454-4bf3-aab1-2e711c9879bf',
-          address: etherdelta_address,
-          abi: JSON.stringify(etherdelta_abi),
-          event_names: 'Trade',
+          address: etherdeltaAddress,
+          abi: JSON.stringify(etherdeltaAbi),
+          eventNames: 'Trade',
           email: 'myself@danielkelly.me',
           url: 'https://danielkelly.me/contract_events.php',
-          block_confirmations: 3,
-          confirmation_code: '3411d22e-d454-4bf3-aab1-2e711c9879bf',
+          blockConfirmations: 3,
+          confirmationCode: '3411d22e-d454-4bf3-aab1-2e711c9879bf',
           enabled: 1,
-          created_at: new Date(),
-          updated_at: new Date()
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           id: '3411d22e-d454-4bf3-aab1-2e711c9879bg',
           address: '0x8d12a197cb00d4747a1fe03395095ce2a5cc6820',
-          abi: JSON.stringify(etherdelta_abi),
-          event_names: 'Trade',
+          abi: JSON.stringify(etherdeltaAbi),
+          eventNames: 'Trade',
           email: 'myself@danielkelly.me',
           url: 'https://danielkelly.me/contract_events.php',
-          block_confirmations: 3,
-          confirmation_code: '3411d22e-d454-4bf3-aab1-2e711c9879bf',
+          blockConfirmations: 3,
+          confirmationCode: '3411d22e-d454-4bf3-aab1-2e711c9879bf',
           enabled: 1,
-          created_at: new Date(),
-          updated_at: new Date()
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
       ],
       {}
     )
   },
   down: (queryInterface, Sequelize) => {
-    /*
-			Add reverting commands here.
-			Return a promise to correctly handle asynchronicity.
-
-			Example:
-			return queryInterface.bulkDelete('Person', null, {});
-		*/
     queryInterface.bulkDelete('Alarm', null, {})
   }
 }

@@ -14,65 +14,65 @@ export default class AlarmService {
    * @param [where] add restrictions on what alarms to fetch
    */
   getAlarms(where = { id: undefined, addresses: [] }) {
-    const internal_where = {}
+    const internalWhere = {}
     if (where.addresses && where.addresses.length) {
-      internal_where.address = {
+      internalWhere.address = {
         [Op.in]: where.addresses
       }
     }
 
     if (where.id) {
-      internal_where.id = where.id
+      internalWhere.id = where.id
     }
 
     return this.alarmModel
       .findAll({
-        where: internal_where
+        where: internalWhere
       })
       .map(function(alarm) {
         alarm.dataValues.abi = JSON.parse(alarm.dataValues.abi)
-        alarm.dataValues.event_names = alarm.dataValues.event_names.split(',')
+        alarm.dataValues.eventNames = alarm.dataValues.eventNames.split(',')
         return alarm.dataValues
       })
   }
 
-  storeLastSyncBlock(contract_address, height) {
+  storeLastSyncBlock(contractAddress, height) {
     return this.alarms
-      .getAlarms({ addresses: [contract_address] })
+      .getAlarms({ addresses: [contractAddress] })
       .then(async results => {
-        const sync_states = []
+        const syncStates = []
 
         for (let x = 0; x < results.length; ++x) {
           const alarm = results[x]
 
-          await this._alarm_sync_state_model
+          await this.syncStateModel
             .findOrCreate({
               where: {
-                Alarm_id: alarm.id
+                alarmId: alarm.id
               },
               defaults: {
-                Alarm_id: alarm.id,
-                last_sync_block: height
+                alarmId: alarm.id,
+                lastSyncBlock: height
               }
             })
             .spread(async (record, created) => {
               // console.log(record, created)
               // Update the last block sync if it already exists and is lower
-              if (!created && height > record.dataValues.last_sync_block) {
+              if (!created && height > record.dataValues.lastSyncBlock) {
                 await record.update({
-                  last_sync_block: height
+                  lastSyncBlock: height
                 })
               }
 
-              sync_states.push({
-                Alarm_id: alarm.id,
+              syncStates.push({
+                alarmId: alarm.id,
                 AlarmSyncState: record,
-                created: created
+                createdAt: created
               })
             })
         }
 
-        return sync_states
+        return syncStates
       })
   }
 
@@ -85,10 +85,10 @@ export default class AlarmService {
     return this.alarmModel.create({
       address: alarmDescription.address,
       abi: alarmDescription.abi,
-      event_names: alarmDescription.event_names,
+      eventNames: alarmDescription.eventNames,
       email: alarmDescription.email,
       url: alarmDescription.url,
-      block_confirmations: alarmDescription.block_confirmations
+      blockConfirmations: alarmDescription.blockConfirmations
     })
   }
 
@@ -126,7 +126,7 @@ export default class AlarmService {
    * Retrieve a mapping of each address, linking to the latest sync
    * stored in the database for that address
    */
-  mapAddressesToLastSync(addresses, default_last_sync) {
+  mapAddressesToLastSync(addresses, defaultLastSync) {
     return this.alarmModel
       .findAll({
         include: [
@@ -142,16 +142,16 @@ export default class AlarmService {
         }
       })
       .reduce(function(addrtolastsync, alarm) {
-        let last_sync_block = default_last_sync
+        let lastSyncBlock = defaultLastSync
         if (alarm.AlarmSyncState !== null)
-          last_sync_block = alarm.AlarmSyncState.dataValues.last_sync_block
+          lastSyncBlock = alarm.AlarmSyncState.dataValues.lastSyncBlock
 
-        // Only return the greatest last_block_sync for specified address
+        // Only return the greatest lastBlockSync for specified address
         if (
           addrtolastsync[alarm.dataValues.address] === undefined ||
-          last_sync_block > addrtolastsync[alarm.dataValues.address]
+          lastSyncBlock > addrtolastsync[alarm.dataValues.address]
         )
-          addrtolastsync[alarm.dataValues.address] = last_sync_block
+          addrtolastsync[alarm.dataValues.address] = lastSyncBlock
 
         return addrtolastsync
       }, {})
@@ -160,11 +160,11 @@ export default class AlarmService {
   /**
    * Retrieve a receipt from the database
    */
-  getReceipt(alarm_id, tx_hash) {
+  getReceipt(alarmId, txHash) {
     return this.receiptModel.findAll({
       where: {
-        Alarm_id: alarm_id,
-        tx_hash: tx_hash
+        alarmId: alarmId,
+        txHash: txHash
       }
     })
   }
