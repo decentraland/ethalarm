@@ -1,3 +1,6 @@
+import webpack from 'webpack'
+import htmlPlugin from 'html-webpack-plugin'
+
 import base from './webpack.base.js'
 
 export default Object.assign({}, base, {
