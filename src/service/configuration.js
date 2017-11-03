@@ -9,14 +9,15 @@ import { Log, env } from 'decentraland-commons'
 
 import AlarmRouter from '../routes/alarms'
 import ConfirmationRouter from '../routes/confirmations'
+import FallbackRouter from '../routes/fallback'
 
 import AlarmService from '../service/alarms'
 
-// Missing imports:
-//  EmailService
-//  TemplateService
-
 import db from '../db/models'
+
+// Missing imports:
+//   EmailService
+//   TemplateService
 
 export const PRODUCTION = 'production'
 export const STAGING = 'staging'
@@ -70,6 +71,7 @@ export default class ConfigurationService {
   setupRoutes(app) {
     app.use(this.alarmRouter.getRouter())
     app.use(this.confirmationRouter.getRouter())
+    app.use(this.fallbackRouter.getRouter())
     app.use(express.static('./public'))
   }
 
@@ -79,6 +81,10 @@ export default class ConfigurationService {
 
   get confirmationRouter() {
     return new ConfirmationRouter(this.confirmationService)
+  }
+
+  get fallbackRouter() {
+    return new FallbackRouter()
   }
 
   get webpackConfiguration() {
