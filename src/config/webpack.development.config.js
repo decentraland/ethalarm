@@ -2,8 +2,10 @@ import webpack from 'webpack'
 import htmlPlugin from 'html-webpack-plugin'
 import path from 'path'
 
-export default {
-  devtool: 'source-map',
+import base from './webpack.base.config'
+
+export default Object.assign({}, base, {
+  devtool: 'cheap-eval-source-map',
   entry: {
     'app': [
       'babel-polyfill',
@@ -12,31 +14,6 @@ export default {
       'webpack/hot/only-dev-server',
       './src/webapp/main.js',
     ]
-  },
-  output: {
-    filename: '[name].[hash].js',
-    publicPath: '/',
-    path: path.join(__dirname, 'dist')
-  },
-  module: {
-    rules: [
-      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
-      {
-        test: /\.s?css/,
-        use: [{
-            loader: 'style-loader'
-        }, {
-            loader: 'css-loader'
-        }, {
-            loader: 'sass-loader'
-        }]
-      }
-    ]
-  },
-  resolve: {
-    alias: {
-      '~': path.resolve(__dirname, '../webapp')
-    }
   },
   plugins: [
     new htmlPlugin({ template: 'public/index.html' }),

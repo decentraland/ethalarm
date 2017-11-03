@@ -1,18 +1,7 @@
 import webpack from 'webpack'
-import htmlPlugin from 'html-webpack-plugin'
 import path from 'path'
 
 export default {
-  devtool: 'source-map',
-  entry: {
-    'app': [
-      'babel-polyfill',
-      'react-hot-loader/patch',
-      'webpack-hot-middleware/client',
-      'webpack/hot/only-dev-server',
-      './webapp/main',
-    ]
-  },
   output: {
     filename: '[name].[hash].js',
     publicPath: '/',
@@ -38,8 +27,4 @@ export default {
       '~': path.resolve(__dirname, '../webapp')
     }
   },
-  plugins: [
-    new htmlPlugin({ template: 'public/index.html' }),
-    new webpack.HotModuleReplacementPlugin()
-  ]
 }
