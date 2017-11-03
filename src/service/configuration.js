@@ -19,6 +19,7 @@ import middlewareDevelopment from '../config/webpackMiddleware.development'
 // Missing imports:
 import AlarmRouter from '../routes/alarm'
 import ConfirmationRouter from '../routes/confirmation'
+import FallbackRouter from '../routes/fallbak'
 //   AlarmService
 //   EmailService
 //   TemplateService
@@ -51,11 +52,6 @@ export default class ConfigurationService {
 
     this.setupRoutes(app)
 
-    app.use((err, req, res, next) => {
-      log.error(err)
-      res.status(400).json(err)
-    })
-
     const port = env.getEnv('PORT', 3000)
     const server = http.Server(app)
     server.listen(port, () => {
@@ -73,6 +69,7 @@ export default class ConfigurationService {
   setupRoutes(app) {
     app.use(this.alarmRouter.getRouter())
     app.use(this.confirmationRouter.getRouter())
+    app.use(this.fallbackRouter.getRouter())
     app.use(express.static('./public'))
   }
 
@@ -82,6 +79,10 @@ export default class ConfigurationService {
 
   get confirmationRouter() {
     return new ConfirmationRouter(this.confirmationService)
+  }
+
+  get fallbackRouter() {
+    return new FallbackRouter()
   }
 
   get webpackConfiguration() {
