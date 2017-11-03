@@ -11,12 +11,10 @@ export default class AlarmRouter {
     this.alarm = alarmService
   }
 
-  getRouter() {
-    const router = Router()
-    router.post('/alarms', validate({ body: AlarmSchema }), this.postAlarm)
-    router.get('/alarms/:id', this.getAlarm)
-    router.delete('/alarms/:id', this.deleteAlarm)
-    return router
+  setup(app) {
+    app.post('/alarms', validate({ body: AlarmSchema }), this.postAlarm)
+    app.get('/alarms/:id', this.getAlarm)
+    app.delete('/alarms/:id', this.deleteAlarm)
   }
 
   get postAlarm() {

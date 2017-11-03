@@ -1,8 +1,8 @@
 import { Op } from 'sequelize'
 
 export default class AlarmService {
-  constructor(dispathService, alarmModel, syncStateModel, receiptModel, configurationService) {
-    this.dispathService = dispathService
+  constructor(dispatchService, alarmModel, syncStateModel, receiptModel, configurationService) {
+    this.dispatchService = dispatchService
     this.alarmModel = alarmModel
     this.syncStateModel = syncStateModel
     this.receiptModel = receiptModel
@@ -35,6 +35,47 @@ export default class AlarmService {
         return alarm.dataValues
       })
   }
+
+  storeLastSyncBlock(contract_address, height) {
+    return this.alarms
+      .getAlarms({ addresses: [contract_address] })
+      .then(async results => {
+        const sync_states = []
+
+        for (let x = 0; x < results.length; ++x) {
+          const alarm = results[x]
+
+          await this._alarm_sync_state_model
+            .findOrCreate({
+              where: {
+                Alarm_id: alarm.id
+              },
+              defaults: {
+                Alarm_id: alarm.id,
+                last_sync_block: height
+              }
+            })
+            .spread(async (record, created) => {
+              // console.log(record, created)
+              // Update the last block sync if it already exists and is lower
+              if (!created && height > record.dataValues.last_sync_block) {
+                await record.update({
+                  last_sync_block: height
+                })
+              }
+
+              sync_states.push({
+                Alarm_id: alarm.id,
+                AlarmSyncState: record,
+                created: created
+              })
+            })
+        }
+
+        return sync_states
+      })
+  }
+
 
   /**
    * Store an alarm in the databas
@@ -69,7 +110,16 @@ export default class AlarmService {
    * Configure the maximum amount of reorgs we might expect to happen
    */
   getReorgSafety() {
-    return this.reorgSafety
+    return this.configuration.getReorgSafety()
+  }
+
+  getContractData(addressToAlarms) {
+    return Object.keys(addressToAlarms).map(address => {
+      return {
+        address,
+        abi: addressToAlarms[address][0].abi
+      }
+    })
   }
 
   /**
@@ -110,13 +160,16 @@ export default class AlarmService {
   /**
    * Retrieve a receipt from the database
    */
-  getReceipt(alarm_id, tx_hash, event_name) {
+  getReceipt(alarm_id, tx_hash) {
     return this.receiptModel.findAll({
       where: {
         Alarm_id: alarm_id,
-        tx_hash: tx_hash,
-        event_name: event_name
+        tx_hash: tx_hash
       }
     })
+  }
+
+  dispatchNotification(alarm, event) {
+    return this.dispatchService.dispath(alarm, event)
   }
 }

@@ -6,7 +6,7 @@ export default class DispatchService {
     this.receiptModel = receiptModel
   }
 
-  async dispatchNotifications(alarm, event) {
+  async dispatch(alarm, event) {
     let httpResponse, smtpResponse
 
     if (alarm.email && alarm.email.length) {
@@ -14,7 +14,7 @@ export default class DispatchService {
     }
 
     if (alarm.url && alarm.url.length) {
-      httpResponse = await this.httpService.sendRequest(alarm, event).then(res => res.text())
+      httpResponse = await this.httpService.sendRequest(alarm, event)
     }
 
     return await this.storeReceipt(alarm.id, event.txHash, event.eventName, {

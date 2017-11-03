@@ -5,10 +5,8 @@ export default class ConfirmationRouter {
     this.confirmationService = confirmationService
   }
 
-  getRouter() {
-    const router = Router()
-    router.post('/confirmations/:id', this.confirm)
-    return router
+  setup(app) {
+    app.post('/confirmations/:id', this.confirm)
   }
 
   get confirm() {

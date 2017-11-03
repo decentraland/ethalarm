@@ -1,11 +1,10 @@
-import http from 'http'
 import express from 'express'
 import bodyParser from 'body-parser'
 import Webpack from 'webpack'
 import WebpackMiddleware from 'webpack-dev-middleware'
 import WebpackHotMiddleware from 'webpack-hot-middleware'
 
-import { Log, env } from 'decentraland-commons'
+import { Log, env, SMTP } from 'decentraland-commons'
 
 import AlarmRouter from '../routes/alarms'
 import ConfirmationRouter from '../routes/confirmations'
@@ -15,9 +14,8 @@ import AlarmService from '../service/alarms'
 
 import db from '../db/models'
 
-// Missing imports:
-//   EmailService
-//   TemplateService
+import HTTPService from './http'
+import DispatchService from './dispatch'
 
 export const PRODUCTION = 'production'
 export const STAGING = 'staging'
@@ -39,28 +37,22 @@ export default class ConfigurationService {
 
   startServer() {
     const app = express()
-    const webpack = Webpack(this.webpackConfiguration)
-    const log = new Log('Server')
+    this.webpack = Webpack(this.webpackConfiguration)
+    this.serverLog = new Log('Server')
 
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())
 
-    this.setupWebpack(app, webpack)
+    this.setupWebpack(app, this.webpack)
 
     this.setupRoutes(app)
 
-    app.use((err, req, res, next) => {
-      log.error(err)
-      res.status(400).json(err)
-    })
-
     const port = env.get('PORT', 3000)
-    const server = http.Server(app)
-    server.listen(port, () => {
-      console.log(`Ethalarm server running on port ${port}`)
+    app.listen(port, () => {
+      this.serverLog.info(`EthAlarm server running on port ${port}`)
     })
 
-    return server
+    return app
   }
 
   setupWebpack(app, webpack) {
@@ -69,10 +61,15 @@ export default class ConfigurationService {
   }
 
   setupRoutes(app) {
-    app.use(this.alarmRouter.getRouter())
-    app.use(this.confirmationRouter.getRouter())
-    app.use(this.fallbackRouter.getRouter())
+    this.alarmRouter.setup(app)
+    this.confirmationRouter.setup(app)
     app.use(express.static('./public'))
+
+    this.fallbackRouter.setupDefault(app)
+  }
+
+  getReorgSafety() {
+    return env.get('REORG_SAFETY', 6)
   }
 
   get alarmRouter() {
@@ -84,7 +81,7 @@ export default class ConfigurationService {
   }
 
   get fallbackRouter() {
-    return new FallbackRouter()
+    return new FallbackRouter(this.serverLog, this.webpack)
   }
 
   get webpackConfiguration() {
@@ -100,21 +97,47 @@ export default class ConfigurationService {
 
   get alarmService() {
     if (!this._alarmService) {
-      this._alarmService = new AlarmService(this.alarmModel)
+      this._alarmService = new AlarmService(
+        this.dispatchService,
+        this.alarmModel,
+        this.syncStateModel,
+        this.receiptModel,
+        this
+      )
     }
     return this._alarmService
   }
 
   get emailService() {
-    throw new Error('Missing EmailService import')
-    // if (!this._emailService) {
-    //   this._emailService = new EmailService(env.get('EMAIL_CONFIG'))
-    // }
-    // return this._emailService
+    if (!this._email) {
+      this._email = new SMTP({
+        hostname: env.get('EMAIL_HOSTNAME'),
+        port: env.get('EMAIL_PORT'),
+        username: env.get('EMAIL_USERNAME'),
+        password: env.get('EMAIL_PASSWORD'),
+      })
+      this._email.setTemplate('notification', (opts) => ({
+        from: `The Decentraland Team <${opts.sender}>`,
+        to: `The Decentraland Team <${opts.sender}>`,
+        subject: `The Decentraland Team <${opts.sender}>`,
+        text: `The Decentraland Team <${opts.sender}>`,
+      }))
+    }
+    return this._email
   }
 
-  get templateService() {
-    throw new Error('Missing TemplateService import')
+  get dispathService() {
+    if (!this._dispatch) {
+      this._dispatch = new DispatchService(this.httpService, this.emailService, 'notification', this.receiptModel)
+    }
+    return this._dispatch
+  }
+
+  get httpService() {
+    if (!this._http) {
+      this._http = new HTTPService()
+    }
+    return this._http
   }
 
   get database() {
@@ -125,12 +148,12 @@ export default class ConfigurationService {
     return db.Alarm
   }
 
-  get alarmSyncStateModel() {
+  get syncStateModel() {
     return db.AlarmSyncState
   }
 
-  get alarmReceiptModel() {
-    return db.AlarmRecepeit
+  get receiptModel() {
+    return db.AlarmReceipt
   }
 }
 

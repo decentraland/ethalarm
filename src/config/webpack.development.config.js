@@ -4,7 +4,7 @@ import htmlPlugin from 'html-webpack-plugin'
 import base from './webpack.base.js'
 
 export default Object.assign({}, base, {
-  devtool: 'source-map',
+  devtool: 'cheap-module-eval-source-map',
   entry: {
     'app': [
       'babel-polyfill',
