@@ -7,6 +7,7 @@ export default class ScannerService {
   constructor(alarmService, ethService) {
     this.ethService = ethService
     this.alarmService = alarmService
+    this.log = new Log('Scanner')
   }
 
   async run() {
@@ -27,6 +28,7 @@ export default class ScannerService {
         const fromBlock = lastBlockSync[contract.address] - max(alarms, 'blockConfirmations') - reogSafety
         const toBlock = block.height - min(alarms, 'blockConfirmations')
         const events = await contract.getPastEvents('allEvents', { fromBlock, toBlock })
+        this.log.debug(`Data received for contract in ${contract.address}`, alarms, fromBlock, toBlock, events)
         for (let event in events) {
           const confirmations = height - event.blockHeight
           await Promise.all(alarms.map(async (alarm) => {

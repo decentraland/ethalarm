@@ -6,7 +6,7 @@ export default class DispatchService {
     this.receiptModel = receiptModel
   }
 
-  async dispatchNotifications(alarm, event) {
+  async dispatch(alarm, event) {
     let httpResponse, smtpResponse
 
     if (alarm.email && alarm.email.length) {
