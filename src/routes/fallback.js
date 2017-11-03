@@ -1,3 +1,4 @@
+import path from 'path'
 import { Router } from 'express'
 
 import locations from '../webapp/locations'
@@ -9,15 +10,23 @@ export default class FallbackRouter {
     this.routes = Object.values(locations)
   }
   setupDefault(app) {
-    console.log('asdfa')
-    app.use(function(err, req, res, next) {
-      try {
-        console.log('asdf')
-        this.log.error(err)
-        res.status(400).json(err)
-      } catch (e) {
-        console.log('asdf')
+    app.use((req, res, next) => {
+      if (!this.routes.includes(req.path)) {
+        this.log.warn(`Route ${req.path} not found`)
       }
+      const filename = path.join(this.webpack.outputPath, 'index.html')
+      this.webpack.outputFileSystem.readFile(filename, (err, result) => {
+        if (err) {
+          return next(err)
+        }
+        res.set('content-type', 'text/html')
+        res.send(result)
+        res.end()
+      })
+    })
+    app.use((error, req, res, next) => {
+      this.log.error(error)
+      res.status(500).json(error)
     })
   }
 }
