@@ -6,27 +6,26 @@ export default class DispatchService {
     this.receiptModel = receiptModel
   }
 
-  async dispatch(alarm, event) {
+  async dispatch(alarm, events) {
     let httpResponse, smtpResponse
 
     if (alarm.email && alarm.email.length) {
-      smtpResponse = await this.emaiService.sendMail(alarm.email, this.templateName, { alarm, event })
+      smtpResponse = await this.emaiService.sendMail(alarm.email, this.templateName, { alarm, events })
     }
 
     if (alarm.webhook && alarm.webhook.length) {
-      httpResponse = await this.httpService.sendRequest(alarm, event)
+      httpResponse = await this.httpService.sendRequest(alarm, events)
     }
 
-    return await this.storeReceipt(alarm.id, event.txHash, event.eventName, {
+    return await this.storeReceipt(alarm.id, events[0].txHash, {
       httpResponse, smtpResponse
     })
   }
 
-  storeReceipt(alarmId, txHash, eventName, extras) {
+  storeReceipt(alarmId, txHash, extras) {
     const receipt = {
       alarmId: alarmId,
       txHash: txHash,
-      eventNames: eventName,
       httpResponse: extras.httpResponse,
       smtpResponse: extras.smtpResponse
     }

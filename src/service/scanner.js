@@ -1,7 +1,8 @@
 import Web3 from 'web3'
+import { Log } from 'decentraland-commons'
 
-const min = (array, prop) => reduce((prev, elem) => Math.min(prev, elem.prop), Infinity)
-const max = (array, prop) => reduce((prev, elem) => Math.max(prev, elem.prop), -Infinity)
+const min = (array, prop) => array.reduce((prev, elem) => Math.min(prev, elem.prop), Infinity)
+const max = (array, prop) => array.reduce((prev, elem) => Math.max(prev, elem.prop), -Infinity)
 
 export default class ScannerService {
   constructor(alarmService, ethService) {
@@ -21,11 +22,11 @@ export default class ScannerService {
     const currentTip = await ethService.getCurrentTip()
     const lastBlockSync = await alarmService.mapAddressesToLastSync(currentTip, allAddresses)
 
-    return ethService.watchNewBlocks((block) => {
+    return ethService.watchNewBlocks(async (block) => {
       const height = block.height
       await Promise.all(contracts.map(async (contract) => {
         const alarms = addressToAlarms[contract.address]
-        const fromBlock = lastBlockSync[contract.address] - max(alarms, 'blockConfirmations') - reogSafety
+        const fromBlock = lastBlockSync[contract.address] - max(alarms, 'blockConfirmations') - reorgSafety
         const toBlock = block.height - min(alarms, 'blockConfirmations')
         const events = await contract.getPastEvents('allEvents', { fromBlock, toBlock })
         this.log.debug(`Data received for contract in ${contract.address}`, alarms, fromBlock, toBlock, events)
