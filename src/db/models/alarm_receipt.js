@@ -10,7 +10,7 @@ module.exports = function(sequelize, DataTypes) {
         primaryKey: true,
         autoIncrement: true
       },
-      Alarm_id: {
+      alarmId: {
         type: DataTypes.UUID,
         references: {
           model: 'Alarm',
@@ -18,18 +18,18 @@ module.exports = function(sequelize, DataTypes) {
         },
         allowNull: false
       },
-      event_name: {
+      eventNames: {
         type: DataTypes.STRING(64), // Couldn't find the actual length restriction if any
         allowNull: false
       },
-      tx_hash: {
+      txHash: {
         type: DataTypes.STRING(66),
         allowNull: false
       },
-      smtp_response: {
+      smtpResponse: {
         type: DataTypes.BLOB('medium')
       },
-      http_response: {
+      httpResponse: {
         type: DataTypes.BLOB('medium')
       }
     },
@@ -37,13 +37,13 @@ module.exports = function(sequelize, DataTypes) {
       tableName: 'AlarmReceipt',
       paranoid: false,
       timestamps: true,
-      createdAt: 'created_at',
-      updatedAt: 'updated_at'
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt'
     }
   )
 
   AlarmReceipt.associate = function(models) {
-    AlarmReceipt.belongsTo(models.Alarm, { foreignKey: 'Alarm_id' })
+    AlarmReceipt.belongsTo(models.Alarm, { foreignKey: 'alarmId' })
   }
 
   return AlarmReceipt

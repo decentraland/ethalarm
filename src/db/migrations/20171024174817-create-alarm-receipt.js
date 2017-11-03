@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      Alarm_id: {
+      alarmId: {
         type: Sequelize.UUIDV4,
         references: {
           model: 'Alarm',
@@ -16,25 +16,25 @@ module.exports = {
         },
         allowNull: false
       },
-      event_name: {
+      eventNames: {
         type: Sequelize.STRING(64),
         allowNull: false
       },
-      tx_hash: {
+      txHash: {
         type: Sequelize.STRING(66),
         allowNull: false
       },
-      smtp_response: {
+      smtpResponse: {
         type: Sequelize.BLOB('medium')
       },
-      http_response: {
+      httpResponse: {
         type: Sequelize.BLOB('medium')
       },
-      created_at: {
+      createdAt: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      updated_at: {
+      updatedAt: {
         type: Sequelize.DATE,
         allowNull: false
       }

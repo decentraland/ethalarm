@@ -24,11 +24,11 @@ export default class DispatchService {
 
   storeReceipt(alarmId, txHash, eventName, extras) {
     const receipt = {
-      Alarm_id: alarmId,
-      tx_hash: txHash,
-      event_name: eventName,
-      http_response: extras.httpResponse,
-      smtp_response: extras.smtpResponse
+      alarmId: alarmId,
+      txHash: txHash,
+      eventNames: eventName,
+      httpResponse: extras.httpResponse,
+      smtpResponse: extras.smtpResponse
     }
 
     return this.receiptModel.create(receipt)

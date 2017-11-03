@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      Alarm_id: {
+      alarmId: {
         type: Sequelize.UUIDV4,
         allowNull: false,
         references: {
@@ -16,7 +16,7 @@ module.exports = {
           key: 'id'
         }
       },
-      last_sync_block: {
+      lastSyncBlock: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: '0'

@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING(65534),
         allowNull: false
       },
-      event_names: {
+      eventNames: {
         type: DataTypes.STRING(512),
         allowNull: false
       },
@@ -27,12 +27,12 @@ module.exports = function(sequelize, DataTypes) {
       url: {
         type: DataTypes.STRING(2000)
       },
-      block_confirmations: {
+      blockConfirmations: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: '1'
       },
-      confirmation_code: {
+      confirmationCode: {
         type: DataTypes.UUID,
         allowNull: false,
         defaultValue: DataTypes.UUIDV4
@@ -47,15 +47,15 @@ module.exports = function(sequelize, DataTypes) {
       tableName: 'Alarm',
       paranoid: true,
       timestamps: true,
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
-      deletedAt: 'deleted_at'
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt',
+      deletedAt: 'deletedAt'
     }
   )
 
   Alarm.associate = function(models) {
-    Alarm.hasOne(models.AlarmSyncState, { foreignKey: 'Alarm_id' })
-    Alarm.hasMany(models.AlarmReceipt, { foreignKey: 'Alarm_id' })
+    Alarm.hasOne(models.AlarmSyncState, { foreignKey: 'alarmId' })
+    Alarm.hasMany(models.AlarmReceipt, { foreignKey: 'alarmId' })
   }
 
   return Alarm

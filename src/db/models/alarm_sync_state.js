@@ -9,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
         primaryKey: true,
         autoIncrement: true
       },
-      Alarm_id: {
+      alarmId: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
           key: 'id'
         }
       },
-      last_sync_block: {
+      lastSyncBlock: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: '0'
@@ -30,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
   )
 
   AlarmSyncState.associate = function(models) {
-    AlarmSyncState.belongsTo(models.Alarm, { foreignKey: 'Alarm_id' })
+    AlarmSyncState.belongsTo(models.Alarm, { foreignKey: 'alarmId' })
   }
 
   return AlarmSyncState
