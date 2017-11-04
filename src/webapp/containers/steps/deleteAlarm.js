@@ -25,7 +25,7 @@ class DeleteAlarm extends SagaStep {
     return (
       <div className="success step">
         <p className="highlight">
-          Success! Alarm deleted.
+          Success! <br/>You will no longer receive email notifications regarding this alarm.
         </p>
         <a href="/" className="next">[Home]</a>
       </div>
