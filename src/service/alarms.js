@@ -1,8 +1,10 @@
 import { Op } from 'sequelize'
+import uuid from 'uuid'
 
 export default class AlarmService {
-  constructor(dispatchService, alarmModel, syncStateModel, receiptModel, configurationService) {
+  constructor(dispatchService, confirmationService, alarmModel, syncStateModel, receiptModel, configurationService) {
     this.dispatchService = dispatchService
+    this.confirmationService = confirmationService
     this.alarmModel = alarmModel
     this.syncStateModel = syncStateModel
     this.receiptModel = receiptModel
@@ -18,7 +20,8 @@ export default class AlarmService {
     if (where.addresses && where.addresses.length) {
       internalWhere.address = {
         [Op.in]: where.addresses
-      }
+      },
+      enabled: true
     }
 
     if (where.id) {
@@ -33,6 +36,15 @@ export default class AlarmService {
         alarm.dataValues.abi = JSON.parse(alarm.dataValues.abi)
         alarm.dataValues.eventNames = alarm.dataValues.eventNames.split(';')
         return alarm.dataValues
+      })
+  }
+
+  confirmAlarm(confirmationCode) {
+    return this.alarmModel.findOne({ confirmationCode })
+      .then(async alarm => {
+        alarm.update({
+          enabled: true
+        })
       })
   }
 
@@ -64,16 +76,30 @@ export default class AlarmService {
   /**
    * Store an alarm in the databas
    */
-  storeNewAlarm(alarmDescription) {
+  async storeNewAlarm(alarmDescription) {
     // store into the database
-    return this.alarmModel.create({
-      address: alarmDescription.address.toLowerCase(),
-      abi: alarmDescription.abi,
-      eventNames: alarmDescription.eventNames.join(';'),
-      email: alarmDescription.email,
-      webhook: alarmDescription.webhook,
-      blockConfirmations: alarmDescription.blockConfirmations
-    })
+    let enabled = !alarmDescription.email
+    let confirmationCode = !enabled && uuid.v4()
+    try {
+      const result = await this.alarmModel.create({
+        address: alarmDescription.address.toLowerCase(),
+        abi: alarmDescription.abi,
+        eventNames: alarmDescription.eventNames.join(';'),
+        email: alarmDescription.email,
+        webhook: alarmDescription.webhook,
+        blockConfirmations: alarmDescription.blockConfirmations,
+        enabled,
+        confirmationCode
+      })
+      if (!enabled) {
+        this.confirmationService.sendConfirmationEmail(result)
+      }
+      return result
+    } catch (error) {
+      console.log('*********************************************')
+      console.log(error.stack)
+      console.log('*********************************************')
+    }
   }
 
   destroyAlarm(alarmId) {

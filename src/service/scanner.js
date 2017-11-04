@@ -18,14 +18,14 @@ export default class ScannerService {
     const alarmService = this.alarmService
     const ethService = this.ethService
 
-    const addressToAlarms = await alarmService.mapAddressesToAlarm()
-    const allAddresses = Object.keys(addressToAlarms)
-    const contracts = ethService.getContracts(await alarmService.getContractData(addressToAlarms))
-    const reorgSafety = await alarmService.getReorgSafety()
-    const currentTip = await ethService.getCurrentTip()
-    const lastBlockSync = await alarmService.mapAddressesToLastSync(allAddresses, currentTip)
-
     return ethService.watchNewBlocks(async () => {
+      const addressToAlarms = await alarmService.mapAddressesToAlarm()
+      const allAddresses = Object.keys(addressToAlarms)
+      const contracts = ethService.getContracts(await alarmService.getContractData(addressToAlarms))
+      const reorgSafety = await alarmService.getReorgSafety()
+      const currentTip = await ethService.getCurrentTip()
+      const lastBlockSync = await alarmService.mapAddressesToLastSync(allAddresses, currentTip)
+
       const height = await this.ethService.getCurrentTip()
       await Promise.all(contracts.map(async (contract) => {
         const alarms = addressToAlarms[contract.address]

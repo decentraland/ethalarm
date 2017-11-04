@@ -16,16 +16,23 @@ Now, go to http://localhost:3000 and the frontend should be displayed to you.
 
 ## TODO
 
+<<<<<<< HEAD
 [ ] Send confirmation email
 [X] DELETE endpoint to delete alarms (/deleteAlarm/:id)
 [ ] Add permalink to check on alarm
 [ ] Optimize scanner so it doesn't read the whole database each time
+=======
+[x] Send confirmation email
+[ ] Add permalink to check on alarm
+[ ] DELETE endpoint to delete alarms
+>>>>>>> Add confirmation email
 [ ] Frontend for "unsuscribe" email
 [ ] Templates - write them up
-[ ] Add tests
 [X] Add some Decentraland branding
 [ ] Deploy to ethalarm.com
 [ ] Add some security to `fetch`
+[ ] Optimize scanner so it doesn't read the whole database each time
+[ ] Add tests
 [x] Make Services injected with DI
 [x] Create a configuration service to bootstrap configuration and models
 [x] Docker-compose: add server, postgres

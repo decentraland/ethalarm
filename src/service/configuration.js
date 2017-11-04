@@ -11,6 +11,7 @@ import ConfirmationRouter from '../routes/confirmations'
 import FallbackRouter from '../routes/fallback'
 
 import AlarmService from '../service/alarms'
+import ConfirmationService from '../service/confirmation'
 import EthereumService from '../service/eth'
 import ScannerService from '../service/scanner'
 
@@ -120,6 +121,7 @@ export default class ConfigurationService {
     if (!this._alarmService) {
       this._alarmService = new AlarmService(
         this.dispatchService,
+        this.confirmationService,
         this.alarmModel,
         this.syncStateModel,
         this.receiptModel,
@@ -127,6 +129,14 @@ export default class ConfigurationService {
       )
     }
     return this._alarmService
+  }
+
+  get confirmationService() {
+    if (!this._confirmation) {
+      this._confirmation = new ConfirmationService(this.emailService, 'confirmation')
+      this._confirmation.setupTemplate()
+    }
+    return this._confirmation
   }
 
   get emailService() {
