@@ -85,7 +85,7 @@ export default class ConfigurationService {
   }
 
   get confirmationRouter() {
-    return new ConfirmationRouter(this.confirmationService)
+    return new ConfirmationRouter(this.alarmService, this.confirmationService)
   }
 
   get fallbackRouter() {

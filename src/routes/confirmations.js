@@ -1,8 +1,9 @@
 import { Router } from 'express'
 
 export default class ConfirmationRouter {
-  constructor(confirmationService) {
+  constructor(alarmService, confirmationService) {
     this.confirmationService = confirmationService
+    this.alarmService = alarmService
   }
 
   setup(app) {
@@ -10,12 +11,12 @@ export default class ConfirmationRouter {
   }
 
   get confirm() {
-    return (req, res) => buildResponseSchema(this.confirmationService.confirm(req.params.id), res)
+    return (req, res) => buildResponseSchema(this.alarmService.confirmAlarm(req.params.id), res)
   }
 }
 
 const buildResponseSchema = (promise, response = {}) => {
   promise
-    .then(result => res.json({ ok: true, result }))
-    .catch(error => res.status(error === 'not found' ? 404 : 500).json({ ok: false, error }))
+    .then(result => response.json({ ok: true, result }))
+    .catch(error => response.status(error === 'not found' ? 404 : 500).json({ ok: false, error }))
 }

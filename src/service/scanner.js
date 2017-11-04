@@ -15,10 +15,17 @@ export default class ScannerService {
   }
 
   async run() {
+    try {
+      return this.ethService.watchNewBlocks(this.checkAlarms.bind(this))
+    } catch (err) {
+      this.log.error('Unable to start watching', err.stack)
+    }
+  }
+
+  async checkAlarms() {
     const alarmService = this.alarmService
     const ethService = this.ethService
-
-    return ethService.watchNewBlocks(async () => {
+    try {
       const addressToAlarms = await alarmService.mapAddressesToAlarm()
       const allAddresses = Object.keys(addressToAlarms)
       const contracts = ethService.getContracts(await alarmService.getContractData(addressToAlarms))
@@ -27,6 +34,8 @@ export default class ScannerService {
       const lastBlockSync = await alarmService.mapAddressesToLastSync(allAddresses, currentTip)
 
       const height = await this.ethService.getCurrentTip()
+      this.log.info(`Received new block height: ${height}`)
+
       await Promise.all(contracts.map(async (contract) => {
         const alarms = addressToAlarms[contract.address]
         const fromBlock = lastBlockSync[contract.address] - max(alarms, 'blockConfirmations') - reorgSafety
@@ -52,6 +61,8 @@ export default class ScannerService {
       })).catch(err => {
         this.log.error(`Error: ${err.stack}`)
       })
-    })
+    } catch (err) {
+      this.log.error(`Error: ${err.stack}`)
+    }
   }
 }

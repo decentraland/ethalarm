@@ -41,7 +41,7 @@ export default class AlarmService {
   }
 
   confirmAlarm(confirmationCode) {
-    return this.alarmModel.findOne({ confirmationCode })
+    return this.alarmModel.findOne({ where: { confirmationCode } })
       .then(async alarm => {
         alarm.update({
           enabled: true

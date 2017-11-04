@@ -6,5 +6,6 @@ export default {
   setNotificationPreference: 'Selected notification preference',
   setId: 'Received ID',
   confirm: 'Confirmation',
-  deleteAlarm: 'Delete alarm'
+  deleteAlarm: 'Delete alarm',
+  confirmAlarm: 'Confirm alarm'
 }

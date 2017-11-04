@@ -12,19 +12,21 @@ import HowNotify from './containers/steps/howNotify'
 import Verify from './containers/steps/verify'
 import Success from './containers/steps/success'
 import DeleteAlarm from './containers/steps/deleteAlarm'
+import ConfirmEmail from './containers/steps/confirmEmail'
 
 export default function Routes() {
   return (
     <Root>
       <Switch>
-          <Route exact path={locations.root}         component={SelectContract} />
-          <Route exact path={locations.lookingUp}    component={LookingUp} />
-          <Route exact path={locations.insertABI}    component={InsertABI} />
-          <Route exact path={locations.selectEvents} component={SelectEvents} />
-          <Route exact path={locations.howNotify}    component={HowNotify} />
-          <Route exact path={locations.verify}       component={Verify} />
-          <Route exact path={locations.success}      component={Success} />
-          <Route exact path={locations.delete}       component={DeleteAlarm} />
+          <Route exact path={locations.root}          component={SelectContract} />
+          <Route exact path={locations.lookingUp}     component={LookingUp} />
+          <Route exact path={locations.insertABI}     component={InsertABI} />
+          <Route exact path={locations.selectEvents}  component={SelectEvents} />
+          <Route exact path={locations.howNotify}     component={HowNotify} />
+          <Route exact path={locations.verify}        component={Verify} />
+          <Route exact path={locations.success}       component={Success} />
+          <Route exact path={locations.delete}        component={DeleteAlarm} />
+          <Route exact path={locations.confirm}       component={ConfirmEmail} />
 
           <Route from="*" component={SelectContract} />
       </Switch>

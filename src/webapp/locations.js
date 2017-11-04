@@ -7,5 +7,6 @@ export default {
   verify: '/verify',
   success: '/success',
 
-  delete: '/deleteAlarm/:alarmId'
+  delete: '/deleteAlarm/:alarmId',
+  confirm: '/confirm/:confirmationCode'
 }

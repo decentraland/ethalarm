@@ -12,6 +12,7 @@ function* allSagas() {
   yield takeEvery(types.setNotificationPreference, handleNotification)
   yield takeEvery(types.confirm                  , handleConfirm)
   yield takeEvery(types.deleteAlarm              , handleDeleteAlarm)
+  yield takeEvery(types.confirmAlarm             , handleConfirmAlarm)
 }
 
 function* handleABI(action) {
@@ -42,10 +43,15 @@ function* handleConfirm(action) {
   yield put(push(locations.success))
 }
 
+function* handleConfirmAlarm(action) {
+  if (action.confirmationCode) {
+    yield call(confirmAlarm, action.confirmationCode)
+  } else {
+    yield put(push(locations.root))
+  }
+}
+
 function* handleDeleteAlarm(action) {
-  console.log('*********************************************')
-  console.log(action)
-  console.log('*********************************************')
   if (action.alarmId) {
     yield call(deleteAlarm, action.alarmId)
   } else {
@@ -107,6 +113,13 @@ async function postAlarm(alarm) {
 async function deleteAlarm(alarmId) {
   return await fetch(`/alarms/${alarmId}`, {
       method: 'DELETE'
+    })
+    .then(parseJson)
+}
+
+async function confirmAlarm(confirmation) {
+  return await fetch(`/confirmations/${confirmation}`, {
+      method: 'POST'
     })
     .then(parseJson)
 }
