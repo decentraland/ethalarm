@@ -1,7 +1,20 @@
 version: '2'
 
 services:
-  server:
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx/letsencrypt:/etc/letsencrypt
+      - ./nginx/keys:/etc/nginx/keys
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./logs/nginx:/var/log/nginx
+    ports:
+      - "443:443"
+      - "80:80"
+    networks:
+      - outside
+      - internal
+  service:
     build:
       context: ./
     ports:
@@ -9,6 +22,8 @@ services:
     networks:
       - internal
       - outside
+    volumes:
+      - ./logs/service:/opt/ethalarm/logs
   postgresql:
     image: 'docker/postgresql:latest'
     volumes:

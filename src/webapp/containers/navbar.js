@@ -26,8 +26,11 @@ class Navbar extends React.Component {
           </a>
         </div>
         <ul className="networks">
-          <NetworkItem name="mainnet" selected={network} onSelect={this.onSelect.bind(this)} />
-          <NetworkItem name="ropsten" selected={network} onSelect={this.onSelect.bind(this)} />
+          <li>
+            <a href="https://medium.com/p/233660030d30" target="_blank" rel="noopener noreferrer">
+              About
+            </a>
+          </li>
         </ul>
       </div>
     )
