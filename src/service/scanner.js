@@ -1,4 +1,3 @@
-import Web3 from 'web3'
 import { Log } from 'decentraland-commons'
 
 const min = (array, prop) => array.reduce((prev, elem) => Math.min(prev, elem.prop), Infinity)
@@ -16,7 +15,7 @@ export default class ScannerService {
     const alarmService = this.alarmService
     const ethService = this.ethService
 
-    const addressToAlarms = await alarmService.mapAddressesToAlarm()
+    const addressToAlarms = await alarmService.mapAddressesToAlarm()
     const allAddresses = Object.keys(addressToAlarms)
     const contracts = ethService.getContracts(await alarmService.getContractData(addressToAlarms))
     const reorgSafety = await alarmService.getReorgSafety()

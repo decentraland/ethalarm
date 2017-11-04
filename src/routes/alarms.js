@@ -1,4 +1,3 @@
-import { Router } from 'express'
 import { Validator } from 'express-json-validator-middleware'
 
 import AlarmSchema from '../schemas/alarms'

@@ -49,7 +49,7 @@ export default class ConfigurationService {
 
     const port = env.get('PORT', 3000)
     app.listen(port, () => {
-      this.serverLog.info(`EthAlarm server running on port ${port}`)
+      this.serverLog.info(`Ethalarm server running on port ${port}`)
     })
 
     return app

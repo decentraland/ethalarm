@@ -1,6 +1,7 @@
 import types from '~/types'
 
 const INITIAL_STATE = {
+  network: 'mainnet',
   address: null,
   abi: null,
   eventNames: [],
@@ -12,6 +13,15 @@ const INITIAL_STATE = {
 }
 
 export default {
+  network: (state = INITIAL_STATE.network, action) => {
+    switch (action.type) {
+      case types.setNetwork:
+        return action.network
+      default:
+        return state
+    }
+  },
+
   address: (state = INITIAL_STATE.address, action) => {
     switch (action.type) {
       case types.setAddress:

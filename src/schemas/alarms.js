@@ -3,7 +3,7 @@ const AlarmSchema = {
   $schema: 'http://json-schema.org/draft-06/schema#',
   description: 'Schema for a POST request to /alarm',
   type: 'object',
-  required: ['address', 'abi', 'eventNames', 'confirmations'],
+  required: ['address', 'abi', 'eventNames', 'blockConfirmations'],
   properties: {
     address: {
       description: 'The contract\'s address',
@@ -15,8 +15,7 @@ const AlarmSchema = {
     },
     eventNames: {
       description: 'List of event names to watch for',
-      type: 'array',
-      items: { type: 'string' }
+      type: 'string'
     },
     webhook: {
       description: 'The URL to query when a new event is generated',

@@ -1,4 +1,3 @@
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Alarm', {
@@ -13,7 +12,7 @@ module.exports = {
         allowNull: false
       },
       abi: {
-        type: Sequelize.STRING(65534),
+        type: Sequelize.TEXT,
         allowNull: false
       },
       eventNames: {
@@ -21,15 +20,17 @@ module.exports = {
         allowNull: false
       },
       email: {
-        type: Sequelize.STRING(254)
+        type: Sequelize.STRING(254),
+        allowNull: true
       },
-      url: {
-        type: Sequelize.STRING(2000)
+      webhook: {
+        type: Sequelize.STRING(2000),
+        allowNull: true
       },
       blockConfirmations: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: '1'
+        defaultValue: 1
       },
       confirmationCode: {
         type: Sequelize.UUID,

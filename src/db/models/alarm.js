@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       abi: {
-        type: DataTypes.STRING(65534),
+        type: DataTypes.TEXT,
         allowNull: false
       },
       eventNames: {
@@ -22,15 +22,17 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       email: {
-        type: DataTypes.STRING(254)
+        type: DataTypes.STRING(254),
+        allowNull: true
       },
       webhook: {
-        type: DataTypes.STRING(2000)
+        type: DataTypes.STRING(2000),
+        allowNull: true
       },
       blockConfirmations: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: '1'
+        defaultValue: 1
       },
       confirmationCode: {
         type: DataTypes.UUID,

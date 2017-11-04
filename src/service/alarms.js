@@ -90,6 +90,11 @@ export default class AlarmService {
       webhook: alarmDescription.webhook,
       blockConfirmations: alarmDescription.blockConfirmations
     })
+    .catch(error => {
+      console.log('*********************************************')
+      console.log(error)
+      console.log('*********************************************')
+    })
   }
 
   /**

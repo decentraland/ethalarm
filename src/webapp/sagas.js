@@ -32,7 +32,7 @@ function* handleConfirm(action) {
   yield call(postAlarm, {
     address: state.address,
     abi: JSON.stringify(state.abi),
-    eventNames: state.eventNames,
+    eventNames: state.eventNames.join(','),
     webhook: state.notification.webhook || '',
     email: state.notification.email || '',
     blockConfirmations: 0

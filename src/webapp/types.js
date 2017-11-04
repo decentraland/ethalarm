@@ -1,4 +1,5 @@
 export default {
+  setNetwork: 'Set Network',
   setAddress: 'Set Contract Address',
   setABI: 'ABI available',
   setEventNames: 'Selected event names',
