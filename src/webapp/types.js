@@ -7,5 +7,8 @@ export default {
   setId: 'Received ID',
   confirm: 'Confirmation',
   deleteAlarm: 'Delete alarm',
-  confirmAlarm: 'Confirm alarm'
+  confirmAlarm: 'Confirm alarm',
+  fetchAlarm: 'Fetch alarm',
+  alarmFetched: 'Alarm data retrieved',
+  alarmFetchError: 'Error while fetching alarm'
 }

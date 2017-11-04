@@ -13,6 +13,7 @@ function* allSagas() {
   yield takeEvery(types.confirm                  , handleConfirm)
   yield takeEvery(types.deleteAlarm              , handleDeleteAlarm)
   yield takeEvery(types.confirmAlarm             , handleConfirmAlarm)
+  yield takeEvery(types.fetchAlarm               , handleFetchAlarm)
 }
 
 function* handleABI(action) {
@@ -84,6 +85,19 @@ function* handleAddressEntered(action) {
   }
 }
 
+function* handleFetchAlarm(action) {
+  if (action.alarmId) {
+    const result = yield call(fetchAlarm, action.alarmId)
+    if (result.error) {
+      yield put({ type: types.alarmFetchError, error: result.error })
+    } else {
+      yield put({ type: types.alarmFetched, alarm: result.alarm })
+    }
+  } else {
+    yield put(push(locations.root))
+  }
+}
+
 async function getABI(address, network) {
   const subdomain = network === 'mainnet' ? 'api' : 'ropsten'
   const url = `http://${subdomain}.etherscan.io/api?module=contract&action=getabi&address=${address}&format=raw`
@@ -108,6 +122,13 @@ async function postAlarm(alarm) {
       body: JSON.stringify(alarm)
     })
     .then(parseJson)
+}
+
+async function fetchAlarm(alarmId) {
+  return await fetch('/alarms/' + alarmId)
+    .then(parseJson)
+    .then(alarm => { alarm })
+    .catch(error => { error })
 }
 
 async function deleteAlarm(alarmId) {

@@ -57,7 +57,6 @@ export default class ScannerService {
           }))
         }
         await alarmService.storeLastSyncBlock(contract.address, height)
-        lastBlockSync[contract.address] = height
       })).catch(err => {
         this.log.error(`Error: ${err.stack}`)
       })

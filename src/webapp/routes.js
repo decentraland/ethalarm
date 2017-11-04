@@ -13,6 +13,7 @@ import Verify from './containers/steps/verify'
 import Success from './containers/steps/success'
 import DeleteAlarm from './containers/steps/deleteAlarm'
 import ConfirmEmail from './containers/steps/confirmEmail'
+import AlarmInfo from './containers/steps/alarmInfo'
 
 export default function Routes() {
   return (
@@ -27,6 +28,7 @@ export default function Routes() {
           <Route exact path={locations.success}       component={Success} />
           <Route exact path={locations.delete}        component={DeleteAlarm} />
           <Route exact path={locations.confirm}       component={ConfirmEmail} />
+          <Route exact path={locations.info}          component={AlarmInfo} />
 
           <Route from="*" component={SelectContract} />
       </Switch>

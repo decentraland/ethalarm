@@ -1,7 +1,6 @@
 import types from '~/types'
 
 const INITIAL_STATE = {
-  network: 'mainnet',
   address: null,
   abi: null,
   eventNames: [],
@@ -9,19 +8,24 @@ const INITIAL_STATE = {
   notification: {
     email: null,
     webhook: null
+  },
+  alarm: {
   }
 }
 
 export default {
-  network: (state = INITIAL_STATE.network, action) => {
+  alarm: (state = INITIAL_STATE.alarm, action) => {
     switch (action.type) {
-      case types.setNetwork:
-        return action.network
+      case types.fetchAlarm:
+        return { loading: true }
+      case types.alarmFetched:
+        return { loading: false, data: action.alarm }
+      case types.alarmFetchError:
+        return { loading: false, error: action.error }
       default:
         return state
     }
   },
-
   address: (state = INITIAL_STATE.address, action) => {
     switch (action.type) {
       case types.setAddress:

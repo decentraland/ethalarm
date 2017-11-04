@@ -17,8 +17,8 @@ Now, go to http://localhost:3000 and the frontend should be displayed to you.
 ## TODO
 
 [x] Send confirmation email
-[ ] Write confirmation page
-[ ] Add permalink to check on alarm
+[x] Write confirmation page
+[x] Add permalink to check on alarm
 [ ] Frontend for "unsuscribe" email
 [ ] Templates for email notifications
 [ ] Deploy to ethalarm.com
