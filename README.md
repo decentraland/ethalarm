@@ -16,9 +16,9 @@ Now, go to http://localhost:3000 and the frontend should be displayed to you.
 
 ## TODO
 
-  [ ] Add some security to `fetch`
-  [ ] Optimize scanner so it doesn't read the whole database each time
-  [ ] Add tests
+* [ ] Add some security to `fetch`
+* [ ] Optimize scanner so it doesn't read the whole database each time
+* [ ] Add tests
 
 ## API
 
