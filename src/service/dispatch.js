@@ -17,12 +17,13 @@ export default class DispatchService {
       httpResponse = await this.httpService.sendRequest(alarm, events)
     }
 
-    return await this.storeReceipt(alarm.id, events[0].txHash, {
+    return await this.storeReceipt(alarm.id, events[0].transactionHash, {
       httpResponse, smtpResponse
     })
   }
 
   storeReceipt(alarmId, txHash, extras) {
+    console.log('Storing', arguments)
     const receipt = {
       alarmId: alarmId,
       txHash: txHash,

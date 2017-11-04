@@ -39,7 +39,6 @@ export default class ScannerService {
       await Promise.all(contracts.map(async (contract) => {
         const alarms = addressToAlarms[contract.address]
         const fromBlock = lastBlockSync[contract.address] - max(alarms, 'blockConfirmations') - reorgSafety
-        // const fromBlock = 4487429
         const toBlock = height - min(alarms, 'blockConfirmations')
         const events = await contract.getPastEvents('allEvents', { fromBlock, toBlock })
         this.log.debug(`Data received for contract in ${contract.address}`, fromBlock, toBlock, events.length)

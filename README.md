@@ -20,7 +20,7 @@ Now, go to http://localhost:3000 and the frontend should be displayed to you.
 [x] Write confirmation page
 [x] Add permalink to check on alarm
 [ ] Frontend for "unsuscribe" email
-[ ] Templates for email notifications
+[x] Templates for email notifications
 [ ] Deploy to ethalarm.com
 [ ] Add some security to `fetch`
 [ ] Optimize scanner so it doesn't read the whole database each time

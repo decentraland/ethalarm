@@ -18,10 +18,6 @@ module.exports = function(sequelize, DataTypes) {
         },
         allowNull: false
       },
-      eventNames: {
-        type: DataTypes.STRING(64), // Couldn't find the actual length restriction if any
-        allowNull: false
-      },
       txHash: {
         type: DataTypes.STRING(66),
         allowNull: false

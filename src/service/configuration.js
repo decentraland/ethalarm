@@ -153,13 +153,74 @@ export default class ConfigurationService {
   }
 
   setupNotificationTemplate() {
-    this.emailService.setTemplate('notification', (opts) => ({
-      from: `"The Decentraland Team" <noreply@decentraland.org>`,
-      to: opts.alarm.email,
-      subject: `[EthAlarm] New Event in Contract ${opts.alarm.address}`,
-      text: JSON.stringify({ alarm: opts.alarm, events: opts.events }),
-      html: JSON.stringify({ alarm: opts.alarm, events: opts.events })
-    }))
+    this.emailService.setTemplate('notification', (opts) => {
+      const alarmId = opts.alarm.id
+      const events = opts.events
+      const email = opts.alarm.email
+      const address = opts.alarm.address
+      const eventNumber = opts.events.length
+      const blockNumber = opts.events[0].blockNumber
+      const transactionHash = opts.events[0].transactionHash
+      const infoUrl = `https://ethalarm.com/info/${alarmId}`
+      const unsubscribeUrl = `https://ethalarm.com/unsubscribe/${alarmId}`
+      const formatPrePost = (pre, post, items) => pre + items.join(post + pre) + post
+      const formatEvent = event => {
+        const abiEventMatches = opts.alarm.abi.filter(
+          abiEntry => abiEntry.type === 'event' && abiEntry.name === event.event
+        )
+        if (!abiEventMatches.length) {
+          return '(Mismatched ABI Event): ' + event.event + JSON.stringify(event.returnValues)
+        }
+        const abiEvent = abiEventMatches[0]
+        return `${abiEvent.name} (${abiEvent.inputs.map(
+          input => `${input.name} [${input.type}]: ${event.returnValues[input.name]}`
+        ).join(', ')})`
+      }
+
+      const text = `Hello ${email},
+
+We detected ${ eventNumber > 1 ? 'new events' : 'a new event'} regarding the contract ${address} at block ${blockNumber}. The transaction that triggered these events has the hash ${transactionHash}. Here's a summary of the event${ eventNumber > 1 ? 's' : ''}:
+
+${formatPrePost('  - ', '\n', events.map(event => formatEvent(event)))}
+
+You can check the details of the alarm you have set up here:
+
+  ${infoUrl}
+
+Best,
+The Decentraland Team
+
+---
+If you would like to stop receiving notifications for this alarm, please visit ${unsubscribeUrl}
+`
+      const blockUrl = `<a href="https://etherscan.io/block/${blockNumber}">${blockNumber}</a>`
+      const transactionUrl = `<a href="https://etherscan.io/tx/${transactionHash}">${transactionHash}</a>`
+      const html = `<p>Hello ${email},</p>
+
+<p>We detected ${ eventNumber > 1 ? 'new events' : 'a new event'} regarding the contract ${address} at block ${blockUrl}. The transaction that triggered these events has the hash ${transactionUrl}. Here's a summary of the event${ eventNumber > 1 ? 's' : ''}:</p>
+
+<ul>
+${formatPrePost('<li>', '</li>', events.map(event => formatEvent(event)))}
+</ul>
+
+<p>You can check the details of the alarm you have set up here:</p>
+
+<div style="margin-left: 20px">${infoUrl}</div>
+
+<p>Best,<br/>
+The Decentraland Team</p>
+
+<p style="font-size: 8px">If you would like to stop receiving notifications for this alarm, please visit ${unsubscribeUrl}</p>
+`
+
+      return {
+        from: `"The Decentraland Team" <noreply@decentraland.org>`,
+        to: opts.alarm.email,
+        subject: `[EthAlarm] New Event in Contract ${opts.alarm.address}`,
+        text: text,
+        html: html
+      }
+    })
   }
 
   get dispatchService() {
