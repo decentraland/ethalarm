@@ -138,10 +138,11 @@ export default class ConfigurationService {
         password: env.get('EMAIL_PASSWORD'),
       })
       this._email.setTemplate('notification', (opts) => ({
-        from: `The Decentraland Team <${opts.sender}>`,
-        to: `The Decentraland Team <${opts.sender}>`,
-        subject: `The Decentraland Team <${opts.sender}>`,
-        text: `The Decentraland Team <${opts.sender}>`,
+        from: `"The Decentraland Team" <noreply@decentraland.org>`,
+        to: opts.alarm.email,
+        subject: `[EthAlarm] New Event in Contract ${opts.alarm.address}`,
+        text: JSON.stringify({ alarm: opts.alarm, events: opts.events }),
+        html: JSON.stringify({ alarm: opts.alarm, events: opts.events })
       }))
     }
     return this._email
