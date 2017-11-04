@@ -35,7 +35,7 @@ export default class AlarmService {
       })
       .map(function(alarm) {
         alarm.dataValues.abi = JSON.parse(alarm.dataValues.abi)
-        alarm.dataValues.eventNames = alarm.dataValues.eventNames.split(',')
+        alarm.dataValues.eventNames = alarm.dataValues.eventNames.split(';')
         return alarm.dataValues
       })
   }

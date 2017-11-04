@@ -14,7 +14,7 @@ export default class ConfirmationService {
       return `Hello, ${alarm.email}
 
 We received a request to notify you of the following events regarding the contract ${alarm.address}:
--${alarm.eventNames.split(',').join('\n  -')}
+-${alarm.eventNames.split(';').join('\n  -')}
 
 In order to confirm your email, please click on this link to start receiving notifications:
 
@@ -27,7 +27,7 @@ The Decentraland Team`
       const url = `https://ethalarm.com/confirm/${alarm.confirmationCode}`
       return `Hello, ${alarm.email}<br/><br/>
       We received a request to notify you of the following events regarding the contract ${alarm.address}:
-      <br/><br/><ul><li>${alarm.eventNames.split(',').join('</li><li>')}</ul><br/>
+      <br/><br/><ul><li>${alarm.eventNames.split(';').join('</li><li>')}</ul><br/>
       <p> In order to confirm your email, please click on this link to start receiving notifications:<p>
       <div style="margin-left: 20px;"><a href=${url}>${url}</a></div>
       <p>Thanks,<br/>The Decentraland Team</p>`
