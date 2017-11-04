@@ -147,15 +147,19 @@ export default class ConfigurationService {
         username: env.get('EMAIL_USERNAME'),
         password: env.get('EMAIL_PASSWORD'),
       })
-      this._email.setTemplate('notification', (opts) => ({
-        from: `"The Decentraland Team" <noreply@decentraland.org>`,
-        to: opts.alarm.email,
-        subject: `[EthAlarm] New Event in Contract ${opts.alarm.address}`,
-        text: JSON.stringify({ alarm: opts.alarm, events: opts.events }),
-        html: JSON.stringify({ alarm: opts.alarm, events: opts.events })
-      }))
+      this.setupNotificationTemplate()
     }
     return this._email
+  }
+
+  setupNotificationTemplate() {
+    this.emailService.setTemplate('notification', (opts) => ({
+      from: `"The Decentraland Team" <noreply@decentraland.org>`,
+      to: opts.alarm.email,
+      subject: `[EthAlarm] New Event in Contract ${opts.alarm.address}`,
+      text: JSON.stringify({ alarm: opts.alarm, events: opts.events }),
+      html: JSON.stringify({ alarm: opts.alarm, events: opts.events })
+    }))
   }
 
   get dispatchService() {

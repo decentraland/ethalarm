@@ -16,12 +16,13 @@ export default class AlarmService {
    * @param [where] add restrictions on what alarms to fetch
    */
   getAlarms(where = { id: undefined, addresses: [] }) {
-    const internalWhere = {}
+    const internalWhere = {
+      enabled: true
+    }
     if (where.addresses && where.addresses.length) {
       internalWhere.address = {
         [Op.in]: where.addresses
-      },
-      enabled: true
+      }
     }
 
     if (where.id) {
@@ -34,7 +35,7 @@ export default class AlarmService {
       })
       .map(function(alarm) {
         alarm.dataValues.abi = JSON.parse(alarm.dataValues.abi)
-        alarm.dataValues.eventNames = alarm.dataValues.eventNames.split(';')
+        alarm.dataValues.eventNames = alarm.dataValues.eventNames.split(',')
         return alarm.dataValues
       })
   }
@@ -84,7 +85,7 @@ export default class AlarmService {
       const result = await this.alarmModel.create({
         address: alarmDescription.address.toLowerCase(),
         abi: alarmDescription.abi,
-        eventNames: alarmDescription.eventNames.join(';'),
+        eventNames: alarmDescription.eventNames,
         email: alarmDescription.email,
         webhook: alarmDescription.webhook,
         blockConfirmations: alarmDescription.blockConfirmations,
