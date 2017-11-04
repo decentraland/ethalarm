@@ -12,13 +12,8 @@ body {
   font-size: 16px;
 }
 
-.root {
-  display: flex;
-  flex-direction: column;
-}
-
 .content {
-  padding-top: 100px;
+  padding-top: 70px;
   padding-bottom: 20px;
 }
 
@@ -40,4 +35,11 @@ a:visited {
 
 .text-center {
   text-align: center;
+}
+
+
+@media (max-width: 768px) {
+  .hidden-xs {
+    display: none !important;
+  }
 }

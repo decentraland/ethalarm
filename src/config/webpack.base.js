@@ -9,6 +9,10 @@ export default {
   module: {
     rules: [
       {
+        test: /\.png$/,
+        loader: 'file-loader'
+      },
+      {
         test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url-loader?mimetype=application/font-woff'
       },

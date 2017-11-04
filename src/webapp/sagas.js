@@ -48,8 +48,10 @@ function* handleEvents(action) {
 function* handleAddressEntered(action) {
   yield put(push(locations.lookingUp))
 
+  const network = yield select(state => state.network)
+
   const { abi } = yield race({
-    abi: call(getABI, action.address),
+    abi: call(getABI, action.address, network),
     timeout: call(delay, 2000)
   })
 
@@ -64,9 +66,9 @@ function* handleAddressEntered(action) {
   }
 }
 
-async function getABI(address) {
-  // TODO: conditional by selected net
-  const url = `http://api.etherscan.io/api?module=contract&action=getabi&address=${address}&format=raw`
+async function getABI(address, network) {
+  const subdomain = network === 'mainnet' ? 'api' : 'ropsten'
+  const url = `http://${subdomain}.etherscan.io/api?module=contract&action=getabi&address=${address}&format=raw`
 
   return await fetch(url)
     .then(parseJson)

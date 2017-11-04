@@ -23,7 +23,7 @@ Now, go to http://localhost:3000 and the frontend should be displayed to you.
 [ ] Frontend for "unsuscribe" email
 [ ] Templates - write them up
 [ ] Add tests
-[ ] Add some Decentraland branding
+[X] Add some Decentraland branding
 [ ] Deploy to ethalarm.com
 [ ] Add some security to `fetch`
 [x] Make Services injected with DI

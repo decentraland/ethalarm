@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import types from '~/types'
 import { pick } from '~/utils'
 
+import image from '../images/logo.png'
+
 class Navbar extends React.Component {
   onSelect(network) {
     this.props.dispatch({
@@ -17,7 +19,13 @@ class Navbar extends React.Component {
 
     return (
       <div className="navbar">
-        <ul>
+        <div className="navbar-logo">
+          <a href="https://decentraland.org" target="_blank" rel="noopener noreferrer">
+            <img src={image} alt="Decentraland logo" width="52" height="52" />
+            <h1 className="hidden-xs">Decentraland</h1>
+          </a>
+        </div>
+        <ul className="networks">
           <NetworkItem name="mainnet" selected={network} onSelect={this.onSelect.bind(this)} />
           <NetworkItem name="ropsten" selected={network} onSelect={this.onSelect.bind(this)} />
         </ul>

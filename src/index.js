@@ -6,7 +6,7 @@ const configurationService = new ConfigurationService(environment)
 async function run() {
   await configurationService.startDatabase()
   await configurationService.startServer()
-  await configurationService.startWatching()
+  // await configurationService.startWatching()
 }
 
 run().catch(console.log)
