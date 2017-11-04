@@ -20,9 +20,11 @@ class Navbar extends React.Component {
     return (
       <div className="navbar">
         <div className="navbar-logo">
-          <a href="https://decentraland.org" target="_blank" rel="noopener noreferrer">
-            <img src={image} alt="Decentraland logo" width="52" height="52" />
-            <h1 className="hidden-xs">Decentraland</h1>
+          <a href="https://ethalarm.com" target="_blank" rel="noopener noreferrer">
+            <h1 className="hidden-xs">EthAlarm</h1>
+            <a href="https://decentraland.org" target="_blank" rel="noopener noreferrer">
+              <img src={image} alt="Decentraland logo" width="24" height="24" style={{ position: 'relative', top: '-10px'}}/>
+            </a>
           </a>
         </div>
         <ul className="networks">
