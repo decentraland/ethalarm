@@ -101,8 +101,8 @@ export default class AlarmService {
   mapByTransactionId(events) {
     const result = {}
     for (let event of events) {
-      result[event.txHash] = result[event.txHash] || []
-      result[event.txHash].push(event)
+      result[event.transactionHash] = result[event.transactionHash] || []
+      result[event.transactionHash].push(event)
     }
     return Object.values(result)
   }
@@ -135,19 +135,19 @@ export default class AlarmService {
           }
         }
       })
-      .reduce(function(addrtolastsync, alarm) {
+      .reduce(function(result, alarm) {
         let lastSyncBlock = defaultLastSync
         if (alarm.AlarmSyncState !== null)
           lastSyncBlock = alarm.AlarmSyncState.dataValues.lastSyncBlock
 
         // Only return the greatest lastBlockSync for specified address
         if (
-          addrtolastsync[alarm.dataValues.address] === undefined ||
-          lastSyncBlock > addrtolastsync[alarm.dataValues.address]
+          result[alarm.dataValues.address] === undefined ||
+          lastSyncBlock > result[alarm.dataValues.address]
         )
-          addrtolastsync[alarm.dataValues.address] = lastSyncBlock
+          result[alarm.dataValues.address] = lastSyncBlock
 
-        return addrtolastsync
+        return result
       }, {})
   }
 
@@ -164,6 +164,6 @@ export default class AlarmService {
   }
 
   dispatchNotification(alarm, event) {
-    return this.dispatchService.dispath(alarm, event)
+    return this.dispatchService.dispatch(alarm, event)
   }
 }
