@@ -147,7 +147,7 @@ export default class ConfigurationService {
     return this._email
   }
 
-  get dispathService() {
+  get dispatchService() {
     if (!this._dispatch) {
       this._dispatch = new DispatchService(this.httpService, this.emailService, 'notification', this.receiptModel)
     }

@@ -34,20 +34,16 @@ export default class ScannerService {
         const fromBlock = 4487429
         const toBlock = height - min(alarms, 'blockConfirmations')
         const events = await contract.getPastEvents('allEvents', { fromBlock, toBlock })
-        this.log.debug(`Data received for contract in ${contract.address}`, fromBlock, toBlock, events)
+        this.log.debug(`Data received for contract in ${contract.address}`, fromBlock, toBlock, events.length)
         const byTransaction = alarmService.mapByTransactionId(events)
         for (let events of byTransaction) {
           const confirmations = height - events[0].blockNumber
           await Promise.all(alarms.map(async (alarm) => {
-            const existingReceipt = await alarmService.getReceipt(alarm.id, events[0].transactionHash)
-            console.log ('Prmose', confirmations >= alarm.blockConfirmations
-              , nameMatches(events, alarm.eventNames)
-              , existingReceipt)
+            const existingReceipts = await alarmService.getReceipt(alarm.id, events[0].transactionHash)
             if (confirmations >= alarm.blockConfirmations
               && nameMatches(events, alarm.eventNames)
-              && !(await alarmService.getReceipt(alarm.id, events[0].transactionHash).length)
+              && !existingReceipts.length
             ) {
-              console.log('Dispatch!')
               await alarmService.dispatchNotification(alarm, events)
             }
           }))
