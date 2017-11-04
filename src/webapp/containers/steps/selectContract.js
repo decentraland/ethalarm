@@ -10,17 +10,17 @@ import SagaStep from './sagaStep'
 
 class SelectContract extends SagaStep {
   componentWillMount() {
-    this.address = null
+    this.state = { address: null }
   }
 
   setAddress = (address) => {
-    this.address = address
+    this.setState({ address })
   }
 
   createAction() {
     return {
       type: types.setAddress,
-      address: this.address
+      address: this.state.address
     }
   }
 
@@ -33,7 +33,7 @@ class SelectContract extends SagaStep {
           </QueryWithLargeInput>
 
           <div className="text-center">
-            <NextButton />
+            <NextButton disabled={!this.state.address} />
           </div>
         </form>
       </div>

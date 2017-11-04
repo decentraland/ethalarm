@@ -7,7 +7,7 @@ export default {
   verify: '/verify',
   success: '/success',
 
-  info: '/alarm/:alarmId',
+  info: '/info/:alarmId',
   delete: '/unsubscribe/:alarmId',
   confirm: '/confirm/:confirmationCode'
 }

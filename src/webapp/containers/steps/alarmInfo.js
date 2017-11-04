@@ -33,12 +33,13 @@ class AlarmInfo extends SagaStep {
   }
 
   renderInner() {
-    if (!this.props.alarm.loading) {
+    if (this.props.alarm.loading || !this.props.alarm.data) {
       return this.renderLoading()
     }
     if (this.props.alarm.error) {
       return this.renderError()
     }
+    const alarm = this.props.alarm.data
     return (
       [
         <p key='title' className="highlight">
@@ -46,7 +47,7 @@ class AlarmInfo extends SagaStep {
         </p>,
         <LogDetail key='log'
           address={alarm.address}
-          eventNames={alarm.eventNames}
+          eventNames={alarm.eventNames.split(';')}
           email={alarm.email}
           webhook={alarm.webhook}
           id={alarm.id}
@@ -56,11 +57,11 @@ class AlarmInfo extends SagaStep {
   }
 
   renderLoading() {
-    return <p className="highlight">
+    return [<p key='text' className="highlight">
       Looking up the alarm information...
-      <br/>
-      <LoadingDots />
-    </p>
+      </p>,
+      <LoadingDots key='dots' />
+    ]
   }
 
   renderError() {
@@ -70,5 +71,5 @@ class AlarmInfo extends SagaStep {
   }
 }
 
-export default connect(state => ({ alarm: state.alarm, match: state.match }))(AlarmInfo)
+export default connect((state) => ({alarm: state.alarm}))(AlarmInfo)
 

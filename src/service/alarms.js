@@ -40,6 +40,10 @@ export default class AlarmService {
       })
   }
 
+  getAlarm(id) {
+    return this.alarmModel.findOne({ where: { id } })
+  }
+
   confirmAlarm(confirmationCode) {
     return this.alarmModel.findOne({ where: { confirmationCode } })
       .then(async alarm => {

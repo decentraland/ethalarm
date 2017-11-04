@@ -32,7 +32,7 @@ function* handleNotification(action) {
 function* handleConfirm(action) {
   const state = yield select()
 
-  yield call(postAlarm, {
+  const result = yield call(postAlarm, {
     address: state.address,
     abi: JSON.stringify(state.abi),
     eventNames: state.eventNames.join(';'),
@@ -40,6 +40,9 @@ function* handleConfirm(action) {
     email: state.notification.email || '',
     blockConfirmations: 0
   })
+  if (result.ok) {
+    yield put({ type: types.setId, id: result.result.id })
+  }
 
   yield put(push(locations.success))
 }
@@ -127,8 +130,8 @@ async function postAlarm(alarm) {
 async function fetchAlarm(alarmId) {
   return await fetch('/alarms/' + alarmId)
     .then(parseJson)
-    .then(alarm => { alarm })
-    .catch(error => { error })
+    .then(alarm => ({ alarm: alarm.result }))
+    .catch(error => ({ error }))
 }
 
 async function deleteAlarm(alarmId) {

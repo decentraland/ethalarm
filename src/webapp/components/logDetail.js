@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 class LogDetail extends React.Component {
   render() {
     const { address, eventNames, email, webhook, id } = this.props
-    const url = `https://ethalarm.com/entry/${id}`
+    const url = `https://ethalarm.com/info/${id}`
 
     return (
       <div className="logdetail">

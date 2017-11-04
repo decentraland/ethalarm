@@ -22,7 +22,7 @@ export default class AlarmRouter {
 
   get getAlarm() {
     return (req, res) => {
-      buildResponseSchema(this.alarm.getAlarm.findById(req.params.id)
+      buildResponseSchema(this.alarm.getAlarm(req.params.id)
         .then(alarm => {
           if (!alarm) throw new Error('not found')
           return alarm

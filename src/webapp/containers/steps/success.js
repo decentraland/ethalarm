@@ -14,6 +14,11 @@ class Success extends React.Component {
       <div className="success step">
         <p className="highlight">
           Success! You&#39;ll be notified of new events&nbsp;
+      { email &&
+          <span style={{fontSize: "12px"}}><br/><br/>
+            We just sent you a confirmation email. <br/> You will not receive notifications until you confirm your email address.
+          </span>
+      }
         </p>
         <div className="explain">
           <LogDetail
