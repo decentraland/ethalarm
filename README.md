@@ -6,8 +6,8 @@ Get notified of events triggered by Ethereum contracts.
 
 Run the server using:
 ```
-npm run docker:build
-npm run docker
+npm install
+npm start
 ```
 
 Now, go to http://localhost:3000 and the frontend should be displayed to you.
@@ -16,15 +16,9 @@ Now, go to http://localhost:3000 and the frontend should be displayed to you.
 
 ## TODO
 
-[x] Send confirmation email
-[x] Write confirmation page
-[x] Add permalink to check on alarm
-[x] Frontend for "unsuscribe" email
-[x] Templates for email notifications
-[ ] Deploy to ethalarm.com
-[ ] Add some security to `fetch`
-[ ] Optimize scanner so it doesn't read the whole database each time
-[ ] Add tests
+  [ ] Add some security to `fetch`
+  [ ] Optimize scanner so it doesn't read the whole database each time
+  [ ] Add tests
 
 ## API
 
@@ -127,103 +121,3 @@ Stop watching the alarm referenced.
 
 Confirmation to start sending emails for the given hash.
 
-## DB Schema
-
-Proposed implementation for the database schema:
-
-```
-Alarm
------
-id: string (uuid v4)
-address: string
-abi: string
-event_names: string (comma separated)
-email: string
-url: string
-confirmation_code: string
-block_confirmations: number
-enabled: boolean
-created_at: datetime
-updated_at: datetime
-deleted_at: datetime
-
-AlarmSyncState
---------------
-id: number
-Alarm_id: string (FK to Alarm)
-last_sync_block: number
-
-AlarmReceipt
--------------
-id: number
-Alarm_id: string (FK to Alarm)
-tx_hash: string
-smtp_response: blob
-http_response: blob
-created_at: datetime
-updated_at: datetime
-```
-
-## Checking for events
-
-* Select unique addresses and ABIs
-* Select last block sync' (if nothing stored, use current web3 block)
-* pick reorgsafety: number of blocks where a reorg might happen
-* For each new block:
-  - for each unique address:
-    - Call the `contract.events()` interface from web3 with `{fromBlock: lastSyncBlock-max(alarms.blockConfirmations)-reorgSafety, toBlock: currentTip-min(alarms.blockConfirmations)}`
-    - for each event:
-      - for each alarm: 
-        * if tx height confirmed is greater or equal than alarm confirmations,
-              event name matches alarm name,
-              and no alarmreceipt for the tx of that event exists:
-          - dispatch run notifications
-    - set last sync block to current tip height
-
-
-### Proposed implementation
-```
-class AlarmService {
-  mapAddressesToAlarm() {}
-  getContracts(addresses) {}
-  getReorgSafety() {}
-  mapAddressesToLastSync(defaultLastSync, addresses) {}
-  getReceipt(alarmId, txHash) {}
-  dispatchNotifications(alarm, event) {}
-  storeLastSyncBlock(address, height) {}
-}
-class EthService {
-  getCurrentTip() {}
-  watchNewBlocks(blockHandler) {}
-}
-async function watch() {
-  const addressToAlarms = await alarmService.mapAddressesToAlarm()
-  const allAddresses = Object.keys(addressToAlarms)
-  const contracts = await alarmService.getContracts(allAddresses)
-  const reorgSafety = await alarmService.getReorgSafety()
-  const currentTip = await ethService.getCurrentTip()
-  const lastBlockSync = await alarmService.mapAddressesToLastSync(currentTip, allAddresses)
-
-  return ethService.watchNewBlocks((block) => {
-    const height = block.height
-    await Promise.all(contracts.map(async (contract) => {
-      const alarms = addressToAlarms[contract.address]
-      const fromBlock = lastBlockSync[contract.address] - max(alarms.blockConfirmations) - reogSafety
-      const toBlock = block.height - min(alarms.blockConfirmations)
-      const events = await contract.getPastEvents('allEvents', { fromBlock, toBlock })
-      for (let event in events) {
-        const confirmations = height - event.blockHeight
-        await Promise.all(alarms.map(async (alarm) => {
-          if (confirmations >= alarm.blockConfirmations
-              && event.event in alarm.eventNames
-              && !(await alarmService.getReceipt(alarm.id, event.transactionHash))
-          ) {
-            await alarmService.dispatchNotification(alarm, event)
-          }
-        }))
-      }
-      await alarmService.storeLastBlockSync(contract.address, block)
-    })
-  })
-}
-```
