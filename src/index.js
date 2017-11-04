@@ -3,5 +3,10 @@ import ConfigurationService, { DEVELOPMENT } from './service/configuration'
 const environment = process.env.NODE_ENV || DEVELOPMENT
 const configurationService = new ConfigurationService(environment)
 
-configurationService.startServer()
-configurationService.startWatching()
+async function run() {
+  await configurationService.startDatabase()
+  await configurationService.startServer()
+  await configurationService.startWatching()
+}
+
+run().catch(console.log)

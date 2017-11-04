@@ -161,6 +161,10 @@ export default class ConfigurationService {
     return this._http
   }
 
+  async startDatabase() {
+    return await db.sequelize.sync()
+  }
+
   get database() {
     return db
   }

@@ -18,7 +18,7 @@ export default class EthereumService {
   }
 
   watchNewBlocks(callback) {
-    return this.web3.eth.subscribe(newBlockHeaders, callback)
+    return this.web3.eth.subscribe('newBlockHeaders', callback)
   }
 
   getCurrentTip() {
@@ -26,6 +26,6 @@ export default class EthereumService {
   }
 
   getContracts(contractData) {
-    return contractData.map(data => new this.web3.eth.Contract(data.address, data.abi))
+    return contractData.map(data => new this.web3.eth.Contract(data.abi, data.address))
   }
 }

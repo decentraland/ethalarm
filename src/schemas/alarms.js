@@ -3,7 +3,7 @@ const AlarmSchema = {
   $schema: 'http://json-schema.org/draft-06/schema#',
   description: 'Schema for a POST request to /alarm',
   type: 'object',
-  required: ['address', 'abi', 'eventNames', 'confirmations'],
+  required: ['address', 'abi', 'eventNames', 'blockConfirmations'],
   properties: {
     address: {
       description: 'The contract\'s address',

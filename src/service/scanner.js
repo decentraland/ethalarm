@@ -24,7 +24,7 @@ export default class ScannerService {
     const lastBlockSync = await alarmService.mapAddressesToLastSync(currentTip, allAddresses)
 
     return ethService.watchNewBlocks(async (block) => {
-      const height = block.height
+      const height = await this.ethService.getCurrentTip()
       await Promise.all(contracts.map(async (contract) => {
         const alarms = addressToAlarms[contract.address]
         const fromBlock = lastBlockSync[contract.address] - max(alarms, 'blockConfirmations') - reorgSafety

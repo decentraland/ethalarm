@@ -30,8 +30,7 @@ export default class AlarmService {
         where: internalWhere
       })
       .map(function(alarm) {
-        alarm.dataValues.abi = JSON.parse(alarm.dataValues.abi)
-        alarm.dataValues.eventNames = alarm.dataValues.eventNames.split(',')
+        alarm.dataValues.eventNames = alarm.dataValues.eventNames.split(';')
         return alarm.dataValues
       })
   }
@@ -85,7 +84,7 @@ export default class AlarmService {
     return this.alarmModel.create({
       address: alarmDescription.address,
       abi: alarmDescription.abi,
-      eventNames: alarmDescription.eventNames,
+      eventNames: alarmDescription.eventNames.join(';'),
       email: alarmDescription.email,
       webhook: alarmDescription.webhook,
       blockConfirmations: alarmDescription.blockConfirmations
