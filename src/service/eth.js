@@ -26,6 +26,10 @@ export default class EthereumService {
   }
 
   getContracts(contractData) {
-    return contractData.map(data => new this.web3.eth.Contract(data.abi, data.address))
+    return contractData.map(data => {
+      const contract = new this.web3.eth.Contract(data.abi, data.address)
+      contract.address = data.address.toLowerCase()
+      return contract
+    })
   }
 }
