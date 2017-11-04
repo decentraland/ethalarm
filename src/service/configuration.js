@@ -11,6 +11,8 @@ import ConfirmationRouter from '../routes/confirmations'
 import FallbackRouter from '../routes/fallback'
 
 import AlarmService from '../service/alarms'
+import EthereumService from '../service/eth'
+import ScannerService from '../service/scanner'
 
 import db from '../db/models'
 
@@ -55,6 +57,11 @@ export default class ConfigurationService {
     return app
   }
 
+  async startWatching() {
+    await this.ethereumService.initialize()
+    this.scannerService.run()
+  }
+
   setupWebpack(app, webpack) {
     app.use(WebpackMiddleware(webpack, this.middlewareConfiguration))
     app.use(WebpackHotMiddleware(webpack))
@@ -93,6 +100,20 @@ export default class ConfigurationService {
 
   get middlewareConfiguration() {
     return require('../config/webpackMiddleware.js').default
+  }
+
+  get ethereumService() {
+    if (!this._ethereum) {
+      this._ethereum = new EthereumService(env.get('ETHEREUM_PROVIDER', 'ws://localhost:8546'))
+    }
+    return this._ethereum
+  }
+
+  get scannerService() {
+    if (!this._scanner) {
+      this._scanner = new ScannerService(this.alarmService, this.ethereumService)
+    }
+    return this._scanner
   }
 
   get alarmService() {

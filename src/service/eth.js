@@ -1,8 +1,8 @@
-import Web3 from 'web3'
+const Web3 = require('web3')
 
 import { Log } from 'decentraland-commons'
 
-export class EthereumService {
+export default class EthereumService {
   constructor(web3Provider) {
     this.web3 = new Web3(web3Provider)
     this.log = new Log('Ethereum')
