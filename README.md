@@ -12,8 +12,6 @@ npm start
 
 Now, go to http://localhost:3000 and the frontend should be displayed to you.
 
-## Architecture
-
 ## TODO
 
 * [ ] Add some security to `fetch`
