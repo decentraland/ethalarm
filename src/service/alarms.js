@@ -31,49 +31,34 @@ export default class AlarmService {
       })
       .map(function(alarm) {
         alarm.dataValues.abi = JSON.parse(alarm.dataValues.abi)
-        alarm.dataValues.eventNames = alarm.dataValues.eventNames.split(',')
+        alarm.dataValues.eventNames = alarm.dataValues.eventNames.split(';')
         return alarm.dataValues
       })
   }
 
   storeLastSyncBlock(contractAddress, height) {
-    return this.alarms
-      .getAlarms({ addresses: [contractAddress] })
-      .then(async results => {
-        const syncStates = []
-
-        for (let x = 0; x < results.length; ++x) {
-          const alarm = results[x]
-
-          await this.syncStateModel
-            .findOrCreate({
-              where: {
-                alarmId: alarm.id
-              },
-              defaults: {
-                alarmId: alarm.id,
+    return this.getAlarms({ addresses: [contractAddress] })
+      .then(async (results) => {
+        return results.map(async (alarm) => await this.syncStateModel
+          .findOrCreate({
+            where: {
+              alarmId: alarm.id
+            },
+            defaults: {
+              alarmId: alarm.id,
+              lastSyncBlock: height
+            }
+          })
+          .spread(async (record, created) => {
+            // Update the last block sync if it already exists and is lower
+            if (!created && height > record.dataValues.lastSyncBlock) {
+              await record.update({
                 lastSyncBlock: height
-              }
-            })
-            .spread(async (record, created) => {
-              // console.log(record, created)
-              // Update the last block sync if it already exists and is lower
-              if (!created && height > record.dataValues.lastSyncBlock) {
-                await record.update({
-                  lastSyncBlock: height
-                })
-              }
-
-              syncStates.push({
-                alarmId: alarm.id,
-                AlarmSyncState: record,
-                createdAt: created
               })
-            })
-        }
-
-        return syncStates
-      })
+            }
+          })
+        )
+    })
   }
 
 
@@ -83,9 +68,9 @@ export default class AlarmService {
   storeNewAlarm(alarmDescription) {
     // store into the database
     return this.alarmModel.create({
-      address: alarmDescription.address,
+      address: alarmDescription.address.toLowerCase(),
       abi: alarmDescription.abi,
-      eventNames: alarmDescription.eventNames,
+      eventNames: alarmDescription.eventNames.join(';'),
       email: alarmDescription.email,
       webhook: alarmDescription.webhook,
       blockConfirmations: alarmDescription.blockConfirmations
@@ -121,8 +106,8 @@ export default class AlarmService {
   mapByTransactionId(events) {
     const result = {}
     for (let event of events) {
-      result[event.txHash] = result[event.txHash] || []
-      result[event.txHash].push(event)
+      result[event.transactionHash] = result[event.transactionHash] || []
+      result[event.transactionHash].push(event)
     }
     return Object.values(result)
   }
@@ -155,19 +140,19 @@ export default class AlarmService {
           }
         }
       })
-      .reduce(function(addrtolastsync, alarm) {
+      .reduce(function(result, alarm) {
         let lastSyncBlock = defaultLastSync
         if (alarm.AlarmSyncState !== null)
           lastSyncBlock = alarm.AlarmSyncState.dataValues.lastSyncBlock
 
         // Only return the greatest lastBlockSync for specified address
         if (
-          addrtolastsync[alarm.dataValues.address] === undefined ||
-          lastSyncBlock > addrtolastsync[alarm.dataValues.address]
+          result[alarm.dataValues.address] === undefined ||
+          lastSyncBlock > result[alarm.dataValues.address]
         )
-          addrtolastsync[alarm.dataValues.address] = lastSyncBlock
+          result[alarm.dataValues.address] = lastSyncBlock
 
-        return addrtolastsync
+        return result
       }, {})
   }
 
@@ -184,6 +169,6 @@ export default class AlarmService {
   }
 
   dispatchNotification(alarm, event) {
-    return this.dispatchService.dispath(alarm, event)
+    return this.dispatchService.dispatch(alarm, event)
   }
 }

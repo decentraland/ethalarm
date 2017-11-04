@@ -11,6 +11,8 @@ import ConfirmationRouter from '../routes/confirmations'
 import FallbackRouter from '../routes/fallback'
 
 import AlarmService from '../service/alarms'
+import EthereumService from '../service/eth'
+import ScannerService from '../service/scanner'
 
 import db from '../db/models'
 
@@ -55,6 +57,11 @@ export default class ConfigurationService {
     return app
   }
 
+  async startWatching() {
+    await this.ethereumService.initialize()
+    this.scannerService.run()
+  }
+
   setupWebpack(app, webpack) {
     app.use(WebpackMiddleware(webpack, this.middlewareConfiguration))
     app.use(WebpackHotMiddleware(webpack))
@@ -95,6 +102,20 @@ export default class ConfigurationService {
     return require('../config/webpackMiddleware.js').default
   }
 
+  get ethereumService() {
+    if (!this._ethereum) {
+      this._ethereum = new EthereumService(env.get('ETHEREUM_PROVIDER', 'ws://localhost:8546'))
+    }
+    return this._ethereum
+  }
+
+  get scannerService() {
+    if (!this._scanner) {
+      this._scanner = new ScannerService(this.alarmService, this.ethereumService)
+    }
+    return this._scanner
+  }
+
   get alarmService() {
     if (!this._alarmService) {
       this._alarmService = new AlarmService(
@@ -117,16 +138,17 @@ export default class ConfigurationService {
         password: env.get('EMAIL_PASSWORD'),
       })
       this._email.setTemplate('notification', (opts) => ({
-        from: `The Decentraland Team <${opts.sender}>`,
-        to: `The Decentraland Team <${opts.sender}>`,
-        subject: `The Decentraland Team <${opts.sender}>`,
-        text: `The Decentraland Team <${opts.sender}>`,
+        from: `"The Decentraland Team" <noreply@decentraland.org>`,
+        to: opts.alarm.email,
+        subject: `[EthAlarm] New Event in Contract ${opts.alarm.address}`,
+        text: JSON.stringify({ alarm: opts.alarm, events: opts.events }),
+        html: JSON.stringify({ alarm: opts.alarm, events: opts.events })
       }))
     }
     return this._email
   }
 
-  get dispathService() {
+  get dispatchService() {
     if (!this._dispatch) {
       this._dispatch = new DispatchService(this.httpService, this.emailService, 'notification', this.receiptModel)
     }
@@ -138,6 +160,10 @@ export default class ConfigurationService {
       this._http = new HTTPService()
     }
     return this._http
+  }
+
+  async startDatabase() {
+    return await db.sequelize.sync()
   }
 
   get database() {

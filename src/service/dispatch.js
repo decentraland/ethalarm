@@ -10,7 +10,7 @@ export default class DispatchService {
     let httpResponse, smtpResponse
 
     if (alarm.email && alarm.email.length) {
-      smtpResponse = await this.emaiService.sendMail(alarm.email, this.templateName, { alarm, events })
+      smtpResponse = await this.emailService.sendMail(alarm.email, this.templateName, { alarm, events })
     }
 
     if (alarm.webhook && alarm.webhook.length) {

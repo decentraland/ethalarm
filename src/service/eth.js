@@ -1,8 +1,8 @@
-import Web3 from 'web3'
+const Web3 = require('web3')
 
 import { Log } from 'decentraland-commons'
 
-export class EthereumService {
+export default class EthereumService {
   constructor(web3Provider) {
     this.web3 = new Web3(web3Provider)
     this.log = new Log('Ethereum')
@@ -18,7 +18,7 @@ export class EthereumService {
   }
 
   watchNewBlocks(callback) {
-    return this.web3.eth.subscribe(newBlockHeaders, callback)
+    return this.web3.eth.subscribe('newBlockHeaders', callback)
   }
 
   getCurrentTip() {
@@ -26,6 +26,10 @@ export class EthereumService {
   }
 
   getContracts(contractData) {
-    return contractData.map(data => new this.web3.eth.Contract(data.address, data.abi))
+    return contractData.map(data => {
+      const contract = new this.web3.eth.Contract(data.abi, data.address)
+      contract.address = data.address.toLowerCase()
+      return contract
+    })
   }
 }
