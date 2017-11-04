@@ -20,8 +20,6 @@ Now, go to http://localhost:3000 and the frontend should be displayed to you.
 
 ## API
 
-There should be only three endpoints to the API:
-
 ### `POST /alarms`
 
 Creates a new alarm, based on data posted through a JSON.
