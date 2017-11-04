@@ -5,5 +5,7 @@ export default {
   selectEvents: '/selectEvents',
   howNotify: '/howNotify',
   verify: '/verify',
-  success: '/success'
+  success: '/success',
+
+  delete: '/deleteAlarm/:alarmId'
 }

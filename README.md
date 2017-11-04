@@ -17,8 +17,8 @@ Now, go to http://localhost:3000 and the frontend should be displayed to you.
 ## TODO
 
 [ ] Send confirmation email
+[X] DELETE endpoint to delete alarms (/deleteAlarm/:id)
 [ ] Add permalink to check on alarm
-[ ] DELETE endpoint to delete alarms
 [ ] Optimize scanner so it doesn't read the whole database each time
 [ ] Frontend for "unsuscribe" email
 [ ] Templates - write them up
@@ -102,7 +102,7 @@ The response body for this method follows a simple schema:
   "type": "object",
   "properties": {
     "ok": {
-      "description": "Whether the request was successful or not",
+      "description": "Whether the request was successfull or not",
       "type": "bool"
     },
     "error": {

@@ -11,6 +11,7 @@ function* allSagas() {
   yield takeEvery(types.setEventNames            , handleEvents)
   yield takeEvery(types.setNotificationPreference, handleNotification)
   yield takeEvery(types.confirm                  , handleConfirm)
+  yield takeEvery(types.deleteAlarm              , handleDeleteAlarm)
 }
 
 function* handleABI(action) {
@@ -39,6 +40,17 @@ function* handleConfirm(action) {
   })
 
   yield put(push(locations.success))
+}
+
+function* handleDeleteAlarm(action) {
+  console.log('*********************************************')
+  console.log(action)
+  console.log('*********************************************')
+  if (action.alarmId) {
+    yield call(deleteAlarm, action.alarmId)
+  } else {
+    yield put(push(locations.root))
+  }
 }
 
 function* handleEvents(action) {
@@ -88,6 +100,13 @@ async function postAlarm(alarm) {
       },
       method: 'POST',
       body: JSON.stringify(alarm)
+    })
+    .then(parseJson)
+}
+
+async function deleteAlarm(alarmId) {
+  return await fetch(`/alarms/${alarmId}`, {
+      method: 'DELETE'
     })
     .then(parseJson)
 }

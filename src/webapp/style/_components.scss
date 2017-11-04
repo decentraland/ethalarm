@@ -92,7 +92,7 @@
 }
 
 
-button.next {
+.next {
   background: $white;
   color: $green;
   border: none;
@@ -102,7 +102,11 @@ button.next {
   font-weight: 400;
   padding: 20px;
   cursor: pointer;
+  text-decoration: none;
 
+  &:visited {
+    color: darken($green, 5%);
+  }
   &:hover {
     color: darken($green, 15%);
   }

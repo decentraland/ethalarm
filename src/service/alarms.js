@@ -61,7 +61,6 @@ export default class AlarmService {
     })
   }
 
-
   /**
    * Store an alarm in the databas
    */
@@ -75,11 +74,10 @@ export default class AlarmService {
       webhook: alarmDescription.webhook,
       blockConfirmations: alarmDescription.blockConfirmations
     })
-    .catch(error => {
-      console.log('*********************************************')
-      console.log(error)
-      console.log('*********************************************')
-    })
+  }
+
+  destroyAlarm(alarmId) {
+    return this.alarmModel.destroy({ where: { id: alarmId } })
   }
 
   /**

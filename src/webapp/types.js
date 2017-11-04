@@ -5,5 +5,6 @@ export default {
   setEventNames: 'Selected event names',
   setNotificationPreference: 'Selected notification preference',
   setId: 'Received ID',
-  confirm: 'Confirmation'
+  confirm: 'Confirmation',
+  deleteAlarm: 'Delete alarm'
 }

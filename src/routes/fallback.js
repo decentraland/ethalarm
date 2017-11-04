@@ -1,5 +1,4 @@
 import path from 'path'
-import { Router } from 'express'
 
 import locations from '../webapp/locations'
 

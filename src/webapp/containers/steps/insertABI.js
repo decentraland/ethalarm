@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import actions from '~/types'
+import types from '~/types'
 import { pick } from '~/utils'
 
 import SagaStep from './sagaStep'
@@ -14,7 +14,7 @@ class InsertABI extends SagaStep {
 
   createAction() {
     return {
-      type: actions.setABI,
+      type: types.setABI,
       abi: JSON.parse(this.abiInput.value)
     }
   }

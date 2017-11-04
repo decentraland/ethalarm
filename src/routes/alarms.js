@@ -31,7 +31,7 @@ export default class AlarmRouter {
   }
 
   get deleteAlarm() {
-    return (req, res) => buildResponseSchema(this.alarm.destroy({ where: { id: req.params.id } }), res)
+    return (req, res) => buildResponseSchema(this.alarm.destroyAlarm(req.params.id), res)
   }
 }
 
