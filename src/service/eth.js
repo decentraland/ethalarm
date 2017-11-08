@@ -4,8 +4,7 @@ import { Log } from 'decentraland-commons'
 
 export default class EthereumService {
   constructor(web3Provider) {
-    // this.web3 = new Web3(web3Provider)
-    this.web3 = new Web3(new Web3.providers.WebsocketProvider(web3Provider))
+    this.web3 = new Web3(web3Provider)
     this.log = new Log('Ethereum')
   }
 
