@@ -22,7 +22,6 @@ export default class EthereumService {
       this.log.info('watchNewBlocks !!!', err, data)
       callback(err, data)
     })
-    })
   }
 
   getCurrentTip() {
