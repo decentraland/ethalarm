@@ -22,7 +22,7 @@ export default class EthereumService {
     //   this.log.info('watchNewBlocks !!!', err, data)
     //   callback(err, data)
     // })
-    return web3.eth.filter('latest', function(error, result) {
+    return this.web3.eth.filter('latest', function(error, result) {
         this.log.info('watchNewBlocks !!!', err, data)
         callback(err, data)
     })
