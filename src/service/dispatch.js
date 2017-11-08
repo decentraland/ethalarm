@@ -7,6 +7,7 @@ export default class DispatchService {
   }
 
   async dispatch(alarm, events) {
+    console.log('DispatchService --> dispatch', alarm, events)
     let httpResponse, smtpResponse
 
     if (alarm.email && alarm.email.length) {

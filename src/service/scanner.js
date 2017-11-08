@@ -29,6 +29,7 @@ export default class ScannerService {
       const addressToAlarms = await alarmService.mapAddressesToAlarm()
       const allAddresses = Object.keys(addressToAlarms)
       const contracts = ethService.getContracts(await alarmService.getContractData(addressToAlarms))
+      this.log.info(`Contracts found`, contracts)
       const reorgSafety = await alarmService.getReorgSafety()
       const currentTip = await ethService.getCurrentTip()
       const lastBlockSync = await alarmService.mapAddressesToLastSync(allAddresses, currentTip)
@@ -41,7 +42,7 @@ export default class ScannerService {
         const fromBlock = lastBlockSync[contract.address] - max(alarms, 'blockConfirmations') - reorgSafety
         const toBlock = height - min(alarms, 'blockConfirmations')
         const events = await contract.getPastEvents('allEvents', { fromBlock, toBlock })
-        this.log.debug(`Data received for contract in ${contract.address}`, fromBlock, toBlock, events.length)
+        this.log.info(`Data received for contract in ${contract.address}`, fromBlock, toBlock, events.length)
         const byTransaction = alarmService.mapByTransactionId(events)
         for (let events of byTransaction) {
           const confirmations = height - events[0].blockNumber
