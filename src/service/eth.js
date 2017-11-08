@@ -18,13 +18,10 @@ export default class EthereumService {
   }
 
   watchNewBlocks(callback) {
-    // return this.web3.eth.subscribe('newBlockHeaders', function(err, data) {
-    //   this.log.info('watchNewBlocks !!!', err, data)
-    //   callback(err, data)
-    // })
-    return this.web3.eth.filter('latest', function(error, result) {
-        this.log.info('watchNewBlocks !!!', err, data)
-        callback(err, data)
+    return this.web3.eth.subscribe('newBlockHeaders', function(err, data) {
+      this.log.info('watchNewBlocks !!!', err, data)
+      callback(err, data)
+    })
     })
   }
 
