@@ -18,7 +18,10 @@ export default class EthereumService {
   }
 
   watchNewBlocks(callback) {
-    return this.web3.eth.subscribe('newBlockHeaders', callback)
+    return this.web3.eth.subscribe('newBlockHeaders', function(err, data) {
+      this.log.info('watchNewBlocks !!!', err, data)
+      callback(err, data)
+    })
   }
 
   getCurrentTip() {
