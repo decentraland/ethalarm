@@ -10,7 +10,7 @@ export default class ConfirmationService {
 
   setupTemplate() {
     const template = alarm => {
-      const url = `https://ethalarm.com/confirm/${alarm.confirmationCode}`
+      const url = `https://ethalarm.colu.com/confirm/${alarm.confirmationCode}`
       return `Hello, ${alarm.email}
 
 We received a request to notify you of the following events regarding the contract ${alarm.address}:
@@ -21,19 +21,19 @@ In order to confirm your email, please click on this link to start receiving not
   ${url}
 
 Thanks,
-The Decentraland Team`
+The Colu Team`
     }
     const templateHTML = (alarm) => {
-      const url = `https://ethalarm.com/confirm/${alarm.confirmationCode}`
+      const url = `https://ethalarm.colu.com/confirm/${alarm.confirmationCode}`
       return `Hello, ${alarm.email}<br/><br/>
       We received a request to notify you of the following events regarding the contract ${alarm.address}:
       <br/><br/><ul><li>${alarm.eventNames.split(';').join('</li><li>')}</ul><br/>
       <p> In order to confirm your email, please click on this link to start receiving notifications:<p>
       <div style="margin-left: 20px;"><a href=${url}>${url}</a></div>
-      <p>Thanks,<br/>The Decentraland Team</p>`
+      <p>Thanks,<br/>The Colu Team</p>`
     }
     this.emailService.setTemplate('confirmation', (opts) => ({
-      from: `"The Decentraland Team" <noreply@decentraland.org>`,
+      from: `"The Colu Team" <system@colu.com>`,
       to: opts.email,
       subject: `[EthAlarm] Please verify your subscription to ${opts.address}`,
       text: template(opts),

@@ -161,8 +161,8 @@ export default class ConfigurationService {
       const eventNumber = opts.events.length
       const blockNumber = opts.events[0].blockNumber
       const transactionHash = opts.events[0].transactionHash
-      const infoUrl = `https://ethalarm.com/info/${alarmId}`
-      const unsubscribeUrl = `https://ethalarm.com/unsubscribe/${alarmId}`
+      const infoUrl = `https://ethalarm.colu.com/info/${alarmId}`
+      const unsubscribeUrl = `https://ethalarm.colu.com/unsubscribe/${alarmId}`
       const formatPrePost = (pre, post, items) => pre + items.join(post + pre) + post
       const formatEvent = event => {
         const abiEventMatches = opts.alarm.abi.filter(
@@ -188,7 +188,7 @@ You can check the details of the alarm you have set up here:
   ${infoUrl}
 
 Best,
-The Decentraland Team
+The Colu Team
 
 ---
 If you would like to stop receiving notifications for this alarm, please visit ${unsubscribeUrl}
@@ -208,13 +208,13 @@ ${formatPrePost('<li>', '</li>', events.map(event => formatEvent(event)))}
 <div style="margin-left: 20px">${infoUrl}</div>
 
 <p>Best,<br/>
-The Decentraland Team</p>
+The Colu Team</p>
 
 <p style="font-size: 8px">If you would like to stop receiving notifications for this alarm, please visit ${unsubscribeUrl}</p>
 `
 
       return {
-        from: `"The Decentraland Team" <noreply@decentraland.org>`,
+        from: `"The Colu Team" <system@colu.com>`,
         to: opts.alarm.email,
         subject: `[EthAlarm] New Event in Contract ${opts.alarm.address}`,
         text: text,
