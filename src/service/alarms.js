@@ -17,7 +17,7 @@ export default class AlarmService {
    */
   getAlarms(where = { id: undefined, addresses: [] }) {
     const internalWhere = {
-      enabled: true
+      enabled: 1
     }
     if (where.addresses && where.addresses.length) {
       internalWhere.address = {
@@ -48,7 +48,7 @@ export default class AlarmService {
     return this.alarmModel.findOne({ where: { confirmationCode } })
       .then(async alarm => {
         alarm.update({
-          enabled: true
+          enabled: 1
         })
       })
   }
@@ -83,7 +83,7 @@ export default class AlarmService {
    */
   async storeNewAlarm(alarmDescription) {
     // store into the database
-    let enabled = !alarmDescription.email
+    let enabled = Number(!alarmDescription.email)
     let confirmationCode = !enabled && uuid.v4()
     try {
       const result = await this.alarmModel.create({
