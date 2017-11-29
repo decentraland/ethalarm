@@ -46,12 +46,13 @@ export default class ScannerService {
         for (let events of byTransaction) {
           const confirmations = height - events[0].blockNumber
           await Promise.all(alarms.map(async (alarm) => {
-            const existingReceipts = await alarmService.getReceipt(alarm.id, events[0].transactionHash)
             if (confirmations >= alarm.blockConfirmations
               && nameMatches(events, alarm.eventNames)
-              && !existingReceipts.length
             ) {
-              await alarmService.dispatchNotification(alarm, events)
+              const existingReceipts = await alarmService.getReceipt(alarm.id, events[0].transactionHash)
+              if(!existingReceipts.length) {
+                await alarmService.dispatchNotification(alarm, events)
+              }
             }
           }))
         }
