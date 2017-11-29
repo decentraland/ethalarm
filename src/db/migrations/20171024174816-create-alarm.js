@@ -38,9 +38,9 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4
       },
       enabled: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.INTEGER(1),
         allowNull: false,
-        defaultValue: false
+        defaultValue: 0
       },
       createdAt: {
         type: Sequelize.DATE
