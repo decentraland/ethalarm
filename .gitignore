@@ -2,6 +2,5 @@
 /package-lock.json
 /node_modules/
 /.node-xmlhttprequest-sync-*
-/_vimrc_local.vim
 
 /src/.env
